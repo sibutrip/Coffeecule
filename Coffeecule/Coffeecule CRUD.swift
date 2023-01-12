@@ -26,7 +26,6 @@ extension ViewModel {
                     let people = JSONUtility().decodeCoffeeculeMembers(for: coffeeculeMembersData)
                     self?.generateRelationshipWeb(for: people)
                     self?.cachedTransactions = JSONUtility().decodeCache()
-                    print(self?.cachedTransactions)
                     if returnedStatus == .granted {
                         // iCLOUD IS ACTIVE
                         // upload transactions, fetch cache, populate web from cloud, save web to JSON
@@ -39,12 +38,8 @@ extension ViewModel {
                         print("from cloud!")
                     } else {
                         // iCLOUD IS INACTIVE
-                        // populate from stored web
-                        //                        let webIsPopulated = self?.webIsPopulated ?? false
-                        //                        if !webIsPopulated {
                         self?.populateRelationshipWeb(from: .Cache)
                         print("from cache!")
-                        //                        }
                     }
                 }
             }
@@ -97,6 +92,7 @@ extension ViewModel {
         let query = CKQuery(recordType: cloudContainer, predicate: predicate)
         let queryOperation = CKQueryOperation(query: query)
         queryOperation.qualityOfService = .userInteractive
+        CKFetchDatabaseChangesOperation
         
         var returnedTransactions: [TransactionModel] = []
         
@@ -115,9 +111,6 @@ extension ViewModel {
         queryOperation.queryResultBlock = { returnedResult in
             DispatchQueue.main.async {
                 self.transactions = returnedTransactions
-                //                for transaction in returnedTransactions {
-                //                    print(transaction.buyerName)
-                //                }
                 self.populateRelationshipWeb(from: .Cloud)
                 print("web after fetch is \(self.relationshipWeb)")
             }
@@ -126,7 +119,6 @@ extension ViewModel {
     }
     
     private func addOperation(operation: CKQueryOperation) {
-        //        operation.qualityOfService = .userInteractive i believe this is duplicated
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     

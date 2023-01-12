@@ -58,9 +58,9 @@ struct JSONUtility {
             
             let data = try Data(contentsOf: fileURL)
             var pastData = try JSONDecoder().decode([String:BuyerInfo].self, from: data)
-            for person in pastData {
-                pastData[person.key]?.isPresent = false
-            }
+//            for person in pastData {
+//                pastData[person.key]?.isPresent = false
+//            }
 //            print(pastData)
             return pastData
         } catch {
