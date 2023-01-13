@@ -9,7 +9,24 @@ import Foundation
 import SwiftUI
 import CloudKit
 
+@MainActor
 class ViewModel: ObservableObject {
+    
+    // MARK: - Error
+
+    enum ViewModelError: Error {
+        case invalidRemoteShare
+    }
+
+    // MARK: - State
+
+    enum State {
+        case loading
+        case loaded(private: [Contact], shared: [Contact])
+        case error(Error)
+    }
+
+    
     // MARK: - Properties
 
     /// State directly observable by our view.
@@ -19,7 +36,7 @@ class ViewModel: ObservableObject {
     /// This project uses the user's private database.
     lazy var database = container.privateCloudDatabase
     /// Sharing requires using a custom record zone.
-    let recordZone = CKRecordZone(zoneName: "Contacts")
+    let recordZone = CKRecordZone(zoneName: "Transactions")
     
     // MARK: - Init
 
@@ -145,8 +162,8 @@ class ViewModel: ObservableObject {
             }
         case .Cache:
             self.relationshipWeb = JSONUtility().decodeWeb()
-            print("loaded from cache")
-            print(self.relationshipWeb)
+//            print("loaded from cache")
+//            print(self.relationshipWeb)
 //            print(relationshipWeb)
 //            for transaction in cachedTransactions {
 //                relationshipWeb?[transaction[0]]?.relationships[transaction[1]]! -= 1
@@ -178,12 +195,13 @@ class ViewModel: ObservableObject {
                 relationshipWeb![currentBuyer]?.relationships[presentPerson]! -= 1
                 relationshipWeb![presentPerson]?.relationships[currentBuyer]! += 1
                 addItem(buyerName: currentBuyer, receiverName: presentPerson)
-                print("\(currentBuyer) bought a coffee bought for \(presentPerson)")
+//                print("\(currentBuyer) bought a coffee bought for \(presentPerson)")
             }
         }
         calculatePresentPeople()
         calculateCurrentBuyer()
         JSONUtility().encodeWeb(for: relationshipWeb!)
-        print(relationshipWeb)
+//        print(relationshipWeb)
     }
+    
 }
