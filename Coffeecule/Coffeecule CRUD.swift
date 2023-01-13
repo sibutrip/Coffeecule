@@ -92,7 +92,6 @@ extension ViewModel {
         let query = CKQuery(recordType: cloudContainer, predicate: predicate)
         let queryOperation = CKQueryOperation(query: query)
         queryOperation.qualityOfService = .userInteractive
-        CKFetchDatabaseChangesOperation
         
         var returnedTransactions: [TransactionModel] = []
         

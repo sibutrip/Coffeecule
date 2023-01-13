@@ -111,7 +111,7 @@ class ViewModel: ObservableObject {
     }
     @AppStorage("coffeeculeMembers") var coffeeculeMembersData: Data = Data()
     @AppStorage("userHasCoffecule") var userHasCoffecule = false
-    var cloudContainer = "TransactionsTest"
+    var cloudContainer = "Transactions"
     var isConnectedToCloud = false
     var cachedTransactions = [[String]]() {
         didSet {
