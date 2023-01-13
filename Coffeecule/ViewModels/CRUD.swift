@@ -25,12 +25,12 @@ extension ViewModel {
     /// Creates the custom zone in use if needed.
     private func createZoneIfNeeded() async throws {
         // Avoid the operation if this has already been done.
-        guard !UserDefaults.standard.bool(forKey: "isZoneCreated") else {
-            return
-        }
+//        guard !UserDefaults.standard.bool(forKey: "isZoneCreated") else {
+//            return
+//        }
 
         do {
-            _ = try await database.modifyRecordZones(saving: [recordZone], deleting: [])
+            print(try await database.modifyRecordZones(saving: [recordZone], deleting: []))
         } catch {
             print("ERROR: Failed to create custom zone: \(error.localizedDescription)")
             throw error
@@ -42,7 +42,7 @@ extension ViewModel {
     
     func uploadTransaction(buyerName: String, receiverName: String) async throws {
         let id = CKRecord.ID(zoneID: recordZone.zoneID)
-        let transactionRecord = CKRecord(recordType: "Transaction", recordID: id)
+        let transactionRecord = CKRecord(recordType: "TransactionsPRIVATE", recordID: id)
         transactionRecord["buyerName"] = buyerName
         transactionRecord["receiverName"] = receiverName
         

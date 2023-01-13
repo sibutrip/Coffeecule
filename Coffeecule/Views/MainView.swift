@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct MainView: View {
+    
     @StateObject var vm = ViewModel()
     
     var body: some View {

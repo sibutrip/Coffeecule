@@ -107,52 +107,17 @@ extension CoffeeculeView {
     }
 }
 
-struct TestViewDummy: View {
-    @StateObject var vm = ViewModel()
-    @State var addedPeople = ["co","to"]
-    var body: some View {
-        OnboardingView(vm: vm)
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
+    struct TestViewDummy: View {
+        @StateObject var vm = ViewModel()
+        @State var addedPeople = ["co","to"]
+        var body: some View {
+            OnboardingView(vm: vm)
+        }
+    }
+    
     @Binding var addedPeople: [String]
     static var previews: some View {
         TestViewDummy(vm: ViewModel())
     }
-}
-
-
-struct ContactsTestView: View {
-    @StateObject var vm = ViewModel()
-    @State var nameInput = ""
-    @State var phoneInput = ""
-    @State var isAddingContact = false
-    
-    //        let onAdd: ((String, String) async throws -> Void)? = addContact
-    
-    var body: some View {
-        Button {
-            Task {
-                //                    try await vm.saveRecordToContainer()
-                try await uploadTransaction(name: nameInput, phoneNumber: phoneInput)
-            }
-        } label: {
-            Text("yooo")
-            
-        }
-        .onAppear {
-            Task {
-                try await vm.initialize()
-                //                try await vm.refresh()
-            }
-        }
-        
-    }
-    private func uploadTransaction(name: String, phoneNumber: String) async throws {
-        try await vm.uploadTransaction(buyerName: name, receiverName: phoneNumber)
-        //        try await vm.refresh()
-        isAddingContact = false
-    }
-    
 }

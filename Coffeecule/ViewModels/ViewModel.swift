@@ -78,13 +78,13 @@ class ViewModel: ObservableObject {
     @Published var transactions: [TransactionModel] = []
     
     init() {
-        userHasCoffeeculeOnLaunch = userHasCoffecule
-        if userHasCoffecule {
-            let people = JSONUtility().decodeCoffeeculeMembers(for: coffeeculeMembersData)
-            generateRelationshipWeb(for: people)
-            // create empty web. will populate later with cached web or icloud transactions
-            checkiCloudStatus()
-        }
+//        userHasCoffeeculeOnLaunch = userHasCoffecule
+//        if userHasCoffecule {
+//            let people = JSONUtility().decodeCoffeeculeMembers(for: coffeeculeMembersData)
+//            generateRelationshipWeb(for: people)
+//            // create empty web. will populate later with cached web or icloud transactions
+//            checkiCloudStatus()
+//        }
     }
     
     var presentPeople = [String]()

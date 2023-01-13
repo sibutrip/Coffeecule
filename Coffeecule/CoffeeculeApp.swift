@@ -13,7 +13,7 @@ struct CoffeeculeApp: App {
         WindowGroup {
 //            MainView()
 //            CloudView()
-            ContactsTestView()
+            PrivateZoneTestView()
         }
     }
 }
