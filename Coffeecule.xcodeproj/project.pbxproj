@@ -15,11 +15,11 @@
 		747E86F22971D635002ACFA0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F12971D635002ACFA0 /* OnboardingView.swift */; };
 		747E86F42971D67B002ACFA0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F32971D67B002ACFA0 /* MainView.swift */; };
 		747E871C2971F56C002ACFA0 /* PrivateZoneTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E871B2971F56C002ACFA0 /* PrivateZoneTestView.swift */; };
-		74834507296B29F200A8AF25 /* Coffeecule CRUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */; };
 		74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */; };
+		74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5E929730F480056B1E2 /* ViewModel.swift */; };
+		74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */; };
 		74F2E1792970B36600935EC8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2E1782970B36600935EC8 /* Config.swift */; };
 		74F2E17B2970B3F100935EC8 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2E17A2970B3F100935EC8 /* Models.swift */; };
-		74F2E17D2970B43B00935EC8 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2E17C2970B43B00935EC8 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,11 +33,11 @@
 		747E86F12971D635002ACFA0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		747E86F32971D67B002ACFA0 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		747E871B2971F56C002ACFA0 /* PrivateZoneTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateZoneTestView.swift; sourceTree = "<group>"; };
-		74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Coffeecule CRUD.swift"; sourceTree = "<group>"; };
 		74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitPermissionHandler.swift; sourceTree = "<group>"; };
+		74EDA5E929730F480056B1E2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerCalculations.swift; sourceTree = "<group>"; };
 		74F2E1782970B36600935EC8 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		74F2E17A2970B3F100935EC8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		74F2E17C2970B43B00935EC8 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,9 +113,9 @@
 			isa = PBXGroup;
 			children = (
 				74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */,
-				74F2E17C2970B43B00935EC8 /* ViewModel.swift */,
-				74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */,
+				74EDA5E929730F480056B1E2 /* ViewModel.swift */,
 				747E86EF2971B95C002ACFA0 /* CRUD.swift */,
+				74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -190,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */,
 				74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */,
 				747E871C2971F56C002ACFA0 /* PrivateZoneTestView.swift in Sources */,
 				7402CB89296A099A000BC882 /* CoffeeculeView.swift in Sources */,
@@ -199,8 +200,7 @@
 				747E86F02971B95C002ACFA0 /* CRUD.swift in Sources */,
 				74F2E17B2970B3F100935EC8 /* Models.swift in Sources */,
 				7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */,
-				74834507296B29F200A8AF25 /* Coffeecule CRUD.swift in Sources */,
-				74F2E17D2970B43B00935EC8 /* ViewModel.swift in Sources */,
+				74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
