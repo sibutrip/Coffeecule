@@ -41,15 +41,20 @@ extension ViewModel {
     
     func uploadTransaction(buyerName: String, receiverName: String) async throws {
         let id = CKRecord.ID(zoneID: recordZone.zoneID)
-        let transactionRecord = CKRecord(recordType: "TransactionsPRIVATE", recordID: id)
+        let transactionRecord = CKRecord(recordType: recordType, recordID: id)
         transactionRecord["buyerName"] = buyerName
         transactionRecord["receiverName"] = receiverName
         
-        do {
-            try await database.save(transactionRecord)
-        } catch {
-            debugPrint("ERROR: Failed to save new Contact: \(error)")
-            throw error
+        Task {
+            do {
+//                cachedRecords[transactionRecord.recordID.recordName] = transactionRecord
+                try await database.save(transactionRecord)
+//                cachedRecords.removeValue(forKey: transactionRecord.recordID.recordName)
+                
+            } catch {
+                debugPrint("ERROR: Failed to save new Contact: \(error)")
+                throw error
+            }
         }
     }
     
@@ -80,6 +85,7 @@ extension ViewModel {
         // Inner function retrieving and converting all Contact records for a single zone.
         @Sendable func transactionsInZone(_ zone: CKRecordZone) async throws -> [TransactionModel] {
             var allTransactions: [TransactionModel] = []
+            let coffeeculeMembers = await self.coffeeculeMembers
 
             /// `recordZoneChanges` can return multiple consecutive changesets before completing, so
             /// we use a loop to process multiple results if needed, indicated by the `moreComing` flag.
@@ -90,14 +96,22 @@ extension ViewModel {
             while awaitingChanges {
                 let zoneChanges = try await database.recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
                 let transactions = zoneChanges.modificationResultsByID.values
-                    .compactMap { try? $0.get().record }
-                    .compactMap { TransactionModel(record: $0) }
-                allTransactions.append(contentsOf: transactions)
-
+                print(coffeeculeMembers)
+                for completionHandler in transactions {
+                    switch completionHandler {
+                    case .success(let transaction):
+                        guard let buyer = transaction.record["buyerName"] as? String else { continue }
+                        guard let receiver = transaction.record["receiverName"] as? String else { continue }
+                        if coffeeculeMembers.contains(buyer) && coffeeculeMembers.contains(receiver) {
+                            allTransactions.append(TransactionModel(record: transaction.record)!)
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
                 awaitingChanges = zoneChanges.moreComing
                 nextChangeToken = zoneChanges.changeToken
             }
-
             return allTransactions
         }
 

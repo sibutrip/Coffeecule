@@ -11,10 +11,10 @@
 		7402CB89296A099A000BC882 /* CoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402CB88296A099A000BC882 /* CoffeeculeView.swift */; };
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
+		7473B5592979DD2C007EAAFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7473B5582979DD2C007EAAFB /* SettingsView.swift */; };
 		747E86F02971B95C002ACFA0 /* CRUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86EF2971B95C002ACFA0 /* CRUD.swift */; };
 		747E86F22971D635002ACFA0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F12971D635002ACFA0 /* OnboardingView.swift */; };
-		747E86F42971D67B002ACFA0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F32971D67B002ACFA0 /* MainView.swift */; };
-		747E871C2971F56C002ACFA0 /* PrivateZoneTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E871B2971F56C002ACFA0 /* PrivateZoneTestView.swift */; };
+		747E86F42971D67B002ACFA0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F32971D67B002ACFA0 /* ContentView.swift */; };
 		74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */; };
 		74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5E929730F480056B1E2 /* ViewModel.swift */; };
 		74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */; };
@@ -29,10 +29,10 @@
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Coffeecule.entitlements; sourceTree = "<group>"; };
+		7473B5582979DD2C007EAAFB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		747E86EF2971B95C002ACFA0 /* CRUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRUD.swift; sourceTree = "<group>"; };
 		747E86F12971D635002ACFA0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		747E86F32971D67B002ACFA0 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		747E871B2971F56C002ACFA0 /* PrivateZoneTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateZoneTestView.swift; sourceTree = "<group>"; };
+		747E86F32971D67B002ACFA0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitPermissionHandler.swift; sourceTree = "<group>"; };
 		74EDA5E929730F480056B1E2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerCalculations.swift; sourceTree = "<group>"; };
@@ -93,10 +93,10 @@
 		747E86F52971D68D002ACFA0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				747E86F32971D67B002ACFA0 /* ContentView.swift */,
 				747E86F12971D635002ACFA0 /* OnboardingView.swift */,
 				7402CB88296A099A000BC882 /* CoffeeculeView.swift */,
-				747E86F32971D67B002ACFA0 /* MainView.swift */,
-				747E871B2971F56C002ACFA0 /* PrivateZoneTestView.swift */,
+				7473B5582979DD2C007EAAFB /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,13 +192,13 @@
 			files = (
 				74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */,
 				74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */,
-				747E871C2971F56C002ACFA0 /* PrivateZoneTestView.swift in Sources */,
 				7402CB89296A099A000BC882 /* CoffeeculeView.swift in Sources */,
 				74F2E1792970B36600935EC8 /* Config.swift in Sources */,
-				747E86F42971D67B002ACFA0 /* MainView.swift in Sources */,
+				747E86F42971D67B002ACFA0 /* ContentView.swift in Sources */,
 				747E86F22971D635002ACFA0 /* OnboardingView.swift in Sources */,
 				747E86F02971B95C002ACFA0 /* CRUD.swift in Sources */,
 				74F2E17B2970B3F100935EC8 /* Models.swift in Sources */,
+				7473B5592979DD2C007EAAFB /* SettingsView.swift in Sources */,
 				7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */,
 				74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */,
 			);

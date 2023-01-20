@@ -38,26 +38,34 @@ class ViewModel: ObservableObject {
     lazy var database = container.privateCloudDatabase
     /// Sharing requires using a custom record zone.
     let recordZone = CKRecordZone(zoneName: "Transactions")
+    let recordType = "Corycule"
+
         
+//    var coffeeculeMembers: [String] { self.relationshipWeb.keys.sorted() }
     var relationshipWeb = [String:BuyerInfo]() {
         didSet {
             currentBuyer = calculateCurrentBuyer(for: relationshipWeb)
         }
     }
         
-    @Published var currentBuyer = "nobody"
+//    @Published
+    var currentBuyer = "nobody" {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
     @Published var presentPeopleDebt = [String:Int]()
     
     @AppStorage("coffeeculeMembers") var coffeeculeMembersData: Data = Data()
     @AppStorage("userHasCoffecule") var userHasCoffecule = false
+    @Published var userHasCoffeeculeOnLaunch = false
     
-    let coffeeculeMembersList = ["cory","tariq","tom","ty","zoe"]
-    let cloudContainer = "TransactionsTest"
+    var coffeeculeMembers = ["cory","tariq","tom","ty","zoe"]
     var transactions: [TransactionModel] = []
-
-    var cachedTransactions = [[String]]() {
+    var cachedRecords = [String:CKRecord]()
+    var ARRAYcachedTransactions = [[String]]() {
         didSet {
-            JSONUtility().encodeCache(for: cachedTransactions)
+            JSONUtility().encodeCache(for: ARRAYcachedTransactions)
         }
     }
     
@@ -70,16 +78,24 @@ class ViewModel: ObservableObject {
     init() {
 //        relationshipWeb = JSONUtility().decodeWeb()
 //        relationshipWeb = generateRelationshipWeb(for: coffeeculeMembersList)
+        userHasCoffeeculeOnLaunch = true
         state = .loading
         Task {
-            try await populateWebFromCloud()
+            self.relationshipWeb = try await populateWebFromCloud()
             state = .loaded
+        }
+        if ARRAYcachedTransactions.count > 0 {
+            print("there are \(ARRAYcachedTransactions.count) cached transaactions")
         }
     }
     
-    func populateWebFromCloud() async throws {
-            transactions = try await fetchTransactions(scope: .private, in: [recordZone])
-            convertTransactionsToWeb(for: self.transactions)
+    func populateWebFromCloud() async throws -> [String:BuyerInfo] {
+        let transactionsTask = Task { () -> [String:BuyerInfo] in
+            let populatedTransactions = try await fetchTransactions(scope: .private, in: [recordZone])
+            return convertTransactionsToWeb(for: populatedTransactions)
+        }
+        let transactions = await transactionsTask.result
+        return try transactions.get()
     }
     
 
@@ -112,13 +128,14 @@ class ViewModel: ObservableObject {
         case Cache, Cloud
     }
     
-    func convertTransactionsToWeb(for transactions: [TransactionModel]) {
-        var relationshipWeb = generateRelationshipWeb(for: coffeeculeMembersList)
+    func convertTransactionsToWeb(for transactions: [TransactionModel]) -> [String:BuyerInfo]{
+        var relationshipWeb = generateRelationshipWeb(for: coffeeculeMembers)
         for transaction in transactions {
+            print(transaction.buyerName,transaction.receiverName)
             relationshipWeb[transaction.buyerName]?.relationships[transaction.receiverName]! -= 1
             relationshipWeb[transaction.receiverName]?.relationships[transaction.buyerName]! += 1
         }
-        self.relationshipWeb = relationshipWeb
+        return relationshipWeb
     }
     
     func populateRelationshipWeb(from source: RelationshipWebSource) {
