@@ -10,7 +10,7 @@ import CloudKit
 import SwiftUI
 
 extension ViewModel {
-    
+        
     /// Prepares container by creating custom zone if needed.
     func initialize() async throws {
         do {
@@ -47,9 +47,7 @@ extension ViewModel {
         
         Task {
             do {
-//                cachedRecords[transactionRecord.recordID.recordName] = transactionRecord
                 try await database.save(transactionRecord)
-//                cachedRecords.removeValue(forKey: transactionRecord.recordID.recordName)
                 
             } catch {
                 debugPrint("ERROR: Failed to save new Contact: \(error)")
@@ -92,18 +90,17 @@ extension ViewModel {
             var awaitingChanges = true
             /// After each loop, if more changes are coming, they are retrieved by using the `changeToken` property.
             var nextChangeToken: CKServerChangeToken? = nil
+            print(coffeeculeMembers)
 
             while awaitingChanges {
                 let zoneChanges = try await database.recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
                 let transactions = zoneChanges.modificationResultsByID.values
-                print(coffeeculeMembers)
                 for completionHandler in transactions {
                     switch completionHandler {
                     case .success(let transaction):
-                        guard let buyer = transaction.record["buyerName"] as? String else { continue }
-                        guard let receiver = transaction.record["receiverName"] as? String else { continue }
-                        if coffeeculeMembers.contains(buyer) && coffeeculeMembers.contains(receiver) {
-                            allTransactions.append(TransactionModel(record: transaction.record)!)
+                        guard let transaction = TransactionModel(record: transaction.record) else { continue }
+                        if coffeeculeMembers.contains(transaction.buyerName) && coffeeculeMembers.contains(transaction.receiverName) {
+                            allTransactions.append(transaction)
                         }
                     case .failure(let error):
                         print(error)
@@ -128,7 +125,6 @@ extension ViewModel {
                 allTransactions.append(contentsOf: transactionsResult)
             }
         }
-
         return allTransactions
     }
     

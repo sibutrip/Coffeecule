@@ -9,6 +9,7 @@ import Charts
 
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
+    @State var editMode = EditMode.inactive
     var body: some View {
         NavigationView {
             Form {
@@ -17,7 +18,6 @@ struct CoffeeculeView: View {
                 buyCoffeeButton
                 relationshipWebChart
             }
-            .scrollDisabled(true)
             .navigationTitle("Coffeecule")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -160,7 +160,6 @@ extension CoffeeculeView {
             var web = try await vm.populateWebFromCloud()
             for person in web {
                 web[person.key]?.isPresent = cachedPresentStatus[person.key] ?? true
-                //                vm.calculateCurrentBuyer(for: vm.relationshipWeb)
             }
             vm.relationshipWeb = web
         }

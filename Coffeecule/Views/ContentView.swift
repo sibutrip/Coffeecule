@@ -12,11 +12,13 @@ struct ContentView: View {
     @StateObject var vm = ViewModel()
     
     var body: some View {
-        if vm.userHasCoffeeculeOnLaunch {
-            CoffeeculeView(vm: vm)
-        } else {
-//            EmptyView()
-            OnboardingView(vm: vm)
-        }
+        ZStack {
+            if vm.userHasCoffecule {
+                CoffeeculeView(vm: vm)
+            } else {
+                //            EmptyView()
+                OnboardingView(vm: vm)
+            }
+        }.animation(.default, value: vm.userHasCoffecule)
     }
 }

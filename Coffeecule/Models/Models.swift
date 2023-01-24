@@ -66,7 +66,45 @@ struct BuyerInfo: Codable {
     var relationships = [String: Int]()
 }
 
-struct JSONUtility {
+enum JSONUtility {
+    case coffeeculeMembers
+    case coffeeculeWeb
+    case transactionsCache
+    case data
+    func encode() {
+        switch self {
+        case .coffeeculeMembers:
+            print("members encoded")
+        case .coffeeculeWeb:
+            print("web encoded")
+        case .transactionsCache:
+            print("transactions encoded")
+        case .data:
+            print("can't encode Data! It's already Data!")
+        }
+    }
+    func decode(to type: Data) -> any Collection {
+        switch self {
+            #warning("there is no way this works lmao")
+        case .data:
+            guard let decodedData = try? JSONDecoder().decode([String].self, from: type.self) else { return [String]() }
+            return decodedData
+        default:
+            return []
+        }
+    }
+//    func encode() -> Data {
+//        switch self {
+//        case .coffeeculeMembers:
+//            guard let encodedData = try? JSONEncoder().encode(self) else { return Data() }
+//            return encodedData
+//        default:
+//            print("hey i haven't written this functionality yet")
+//        }
+//    }
+}
+
+struct JSONUtilitySTRUCT {
     public func encodeCoffeeculeMembers(for members: [String]) -> Data {
         guard let encodedData = try? JSONEncoder().encode(members) else { return Data() }
         return encodedData

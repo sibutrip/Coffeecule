@@ -10,52 +10,39 @@ import SwiftUI
 struct OnboardingView: View {
     @ObservedObject var vm: ViewModel
     @State var newPerson: String = ""
+    @State var addedPeople: [String] = []
     
     var body: some View {
         NavigationView {
             Form {
-                addedPeople
+                listOfMembers
                 createCoffeeculeButton
             }
             .animation(.default, value: vm.addedPeople)
             .navigationTitle("who's in your coffeecule?")
             .navigationBarTitleDisplayMode(.inline)
             .onDisappear {
-                vm.createNewCoffeecule(for: vm.addedPeople)
-                vm.userHasCoffeeculeOnLaunch = true
+            }
+            .onAppear {
+                addedPeople.removeAll()
             }
         }
     }
 }
 
 extension OnboardingView {
-    var createCoffeeculeButton: some View {
-        Section {
-            Text(vm.addedPeople.count < 2 ? "add people to continue" : "create coffeecule!")
-                .foregroundColor(vm.addedPeople.count < 2 ? .gray : .blue)
-                .background {
-                    NavigationLink("") {
-                        CoffeeculeView(vm: vm)
-                            .navigationBarBackButtonHidden()
-                    }.disabled(vm.addedPeople.count < 2)
-                        .frame(maxWidth: .infinity)
-                        .animation(.default.speed(1.75), value: vm.addedPeople.count)
-                        .opacity(0.0)
-                }.frame(maxWidth: .infinity)
-        }
-    }
     
-    var addedPeople: some View {
+    var listOfMembers: some View {
         List {
-            ForEach(vm.addedPeople, id: \.self) {
+            ForEach(addedPeople, id: \.self) {
                 Text($0)
             }.onDelete { IndexSet in
-                vm.addedPeople.remove(atOffsets: IndexSet)
+                addedPeople.remove(atOffsets: IndexSet)
             }
             HStack {
                 TextField("add a person...", text: $newPerson)
                 Button {
-                    vm.addedPeople.append(newPerson)
+                    addedPeople.append(newPerson)
                     newPerson = ""
                 } label: {
                     Image(systemName: "plus.circle")
@@ -64,6 +51,29 @@ extension OnboardingView {
                 .buttonStyle(PlainButtonStyle())
                 .foregroundColor(.green)
             }
+        }
+    }
+    
+    var createCoffeeculeButton: some View {
+        Section {
+            Text(addedPeople.count < 2 ? "add people to continue" : "create coffeecule!")
+                .foregroundColor(addedPeople.count < 2 ? .gray : .blue)
+                .background {
+                    Button("make cule", action: {
+                        var peopleToAdd = addedPeople
+                        peopleToAdd.append(newPerson)
+                        vm.coffeeculeMembers = peopleToAdd
+                        print("addedfdf")
+                    })
+//                    NavigationLink("") {
+//                        CoffeeculeView(vm: vm)
+//                        .navigationBarBackButtonHidden()
+//                    }
+                    .disabled(addedPeople.count < 2)
+                        .frame(maxWidth: .infinity)
+                        .animation(.default.speed(1.75), value: addedPeople)
+                        .opacity(0.0)
+                }.frame(maxWidth: .infinity)
         }
     }
 }

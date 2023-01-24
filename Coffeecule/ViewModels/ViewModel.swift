@@ -22,7 +22,7 @@ class ViewModel: ObservableObject {
     
     enum State {
         case loading
-//        case loaded(private: [Contact], shared: [Contact])
+        //        case loaded(private: [Contact], shared: [Contact])
         case loaded
         case error(Error)
     }
@@ -38,17 +38,16 @@ class ViewModel: ObservableObject {
     lazy var database = container.privateCloudDatabase
     /// Sharing requires using a custom record zone.
     let recordZone = CKRecordZone(zoneName: "Transactions")
-    let recordType = "Corycule"
-
-        
-//    var coffeeculeMembers: [String] { self.relationshipWeb.keys.sorted() }
+    let recordType = "TransactionsTest"
+    
+    
+    //    var coffeeculeMembers: [String] { self.relationshipWeb.keys.sorted() }
     var relationshipWeb = [String:BuyerInfo]() {
         didSet {
             currentBuyer = calculateCurrentBuyer(for: relationshipWeb)
         }
     }
-        
-//    @Published
+    
     var currentBuyer = "nobody" {
         didSet {
             self.objectWillChange.send()
@@ -56,124 +55,35 @@ class ViewModel: ObservableObject {
     }
     @Published var presentPeopleDebt = [String:Int]()
     
-    @AppStorage("coffeeculeMembers") var coffeeculeMembersData: Data = Data()
-    @AppStorage("userHasCoffecule") var userHasCoffecule = false
-    @Published var userHasCoffeeculeOnLaunch = false
-    
-    var coffeeculeMembers = ["cory","tariq","tom","ty","zoe"]
-    var transactions: [TransactionModel] = []
-    var cachedRecords = [String:CKRecord]()
-    var ARRAYcachedTransactions = [[String]]() {
+    @AppStorage("coffeeculeMembers") var storedCoffeeculeMembers = Data()
+    var coffeeculeMembers = ["cory","tariq","tom","ty","zoe"] {
         didSet {
-            JSONUtility().encodeCache(for: ARRAYcachedTransactions)
+            self.storedCoffeeculeMembers = JSONUtilitySTRUCT().encodeCoffeeculeMembers(for: self.coffeeculeMembers)
+            print("added")
         }
     }
     
-    var addedPeople = [String]() {
-        didSet { createNewCoffeecule(for: addedPeople) }
+    var userHasCoffecule: Bool {
+        coffeeculeMembers.count > 0
     }
+    var transactions: [TransactionModel] = []
+    var ARRAYcachedTransactions = [[String]]() {
+        didSet {
+            JSONUtilitySTRUCT().encodeCache(for: ARRAYcachedTransactions)
+        }
+    }
+    
+    var addedPeople = [String]()
     
     // MARK: - Init
     
     init() {
-//        relationshipWeb = JSONUtility().decodeWeb()
-//        relationshipWeb = generateRelationshipWeb(for: coffeeculeMembersList)
-        userHasCoffeeculeOnLaunch = true
         state = .loading
+        self.storedCoffeeculeMembers = JSONUtilitySTRUCT().encodeCoffeeculeMembers(for: self.coffeeculeMembers)
+        coffeeculeMembers = JSONUtilitySTRUCT().decodeCoffeeculeMembers(for: storedCoffeeculeMembers)
         Task {
             self.relationshipWeb = try await populateWebFromCloud()
             state = .loaded
         }
-        if ARRAYcachedTransactions.count > 0 {
-            print("there are \(ARRAYcachedTransactions.count) cached transaactions")
-        }
     }
-    
-    func populateWebFromCloud() async throws -> [String:BuyerInfo] {
-        let transactionsTask = Task { () -> [String:BuyerInfo] in
-            let populatedTransactions = try await fetchTransactions(scope: .private, in: [recordZone])
-            return convertTransactionsToWeb(for: populatedTransactions)
-        }
-        let transactions = await transactionsTask.result
-        return try transactions.get()
-    }
-    
-
-    
-    public func createNewCoffeecule(for addedMembers: [String]) {
-        #warning("this function does not work")
-        generateRelationshipWeb(for: addedMembers)
-        coffeeculeMembersData = JSONUtility().encodeCoffeeculeMembers(for: addedMembers)
-        self.userHasCoffecule = true
-    }
-    
-    func generateRelationshipWeb(for people: [String]) -> [String:BuyerInfo] {
-        /// creates empty web template
-        var relationshipWeb = [String:BuyerInfo]()
-        for buyer in people {
-            var buyerInfo = BuyerInfo()
-            for receiver in people {
-                if receiver != buyer {
-                    buyerInfo.relationships[receiver] = 0
-                }
-            }
-            relationshipWeb[buyer] = buyerInfo
-        }
-        //        JSONUtility().encodeWeb(for: relationshipWeb)
-//        self.relationshipWeb = relationshipWeb
-        return relationshipWeb
-    }
-    
-    enum RelationshipWebSource {
-        case Cache, Cloud
-    }
-    
-    func convertTransactionsToWeb(for transactions: [TransactionModel]) -> [String:BuyerInfo]{
-        var relationshipWeb = generateRelationshipWeb(for: coffeeculeMembers)
-        for transaction in transactions {
-            print(transaction.buyerName,transaction.receiverName)
-            relationshipWeb[transaction.buyerName]?.relationships[transaction.receiverName]! -= 1
-            relationshipWeb[transaction.receiverName]?.relationships[transaction.buyerName]! += 1
-        }
-        return relationshipWeb
-    }
-    
-    func populateRelationshipWeb(from source: RelationshipWebSource) {
-        switch source {
-        case .Cloud:
-            for transaction in transactions {
-                //                print(transaction.buyerName)
-                relationshipWeb[transaction.buyerName]?.relationships[transaction.receiverName]! -= 1
-                relationshipWeb[transaction.receiverName]?.relationships[transaction.buyerName]! += 1
-            }
-        case .Cache:
-            self.relationshipWeb = JSONUtility().decodeWeb()
-            //            print("loaded from cache")
-            //            print(self.relationshipWeb)
-            //            print(relationshipWeb)
-            //            for transaction in cachedTransactions {
-            //                relationshipWeb?[transaction[0]]?.relationships[transaction[1]]! -= 1
-            //                relationshipWeb?[transaction[1]]?.relationships[transaction[0]]! -= 1
-            //                print("cached transaction added to web")
-            //            }
-        }
-        //        webIsPopulated = true
-    }
-    
-    
-//    func buyCoffee() {
-//        for presentPerson in presentPeople {
-//            if presentPerson != currentBuyer {
-//                relationshipWeb![currentBuyer]?.relationships[presentPerson]! -= 1
-//                relationshipWeb![presentPerson]?.relationships[currentBuyer]! += 1
-//                addItem(buyerName: currentBuyer, receiverName: presentPerson)
-//                //                print("\(currentBuyer) bought a coffee bought for \(presentPerson)")
-//            }
-//        }
-//        calculatePresentPeople()
-//        calculateCurrentBuyer()
-//        JSONUtility().encodeWeb(for: relationshipWeb!)
-//        //        print(relationshipWeb)
-//    }
-    
 }
