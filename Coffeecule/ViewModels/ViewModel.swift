@@ -38,7 +38,7 @@ class ViewModel: ObservableObject {
     lazy var database = container.privateCloudDatabase
     /// Sharing requires using a custom record zone.
     let recordZone = CKRecordZone(zoneName: "Transactions")
-    let recordType = "TransactionsTest"
+    let recordType = "Corycule"
     
     
     //    var coffeeculeMembers: [String] { self.relationshipWeb.keys.sorted() }
