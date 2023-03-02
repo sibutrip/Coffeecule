@@ -63,13 +63,37 @@ class ViewModel: ObservableObject {
         currentBuyer = mostDebted?.key ?? Person(name: "nobody")
     }
     
+    //    var displayedDebts: [Person:Int] {
+    //        var debts = [Person:Int]()
+    //        for person in people {
+    //            if person.isPresent {
+    //                debts[person] = person.coffeesOwed.values.reduce(0, +)
+    //            }
+    //        }
+    //        return debts
+    //    }
+    
     var displayedDebts: [Person:Int] {
         var debts = [Person:Int]()
-        for person in people {
-            if person.isPresent {
-                debts[person] = person.coffeesOwed.values.reduce(0, +)
-            }
+        let people = self.people
+        let presentPeople: [Person] = people.filter {
+            $0.isPresent
         }
+        let presentNames: [String] = presentPeople.map {
+            $0.name
+        }
+        for person in presentPeople {
+            let debt: Int = person.coffeesOwed.reduce(0) { partialResult, dict in
+                if presentNames.contains(where: { name in
+                    dict.key == name
+                }) {
+                    return partialResult + dict.value
+                }
+                return 0
+            }
+            debts[person] = debt
+        }
+        print("done")
         return debts
     }
     
@@ -125,7 +149,8 @@ class ViewModel: ObservableObject {
             await ReadWrite.shared.writeTransactionsToCloud(transactions)
         }
         Task {
-            await self.updatePeople(updatedPeople)
+            //            await self.updatePeople(updatedPeople)
+            await ReadWrite.shared.writePeopleToCloud(updatedPeople)
         }
     }
     
@@ -159,29 +184,31 @@ class ViewModel: ObservableObject {
         
         self.calculateBuyer()
         
-        Task(priority: .userInitiated) {
-            try await initialize()
-            if await ReadWrite.shared.getiCloudStatus() == "available" {
-                let peopleFromCloud = await ReadWrite.shared.readPeopleFromCloud().sorted()
-                for person in peopleFromCloud {
-                    print(person.name)
-                }
-                
-                if peopleFromCloud.count > 0 {
-                    self.people = peopleFromCloud
-                }
-                self.state = .loaded
-                
-            } else {
-                state = .noPermission
-                return
-            }
-        }
+        //        Task(priority: .userInitiated) {
+        //            try await initialize()
+        //            if await ReadWrite.shared.getiCloudStatus() == "available" {
+        //                let peopleFromCloud = await ReadWrite.shared.readPeopleFromCloud().sorted()
+        //                for person in peopleFromCloud {
+        //                    print(person.name)
+        //                }
+        //
+        //                if peopleFromCloud.count > 0 {
+        //                    self.people = peopleFromCloud
+        //                }
+        //                self.state = .loaded
+        //
+        //            } else {
+        //                state = .noPermission
+        //                return
+        //            }
+        //        }
         self.state = .loaded
         self.calculateBuyer()
         
         Task(priority: .userInitiated) {
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+            
+            /// need to include people who havent made transactions in [Person]
             let people = ReadWrite.shared.transactionsToPeople(transactions, people: self.people)
             await self.updatePeople(people)
         }

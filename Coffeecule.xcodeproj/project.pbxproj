@@ -86,10 +86,10 @@
 			children = (
 				7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */,
 				7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */,
-				7467994329B0DC9100339D5C /* Debug */,
 				7467994729B0DC9100339D5C /* Models */,
 				7467995429B0DC9100339D5C /* ViewModel */,
 				7467993E29B0DC9100339D5C /* Views */,
+				7467994329B0DC9100339D5C /* Debug */,
 				7402CB8A296A099C000BC882 /* Assets.xcassets */,
 				7402CB8C296A099C000BC882 /* Preview Content */,
 			);
@@ -139,9 +139,9 @@
 		7467994A29B0DC9100339D5C /* ReadWriterHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				7467995029B0DC9100339D5C /* ReadWriterProtocol.swift */,
 				7467994B29B0DC9100339D5C /* ReadWrite.swift */,
 				7467994C29B0DC9100339D5C /* Old ReadWriters */,
-				7467995029B0DC9100339D5C /* ReadWriterProtocol.swift */,
 			);
 			path = ReadWriterHelpers;
 			sourceTree = "<group>";

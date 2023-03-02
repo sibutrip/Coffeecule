@@ -98,12 +98,13 @@ extension CoffeeculeView {
     
     var relationshipWebChart: some View {
         VStack {
-            Chart(vm.displayedDebts.keys.sorted(), id: \.self) {
-                BarMark(
-                    x: .value("person", $0.name),
-                    y: .value("cups bought", vm.displayedDebts[$0] ?? 0)
-                )
-            }
+            chart(vm.displayedDebts)
+//            Chart(vm.displayedDebts.keys.sorted(), id: \.self) {
+//                BarMark(
+//                    x: .value("person", $0.name),
+//                    y: .value("cups bought", vm.displayedDebts[$0] ?? 0)
+//                ).foregroundStyle(vm.displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
+//            }
             
         }
         .frame(height: 100)
@@ -125,7 +126,18 @@ extension CoffeeculeView {
         } label: {
             Text("Select All")
         }
-    }  
+    }
+    
+    func chart(_ debt: [Person : Int])  -> some View {
+        let displayedDebts = debt
+        
+        return Chart(displayedDebts.keys.sorted(), id: \.self) {
+            BarMark(
+                x: .value("person", $0.name),
+                y: .value("cups bought", displayedDebts[$0] ?? 0)
+            ).foregroundStyle(displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
+        }
+    }
 }
 
 // MARK: - Preview
