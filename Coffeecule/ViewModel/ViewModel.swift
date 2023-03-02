@@ -63,7 +63,7 @@ class ViewModel: ObservableObject {
         }
         currentBuyer = mostDebted?.key ?? Person(name: "nobody")
     }
-        
+    
     var displayedDebts: [Person:Int] {
         var debts = [Person:Int]()
         let people = self.people
@@ -163,42 +163,15 @@ class ViewModel: ObservableObject {
     init(readWriter: ReadWritable) {
         
         self.state = .loading
-        
         self.readWriter = readWriter
         
-        if UserDefaults.standard.object(forKey: "hasOpenedApp") == nil {
-            UserDefaults.standard.set(true, forKey: "hasOpenedApp")
-        }
-        
         self.people = ReadWrite.shared.readPeopleFromDisk().sorted()
-        
-        self.calculateBuyer()
-        
-        //        Task(priority: .userInitiated) {
-        //            try await initialize()
-        //            if await ReadWrite.shared.getiCloudStatus() == "available" {
-        //                let peopleFromCloud = await ReadWrite.shared.readPeopleFromCloud().sorted()
-        //                for person in peopleFromCloud {
-        //                    print(person.name)
-        //                }
-        //
-        //                if peopleFromCloud.count > 0 {
-        //                    self.people = peopleFromCloud
-        //                }
-        //                self.state = .loaded
-        //
-        //            } else {
-        //                state = .noPermission
-        //                return
-        //            }
-        //        }
-//        self.state = .loaded
         self.calculateBuyer()
         
         Task(priority: .userInitiated) {
+            await initialize()
             if let updatedPeople = await backgroundUpdateCloud() {
                 self.people = updatedPeople
-//                print("self people is now \(self.people)")
             }
         }
         self.state = .loaded

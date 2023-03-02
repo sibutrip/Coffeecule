@@ -11,7 +11,7 @@ import CloudKit
 extension ViewModel {
     
     /// Prepares container by creating custom zone if needed.
-    func initialize() async throws {
+    func initialize() async {
         do {
             try await createZonesIfNeeded()
         } catch {
