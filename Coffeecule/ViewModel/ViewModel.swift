@@ -198,10 +198,10 @@ class ViewModel: ObservableObject {
         Task(priority: .userInitiated) {
             if let updatedPeople = await backgroundUpdateCloud() {
                 self.people = updatedPeople
-                print("self people is now \(self.people)")
+//                print("self people is now \(self.people)")
             }
-            self.state = .loaded
         }
+        self.state = .loaded
     }
 }
 

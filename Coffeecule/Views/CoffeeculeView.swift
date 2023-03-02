@@ -18,7 +18,10 @@ struct CoffeeculeView: View {
                 buyCoffeeButton
                 relationshipWebChart
             }
-            
+            .navigationTitle("Coffeecule")
+            .refreshable {
+                Task { await vm.backgroundUpdateCloud() }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
