@@ -11,8 +11,9 @@ import SwiftUI
 struct CoffeeculeApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+//            MainView()
 //            CloudView()
+            ContentView()
         }
     }
 }

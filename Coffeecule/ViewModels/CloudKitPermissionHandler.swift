@@ -10,6 +10,7 @@ import CloudKit
 import SwiftUI
 
 class CloudKitViewModel: ObservableObject {
+    /// i dont use this at all. it's just nice to have in case i need to ;)
     
     @Published var permissionStatus: Bool = false
     @Published var isSignedInToiCloud: Bool = false
