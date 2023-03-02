@@ -8,21 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402CB86296A099A000BC882 /* CoffeeculeApp.swift */; };
-		7402CB89296A099A000BC882 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402CB88296A099A000BC882 /* ContentView.swift */; };
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
-		74834507296B29F200A8AF25 /* Coffeecule CRUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */; };
 		74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7402CB86296A099A000BC882 /* CoffeeculeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeculeApp.swift; sourceTree = "<group>"; };
-		7402CB88296A099A000BC882 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Coffeecule.entitlements; sourceTree = "<group>"; };
-		74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Coffeecule CRUD.swift"; sourceTree = "<group>"; };
 		74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitPermissionHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,8 +54,6 @@
 			children = (
 				7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */,
 				7402CB86296A099A000BC882 /* CoffeeculeApp.swift */,
-				7402CB88296A099A000BC882 /* ContentView.swift */,
-				74834506296B29F200A8AF25 /* Coffeecule CRUD.swift */,
 				74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */,
 				7402CB8A296A099C000BC882 /* Assets.xcassets */,
 				7402CB8C296A099C000BC882 /* Preview Content */,
@@ -146,9 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */,
-				7402CB89296A099A000BC882 /* ContentView.swift in Sources */,
 				7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */,
-				74834507296B29F200A8AF25 /* Coffeecule CRUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
