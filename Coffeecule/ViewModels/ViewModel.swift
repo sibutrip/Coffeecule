@@ -82,6 +82,7 @@ class ViewModel: ObservableObject {
         self.storedCoffeeculeMembers = JSONUtilitySTRUCT().encodeCoffeeculeMembers(for: self.coffeeculeMembers)
         coffeeculeMembers = JSONUtilitySTRUCT().decodeCoffeeculeMembers(for: storedCoffeeculeMembers)
         Task {
+            try await initialize()
             self.relationshipWeb = try await populateWebFromCloud()
             state = .loaded
         }
