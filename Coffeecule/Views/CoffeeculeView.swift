@@ -9,11 +9,11 @@ import Charts
 
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
-    @State var editMode = EditMode.inactive
+    @State var isBuying = false
     var body: some View {
         NavigationView {
             Form {
-                whosGettingCoffee
+                WhosGettingCoffee(vm: vm)
                 itsTimeForPersonToGetCoffee
                 buyCoffeeButton
                 relationshipWebChart
@@ -21,15 +21,28 @@ struct CoffeeculeView: View {
             .navigationTitle("Coffeecule")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    settingsToolbar
+                    EditButton()
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     selectAllToolbar
                 }
             }
         }
+        .overlay {
+            ZStack {
+                switch vm.state {
+                case .loading:
+                    Color.gray.opacity(0.3)
+                    ProgressView()
+                default:
+                    EmptyView()
+                }
+            }
+            .ignoresSafeArea()
+        }
     }
 }
+
 
 extension CoffeeculeView {
     
@@ -46,40 +59,12 @@ extension CoffeeculeView {
     
     // MARK: - Computed Views
     
-    var whosGettingCoffee: some View {
-        Section("who's getting coffee?") {
-            if iCloudState {
-                List {
-                    ForEach(vm.coffeeculeMembers, id: \.self) { name in
-                        Button {
-                            vm.relationshipWeb[name]?.isPresent.toggle()
-                        } label: {
-                            HStack {
-                                Image(systemName: "checkmark")
-                                    .opacity(vm.relationshipWeb[name]?.isPresent ?? false ? 1.0 : 0.0)
-                                Text("\(name)")
-                                    .foregroundColor(.black)
-                            }
-                        }
-                    }
-                    .onDelete { person in
-                        vm.coffeeculeMembers.remove(atOffsets: person)
-                        refreshTransactions()
-                    }
-                }
-            } else {
-                ProgressView()
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
-        }
-    }
-    
     var itsTimeForPersonToGetCoffee: some View {
         Section {
             VStack(alignment: .center) {
                 Spacer()
                 Text("it's time for")
-                Text("\(vm.currentBuyer)").font(.largeTitle)
+                Text("\(vm.currentBuyer.name)").font(.largeTitle)
                     .animation(.default.speed(3.0), value: vm.currentBuyer)
                 Text("to buy coffee")
                 Spacer()
@@ -90,27 +75,39 @@ extension CoffeeculeView {
     var buyCoffeeButton: some View {
         Section {
             Button("buy coffee") {
-                Task {
-                    try await uploadTransactions()
-                    refreshTransactions()
+                isBuying = true
+            }.alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
+                HStack {
+                    Button("Yes", role: .destructive) {
+                        Task(priority: .userInitiated) {
+                            vm.state = .loading
+                            vm.buyCoffee()
+//                            await vm.refreshTransactions()
+                            vm.calculateBuyer()
+                            vm.state = .loaded
+                        }
+                    }
+                    Button("No", role: .cancel) {
+                        isBuying = false
+                    }
                 }
             }
-            .disabled(vm.currentBuyer == "nobody" )
+            .disabled(vm.currentBuyer.name == "nobody")
         }
     }
     
     var relationshipWebChart: some View {
         VStack {
-            Chart(vm.presentPeopleDebt.keys.sorted(), id: \.self) {
+            Chart(vm.displayedDebts.keys.sorted(), id: \.self) {
                 BarMark(
-                    x: .value("person", $0),
-                    y: .value("cups bought", vm.presentPeopleDebt[$0] ?? 0)
+                    x: .value("person", $0.name),
+                    y: .value("cups bought", vm.displayedDebts[$0] ?? 0)
                 )
             }
             
         }
         .frame(height: 100)
-        .animation(.default, value: vm.presentPeopleDebt)
+        .animation(.default, value: vm.displayedDebts)
     }
     
     // MARK: - Toolbars
@@ -118,59 +115,24 @@ extension CoffeeculeView {
     var settingsToolbar: some View {
         EditButton()
     }
-#warning("change from offline to online on successful fetch")
     
     
     var selectAllToolbar: some View {
         Button {
-            for person in vm.relationshipWeb {
-                vm.relationshipWeb[person.key]?.isPresent = true
+            for index in vm.people.indices {
+                vm.people[index].isPresent = true
             }
         } label: {
             Text("Select All")
         }
-    }
-    
-    
-    // MARK: - View Methods
-    
-    func uploadTransactions() async throws {
-        let buyerName = vm.currentBuyer
-        for receiverName in vm.relationshipWeb.keys {
-            if let isPresent = vm.relationshipWeb[receiverName]?.isPresent {
-                if isPresent {
-                    if receiverName != vm.currentBuyer {
-                        try await vm.uploadTransaction(buyerName: buyerName, receiverName: receiverName)
-                        print("\(buyerName) bought coffee for \(receiverName)")
-                    }
-                }
-            }
-        }
-    }
-    
-    /// Cache a person's present status.
-    /// Populate web from cloud.
-    /// Mark present people as present in the updated web.
-    func refreshTransactions() {
-        var cachedPresentStatus = [String:Bool]()
-        for person in vm.coffeeculeMembers {
-            cachedPresentStatus[person] = vm.relationshipWeb[person]?.isPresent
-        }
-        Task {
-            var web = try await vm.populateWebFromCloud()
-            for person in web {
-                web[person.key]?.isPresent = cachedPresentStatus[person.key] ?? true
-            }
-            vm.relationshipWeb = web
-        }
-    }
-    
+    }  
 }
 
 // MARK: - Preview
 
 struct CoffeeculeView_Previews: PreviewProvider {
     static var previews: some View {
-        CoffeeculeView(vm: ViewModel())
+        CoffeeculeView(vm: ViewModel(readWriter: ReadWrite.shared))
     }
 }
+

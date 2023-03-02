@@ -1,10 +1,11 @@
 //
 //  OnboardingView.swift
-//  Coffeecule
+//  CoffeeculeTest
 //
-//  Created by Cory Tripathy on 1/13/23.
+//  Created by Cory Tripathy on 2/6/23.
 //
 
+import Foundation
 import SwiftUI
 
 struct OnboardingView: View {
@@ -18,7 +19,7 @@ struct OnboardingView: View {
                 listOfMembers
                 createCoffeeculeButton
             }
-            .animation(.default, value: vm.addedPeople)
+            .animation(.default, value: addedPeople)
             .navigationTitle("who's in your coffeecule?")
             .navigationBarTitleDisplayMode(.inline)
             .onDisappear {
@@ -59,21 +60,23 @@ extension OnboardingView {
             Text(addedPeople.count < 2 ? "add people to continue" : "create coffeecule!")
                 .foregroundColor(addedPeople.count < 2 ? .gray : .blue)
                 .background {
-                    Button("make cule", action: {
+                    Button("make cule") {
                         var peopleToAdd = addedPeople
                         peopleToAdd.append(newPerson)
-                        vm.coffeeculeMembers = peopleToAdd
-                        print("addedfdf")
-                    })
-//                    NavigationLink("") {
-//                        CoffeeculeView(vm: vm)
-//                        .navigationBarBackButtonHidden()
-//                    }
-                    .disabled(addedPeople.count < 2)
-                        .frame(maxWidth: .infinity)
-                        .animation(.default.speed(1.75), value: addedPeople)
-                        .opacity(0.0)
-                }.frame(maxWidth: .infinity)
+                        vm.createNewCoffeecule(for: addedPeople)
+                        vm.state = .loaded
+                        vm.calculateBuyer()
+                        ReadWrite.shared.writePeopleToDisk(vm.people)
+                        Task {
+                            await ReadWrite.shared.writePeopleToCloud(vm.people)
+                        }
+                    }
+                    .disabled(addedPeople.count < 2 || (addedPeople.count < 1 && newPerson.isEmpty))
+                    .frame(maxWidth: .infinity)
+                    .animation(.default.speed(1.75), value: addedPeople)
+                    .opacity(0.0)
+                }
+                .frame(maxWidth: .infinity)
         }
     }
 }

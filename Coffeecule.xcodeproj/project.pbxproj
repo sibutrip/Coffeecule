@@ -7,37 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402CB86296A099A000BC882 /* CoffeeculeApp.swift */; };
-		7402CB89296A099A000BC882 /* CoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402CB88296A099A000BC882 /* CoffeeculeView.swift */; };
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
-		747E86F02971B95C002ACFA0 /* CRUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86EF2971B95C002ACFA0 /* CRUD.swift */; };
-		747E86F22971D635002ACFA0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F12971D635002ACFA0 /* OnboardingView.swift */; };
-		747E86F42971D67B002ACFA0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E86F32971D67B002ACFA0 /* ContentView.swift */; };
-		74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */; };
-		74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5E929730F480056B1E2 /* ViewModel.swift */; };
-		74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */; };
-		74F2E1792970B36600935EC8 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2E1782970B36600935EC8 /* Config.swift */; };
-		74F2E17B2970B3F100935EC8 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2E17A2970B3F100935EC8 /* Models.swift */; };
-		74F42749297F188E00A32F50 /* WebCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F42748297F188E00A32F50 /* WebCalculations.swift */; };
+		7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467993F29B0DC9100339D5C /* CoffeeculeView.swift */; };
+		7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */; };
+		7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994129B0DC9100339D5C /* OnboardingView.swift */; };
+		7467995A29B0DC9100339D5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994229B0DC9100339D5C /* ContentView.swift */; };
+		7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994429B0DC9100339D5C /* CloudDebug.swift */; };
+		7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */; };
+		7467995D29B0DC9100339D5C /* CoffeeculeTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */; };
+		7467995E29B0DC9100339D5C /* CloudKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994829B0DC9100339D5C /* CloudKitError.swift */; };
+		7467995F29B0DC9100339D5C /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994929B0DC9100339D5C /* Person.swift */; };
+		7467996029B0DC9100339D5C /* ReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994B29B0DC9100339D5C /* ReadWrite.swift */; };
+		7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994D29B0DC9100339D5C /* CloudReadWrite.swift */; };
+		7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994E29B0DC9100339D5C /* DummyReadWrite.swift */; };
+		7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994F29B0DC9100339D5C /* DiskReadWrite.swift */; };
+		7467996429B0DC9100339D5C /* ReadWriterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995029B0DC9100339D5C /* ReadWriterProtocol.swift */; };
+		7467996529B0DC9100339D5C /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995229B0DC9100339D5C /* Transaction.swift */; };
+		7467996629B0DC9100339D5C /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995329B0DC9100339D5C /* Repository.swift */; };
+		7467996729B0DC9100339D5C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995529B0DC9100339D5C /* ViewModel.swift */; };
+		7467996829B0DC9100339D5C /* VmCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995629B0DC9100339D5C /* VmCloud.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7402CB86296A099A000BC882 /* CoffeeculeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeculeApp.swift; sourceTree = "<group>"; };
-		7402CB88296A099A000BC882 /* CoffeeculeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeculeView.swift; sourceTree = "<group>"; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Coffeecule.entitlements; sourceTree = "<group>"; };
-		747E86EF2971B95C002ACFA0 /* CRUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRUD.swift; sourceTree = "<group>"; };
-		747E86F12971D635002ACFA0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		747E86F32971D67B002ACFA0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitPermissionHandler.swift; sourceTree = "<group>"; };
-		74EDA5E929730F480056B1E2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerCalculations.swift; sourceTree = "<group>"; };
-		74F2E1782970B36600935EC8 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		74F2E17A2970B3F100935EC8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		74F42748297F188E00A32F50 /* WebCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCalculations.swift; sourceTree = "<group>"; };
+		7467993F29B0DC9100339D5C /* CoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeView.swift; sourceTree = "<group>"; };
+		7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhosGettingCoffee.swift; sourceTree = "<group>"; };
+		7467994129B0DC9100339D5C /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		7467994229B0DC9100339D5C /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7467994429B0DC9100339D5C /* CloudDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDebug.swift; sourceTree = "<group>"; };
+		7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DEBUGCoffeeculeView.swift; sourceTree = "<group>"; };
+		7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeTestApp.swift; sourceTree = "<group>"; };
+		7467994829B0DC9100339D5C /* CloudKitError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudKitError.swift; sourceTree = "<group>"; };
+		7467994929B0DC9100339D5C /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		7467994B29B0DC9100339D5C /* ReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWrite.swift; sourceTree = "<group>"; };
+		7467994D29B0DC9100339D5C /* CloudReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudReadWrite.swift; sourceTree = "<group>"; };
+		7467994E29B0DC9100339D5C /* DummyReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyReadWrite.swift; sourceTree = "<group>"; };
+		7467994F29B0DC9100339D5C /* DiskReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskReadWrite.swift; sourceTree = "<group>"; };
+		7467995029B0DC9100339D5C /* ReadWriterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriterProtocol.swift; sourceTree = "<group>"; };
+		7467995229B0DC9100339D5C /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		7467995329B0DC9100339D5C /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		7467995529B0DC9100339D5C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		7467995629B0DC9100339D5C /* VmCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VmCloud.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,11 +85,11 @@
 			isa = PBXGroup;
 			children = (
 				7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */,
-				7402CB86296A099A000BC882 /* CoffeeculeApp.swift */,
-				74F2E1782970B36600935EC8 /* Config.swift */,
-				747E86F62971D69F002ACFA0 /* Models */,
-				747E86F72971D6B0002ACFA0 /* ViewModels */,
-				747E86F52971D68D002ACFA0 /* Views */,
+				7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */,
+				7467994329B0DC9100339D5C /* Debug */,
+				7467994729B0DC9100339D5C /* Models */,
+				7467995429B0DC9100339D5C /* ViewModel */,
+				7467993E29B0DC9100339D5C /* Views */,
 				7402CB8A296A099C000BC882 /* Assets.xcassets */,
 				7402CB8C296A099C000BC882 /* Preview Content */,
 			);
@@ -90,34 +104,73 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		747E86F52971D68D002ACFA0 /* Views */ = {
+		7467993E29B0DC9100339D5C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				747E86F32971D67B002ACFA0 /* ContentView.swift */,
-				747E86F12971D635002ACFA0 /* OnboardingView.swift */,
-				7402CB88296A099A000BC882 /* CoffeeculeView.swift */,
+				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
+				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
+				7467994129B0DC9100339D5C /* OnboardingView.swift */,
+				7467994229B0DC9100339D5C /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		747E86F62971D69F002ACFA0 /* Models */ = {
+		7467994329B0DC9100339D5C /* Debug */ = {
 			isa = PBXGroup;
 			children = (
-				74F2E17A2970B3F100935EC8 /* Models.swift */,
+				7467994429B0DC9100339D5C /* CloudDebug.swift */,
+				7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		7467994729B0DC9100339D5C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7467994829B0DC9100339D5C /* CloudKitError.swift */,
+				7467994929B0DC9100339D5C /* Person.swift */,
+				7467994A29B0DC9100339D5C /* ReadWriterHelpers */,
+				7467995129B0DC9100339D5C /* Transactions */,
+				7467995329B0DC9100339D5C /* Repository.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		747E86F72971D6B0002ACFA0 /* ViewModels */ = {
+		7467994A29B0DC9100339D5C /* ReadWriterHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				74B0EADB296CA98E0093DF1E /* CloudKitPermissionHandler.swift */,
-				74EDA5E929730F480056B1E2 /* ViewModel.swift */,
-				747E86EF2971B95C002ACFA0 /* CRUD.swift */,
-				74EDA5EB29734F190056B1E2 /* BuyerCalculations.swift */,
-				74F42748297F188E00A32F50 /* WebCalculations.swift */,
+				7467994B29B0DC9100339D5C /* ReadWrite.swift */,
+				7467994C29B0DC9100339D5C /* Old ReadWriters */,
+				7467995029B0DC9100339D5C /* ReadWriterProtocol.swift */,
 			);
-			path = ViewModels;
+			path = ReadWriterHelpers;
+			sourceTree = "<group>";
+		};
+		7467994C29B0DC9100339D5C /* Old ReadWriters */ = {
+			isa = PBXGroup;
+			children = (
+				7467994D29B0DC9100339D5C /* CloudReadWrite.swift */,
+				7467994E29B0DC9100339D5C /* DummyReadWrite.swift */,
+				7467994F29B0DC9100339D5C /* DiskReadWrite.swift */,
+			);
+			path = "Old ReadWriters";
+			sourceTree = "<group>";
+		};
+		7467995129B0DC9100339D5C /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				7467995229B0DC9100339D5C /* Transaction.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		7467995429B0DC9100339D5C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7467995529B0DC9100339D5C /* ViewModel.swift */,
+				7467995629B0DC9100339D5C /* VmCloud.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,6 +205,7 @@
 				TargetAttributes = {
 					7402CB82296A099A000BC882 = {
 						CreatedOnToolsVersion = 14.0.1;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -190,17 +244,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74EDA5EC29734F190056B1E2 /* BuyerCalculations.swift in Sources */,
-				74F42749297F188E00A32F50 /* WebCalculations.swift in Sources */,
-				74B0EADC296CA98E0093DF1E /* CloudKitPermissionHandler.swift in Sources */,
-				7402CB89296A099A000BC882 /* CoffeeculeView.swift in Sources */,
-				74F2E1792970B36600935EC8 /* Config.swift in Sources */,
-				747E86F42971D67B002ACFA0 /* ContentView.swift in Sources */,
-				747E86F22971D635002ACFA0 /* OnboardingView.swift in Sources */,
-				747E86F02971B95C002ACFA0 /* CRUD.swift in Sources */,
-				74F2E17B2970B3F100935EC8 /* Models.swift in Sources */,
-				7402CB87296A099A000BC882 /* CoffeeculeApp.swift in Sources */,
-				74EDA5EA29730F480056B1E2 /* ViewModel.swift in Sources */,
+				7467996429B0DC9100339D5C /* ReadWriterProtocol.swift in Sources */,
+				7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */,
+				7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */,
+				7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */,
+				7467996829B0DC9100339D5C /* VmCloud.swift in Sources */,
+				7467996029B0DC9100339D5C /* ReadWrite.swift in Sources */,
+				7467995A29B0DC9100339D5C /* ContentView.swift in Sources */,
+				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
+				7467995D29B0DC9100339D5C /* CoffeeculeTestApp.swift in Sources */,
+				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
+				7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */,
+				7467995F29B0DC9100339D5C /* Person.swift in Sources */,
+				7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */,
+				7467996629B0DC9100339D5C /* Repository.swift in Sources */,
+				7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */,
+				7467995E29B0DC9100339D5C /* CloudKitError.swift in Sources */,
+				7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */,
+				7467996529B0DC9100339D5C /* Transaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +387,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Coffeecule/Coffeecule.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -347,6 +409,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.CoryTripathy.Coffeecule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -357,6 +420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Coffeecule/Coffeecule.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

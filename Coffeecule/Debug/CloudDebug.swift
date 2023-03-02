@@ -1,21 +1,22 @@
 //
-//  CloudKitPermissionHandler.swift
-//  Coffeecule
+//  CloudDebug.swift
+//  CoffeeculeTest
 //
-//  Created by Cory Tripathy on 1/9/23.
+//  Created by Cory Tripathy on 2/3/23.
 //
 
 import Foundation
-import CloudKit
 import SwiftUI
+import CloudKit
+import UIKit
 
 class CloudKitViewModel: ObservableObject {
-    /// i dont use this at all. it's just nice to have in case i need to ;)
     
     @Published var permissionStatus: Bool = false
     @Published var isSignedInToiCloud: Bool = false
     @Published var signInError: String = ""
     @Published var userName: String = ""
+    @Published var familyName: String = ""
     
     init() {
         getiCloudStatus()
@@ -54,6 +55,10 @@ class CloudKitViewModel: ObservableObject {
             DispatchQueue.main.async {
                 if returnedStatus == .granted {
                     self?.permissionStatus = true
+                } else {
+                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsURL)
+                    }
                 }
             }
         }
@@ -67,11 +72,14 @@ class CloudKitViewModel: ObservableObject {
         }
     }
     
-    func discoveriCloudUser(id: CKRecord.ID) {
+    func discoveriCloudUser (id: CKRecord.ID) {
         CKContainer.default().discoverUserIdentity(withUserRecordID: id) { [weak self] returnedIdentity, returnedError  in
             DispatchQueue.main.async {
                 if let name =  returnedIdentity?.nameComponents?.givenName {
                     self?.userName = name
+                }
+                if let familyName = returnedIdentity?.nameComponents?.familyName {
+                    self?.familyName = familyName
                 }
             }
         }
@@ -79,13 +87,23 @@ class CloudKitViewModel: ObservableObject {
 }
 
 struct CloudView: View {
+    @State var isPresented = false
     @StateObject var vm = CloudKitViewModel()
     var body: some View {
         VStack {
             Text("IS SIGNED IN: \(vm.isSignedInToiCloud.description.uppercased())")
             Text(vm.signInError)
             Text("Permission: \(vm.permissionStatus.description.uppercased())")
-            Text("NAME: \(vm.userName)")
+            Text("given NAME: \(vm.userName)")
+            Text("family NAME: \(vm.familyName)")
+            Button("tap me") {
+                isPresented = true
+            }.alert("do you want to enable cloud stuff?", isPresented: $isPresented) {
+                HStack {
+                    Text("yes")
+                    Text("no?")
+                }
+            }
         }
     }
 }

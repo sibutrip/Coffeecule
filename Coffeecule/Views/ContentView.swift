@@ -1,24 +1,25 @@
-////
-////  MainView.swift
-////  Coffeecule
-////
-////  Created by Cory Tripathy on 1/13/23.
-////
+//
+//  ContentView.swift
+//  CoffeeculeTest
+//
+//  Created by Cory Tripathy on 2/20/23.
+//
 
-import Foundation
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var vm = ViewModel()
-    
+    @StateObject var vm = ViewModel(readWriter: ReadWrite.shared)
     var body: some View {
-        ZStack {
-            if vm.userHasCoffecule {
-                CoffeeculeView(vm: vm)
-            } else {
-                //            EmptyView()
-                OnboardingView(vm: vm)
-            }
-        }.animation(.default, value: vm.userHasCoffecule)
+        if vm.hasCoffeecule {
+            CoffeeculeView(vm: vm)
+        } else {
+            OnboardingView(vm: vm)
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
