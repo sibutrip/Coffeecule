@@ -12,6 +12,7 @@ struct OnboardingView: View {
     @ObservedObject var vm: ViewModel
     @State var newPerson: String = ""
     @State var addedPeople: [String] = []
+    @State var duplicatePersonAlert = false
     
     var body: some View {
         NavigationView {
@@ -22,10 +23,12 @@ struct OnboardingView: View {
             .animation(.default, value: addedPeople)
             .navigationTitle("who's in your coffeecule?")
             .navigationBarTitleDisplayMode(.inline)
-            .onDisappear {
-            }
             .onAppear {
                 addedPeople.removeAll()
+            }.alert("\(newPerson) is already in your Coffeecule, try changing their name.", isPresented: $duplicatePersonAlert) {
+                Button("Okay", role: .cancel) {
+                    newPerson.removeAll()
+                }
             }
         }
     }
@@ -43,8 +46,13 @@ extension OnboardingView {
             HStack {
                 TextField("add a person...", text: $newPerson)
                 Button {
+                    self.newPerson = newPerson.capitalized
+                    if addedPeople.contains(newPerson) {
+                        duplicatePersonAlert = true
+                        return
+                    }
                     addedPeople.append(newPerson)
-                    newPerson = ""
+                    self.newPerson = ""
                 } label: {
                     Image(systemName: "plus.circle")
                 }
