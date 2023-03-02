@@ -13,7 +13,7 @@ typealias ReadWritable = Readable & Writable
 protocol Readable {
     func readPeopleFromDisk() -> [Person]
     func readTransactionsFromCloud() async -> [Transaction]
-    func readPeopleFromCloud() async -> [Person]
+    func readPeopleFromCloud() async -> [Person]?
 }
 
 protocol Writable {
@@ -25,10 +25,14 @@ protocol Writable {
 
 extension Readable {
     func transactionsToPeople(_ transactions: [Transaction], people: [Person]) -> [Person] {
-        var peopleToAdd = [Person]()
+//        var peopleToAdd = [Person]()
      
         var names = people.map {
             $0.name
+        }
+        
+        var peopleToAdd = names.map {
+            Person(name: $0)
         }
         
         for transaction in transactions {
@@ -38,17 +42,17 @@ extension Readable {
             
             if !names.contains(buyer) {
                 names.append(buyer)
-                peopleToAdd.append(Person(name: buyer))
+//                peopleToAdd.append(Person(name: buyer))
             }
             if !names.contains(receiver) {
                 names.append(receiver)
-                peopleToAdd.append(Person(name: receiver))
+//                peopleToAdd.append(Person(name: receiver))
             }
                         
             guard let buyerIndex = peopleToAdd.firstIndex(where: {
                 $0.name == buyer
             }) else {
-                debugPrint("transaction buyer is not in the people array")
+                debugPrint("transaction buyer: \(buyer) is not in the people array")
                 return [Person]()
             }
             
@@ -59,7 +63,7 @@ extension Readable {
             guard let receiverIndex = peopleToAdd.firstIndex(where: {
                 $0.name == receiver
             }) else {
-                debugPrint("transaction receiver is not in the people array")
+                debugPrint("transaction receiver: \(receiver) is not in the people array")
                 return [Person]()
             }
             

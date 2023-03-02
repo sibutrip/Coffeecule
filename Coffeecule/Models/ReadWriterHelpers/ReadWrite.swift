@@ -36,28 +36,31 @@ struct ReadWrite: ReadWritable {
         return transactions
     }
     
-    func readPeopleFromCloud() async -> [Person] {
+    func readPeopleFromCloud() async -> [Person]? {
         guard let records = try? await fetchFromPrivateContainer(from: .People) else {
             print("no people found in cloud")
-            return []
+            return nil
         }
         if records.count > 1 {
-            print("found \(records.count) number of people jsons lol")
+            print("ERROR: found \(records.count) people json.")
         } else if records.count == 0 {
             print("no people stored in cloud. normal on first time launch")
-            return []
+            return nil
         }
         guard let nsEncodedPeople = records[0]["people"] as? NSData else {
             print("cannot get value NSData from record[people]")
-            return []
+            return nil
         }
         do {
             let encodedPeople = Data(referencing: nsEncodedPeople)
             let decodedpeople = try JSONDecoder().decode([Person].self, from: encodedPeople)
+            for person in decodedpeople {
+                print("\(person.name) decoded from cloud")
+            }
             return decodedpeople
         } catch {
-            print("error reading cachedTransactions.json data")
-            return []
+            print("cannot decode people json)")
+            return nil
         }
     }
         

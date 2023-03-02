@@ -18,7 +18,7 @@ struct CoffeeculeView: View {
                 buyCoffeeButton
                 relationshipWebChart
             }
-            .navigationTitle("Coffeecule")
+            
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
@@ -27,18 +27,6 @@ struct CoffeeculeView: View {
                     selectAllToolbar
                 }
             }
-        }
-        .overlay {
-            ZStack {
-                switch vm.state {
-                case .loading:
-                    Color.gray.opacity(0.3)
-                    ProgressView()
-                default:
-                    EmptyView()
-                }
-            }
-            .ignoresSafeArea()
         }
     }
 }
@@ -74,15 +62,24 @@ extension CoffeeculeView {
     
     var buyCoffeeButton: some View {
         Section {
-            Button("buy coffee") {
+            
+            Button {
                 isBuying = true
-            }.alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
+            } label: {
+                switch vm.state {
+                case .loaded:
+                    Text("Buy Coffee")
+                default:
+                    ProgressView()
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
                 HStack {
                     Button("Yes", role: .destructive) {
                         Task(priority: .userInitiated) {
                             vm.state = .loading
                             vm.buyCoffee()
-//                            await vm.refreshTransactions()
                             vm.calculateBuyer()
                             vm.state = .loaded
                         }
@@ -92,20 +89,26 @@ extension CoffeeculeView {
                     }
                 }
             }
-            .disabled(vm.currentBuyer.name == "nobody")
+            .disabled(vm.currentBuyer.name == "nobody" || vm.state != .loaded )
         }
+        //        .overlay {
+        //            ZStack {
+        //                switch vm.state {
+        //
+        //                case .loading:
+        //                    Color.gray.opacity(0.0)
+        //                    ProgressView()
+        //                default:
+        //                    EmptyView()
+        //                }
+        //            }
+        //            .ignoresSafeArea()
+        //        }
     }
     
     var relationshipWebChart: some View {
         VStack {
             chart(vm.displayedDebts)
-//            Chart(vm.displayedDebts.keys.sorted(), id: \.self) {
-//                BarMark(
-//                    x: .value("person", $0.name),
-//                    y: .value("cups bought", vm.displayedDebts[$0] ?? 0)
-//                ).foregroundStyle(vm.displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
-//            }
-            
         }
         .frame(height: 100)
         .animation(.default, value: vm.displayedDebts)

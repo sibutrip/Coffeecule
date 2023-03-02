@@ -53,7 +53,6 @@ struct WhosGettingCoffee: View {
                         Task {
                             do {
                                 try await vm.removePerson(for: personToDelete)
-                                await vm.updatePeople(vm.people)
                             } catch {
                                 deleteError = true
                             }

@@ -15,7 +15,7 @@ extension ViewModel {
         do {
             try await createZonesIfNeeded()
         } catch {
-            state = .error(error)
+            state = .error
         }
     }
     
@@ -40,22 +40,22 @@ extension ViewModel {
     /// Cache a person's present status.
     /// Populate people from cloud.
     /// Mark present people as present in the updated people.
-    public func refreshTransactions() async {
-        
-        // key: name, value: isPresent
-        var cachedPeopleStatus = [String:Bool]()
-        for person in self.people {
-            cachedPeopleStatus[person.name] = person.isPresent
-        }
-        let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-        var newPeople = ReadWrite.shared.transactionsToPeople(transactions, people: people)
-        for index in newPeople.sorted().indices {
-            if let cachedPersonStatus = cachedPeopleStatus[newPeople[index].name] {
-                newPeople[index].isPresent = cachedPersonStatus
-            }
-        }
-        self.people = newPeople
-    }
+    //    public func refreshTransactions() async {
+    //
+    //        // key: name, value: isPresent
+    //        var cachedPeopleStatus = [String:Bool]()
+    //        for person in self.people {
+    //            cachedPeopleStatus[person.name] = person.isPresent
+    //        }
+    //        let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+    //        var newPeople = ReadWrite.shared.transactionsToPeople(transactions, people: people)
+    //        for index in newPeople.sorted().indices {
+    //            if let cachedPersonStatus = cachedPeopleStatus[newPeople[index].name] {
+    //                newPeople[index].isPresent = cachedPersonStatus
+    //            }
+    //        }
+    //        self.people = newPeople
+    //    }
     
     func removePerson(for deletingPerson: Person) async throws {
         for item in ["buyerName","receiverName"] {
@@ -66,7 +66,7 @@ extension ViewModel {
                 let _ = try await Repository.shared.database.deleteRecord(withID: id)
             }
         }
-        let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+        //        let transactions = await ReadWrite.shared.readTransactionsFromCloud()
         var updatedPeople = people.filter {
             $0 != deletingPerson
         }
@@ -78,37 +78,16 @@ extension ViewModel {
             updatedPerson.coffeesOwed = coffeesOwed
             return updatedPerson
         }
-    
+        
         
         print(updatedPeople)
-        let people = ReadWrite.shared.transactionsToPeople(transactions, people: updatedPeople)
-        self.people = people
+        //        let people = ReadWrite.shared.transactionsToPeople(transactions, people: updatedPeople)
+        self.people = updatedPeople
         calculateBuyer()
         ReadWrite.shared.writePeopleToDisk(people)
         Task {
-//            await self.updatePeople(people)
+            //            await self.updatePeople(people)
             await ReadWrite.shared.writePeopleToCloud(people)
-        }
-    }
-    
-    func updatePeople(_ people: [Person]) async {
-        do {
-            let query = CKQuery(recordType: Repository.shared.recordType, predicate: NSPredicate(value: true))
-            let (results, _)  = try await Repository.shared.database.records(matching: query, inZoneWith: RecordZones.People().zoneID, desiredKeys: nil, resultsLimit: CKQueryOperation.maximumResults)
-            for (_, result) in results {
-                switch result {
-                case .success(let result):
-                    
-                    let data = try JSONEncoder().encode(self.people)
-                    result["people"] = NSData(data: data)
-                    try await Repository.shared.database.save(result)
-                    
-                case .failure(_):
-                    print("failed to fetch person record")
-                }
-            }
-        } catch {
-            print("failed to update person record")
         }
     }
     
@@ -122,5 +101,16 @@ extension ViewModel {
         } catch {
             print("error delete people json")
         }
+    }
+    
+    func backgroundUpdateCloud() async -> [Person]? {
+        let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+        let people = await ReadWrite.shared.readPeopleFromCloud() ?? self.people
+        print("in refresh, poeple are \(people)")
+        /// need to include people who havent made transactions in [Person]
+        let updatedPeople = ReadWrite.shared.transactionsToPeople(transactions, people: people)
+        ReadWrite.shared.writePeopleToDisk(updatedPeople)
+        await ReadWrite.shared.writePeopleToCloud(updatedPeople)
+        return updatedPeople
     }
 }

@@ -19,12 +19,13 @@ class ViewModel: ObservableObject {
         }
     }
     
-    enum State {
+    enum State: Equatable {
+        
         case loading
         case loaded
         case noCoffeecule
         case noPermission
-        case error(Error)
+        case error
     }
     
     // MARK: - Cloud-related Properties
@@ -62,17 +63,7 @@ class ViewModel: ObservableObject {
         }
         currentBuyer = mostDebted?.key ?? Person(name: "nobody")
     }
-    
-    //    var displayedDebts: [Person:Int] {
-    //        var debts = [Person:Int]()
-    //        for person in people {
-    //            if person.isPresent {
-    //                debts[person] = person.coffeesOwed.values.reduce(0, +)
-    //            }
-    //        }
-    //        return debts
-    //    }
-    
+        
     var displayedDebts: [Person:Int] {
         var debts = [Person:Int]()
         let people = self.people
@@ -93,7 +84,6 @@ class ViewModel: ObservableObject {
             }
             debts[person] = debt
         }
-        print("done")
         return debts
     }
     
@@ -202,15 +192,15 @@ class ViewModel: ObservableObject {
         //                return
         //            }
         //        }
-        self.state = .loaded
+//        self.state = .loaded
         self.calculateBuyer()
         
         Task(priority: .userInitiated) {
-            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-            
-            /// need to include people who havent made transactions in [Person]
-            let people = ReadWrite.shared.transactionsToPeople(transactions, people: self.people)
-            await self.updatePeople(people)
+            if let updatedPeople = await backgroundUpdateCloud() {
+                self.people = updatedPeople
+                print("self people is now \(self.people)")
+            }
+            self.state = .loaded
         }
     }
 }
