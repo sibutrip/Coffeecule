@@ -21,6 +21,7 @@ struct Repository {
     let dummyUrl: URL
     let peopleUrl: URL
     let dummyPeopleUrl: URL
+    var ckShare: CKShare?
     
     /// Use the specified iCloud container ID, which should also be present in the entitlements file.
     lazy var container = CKContainer(identifier: "iCloud.com.CoryTripathy.Coffeecule")

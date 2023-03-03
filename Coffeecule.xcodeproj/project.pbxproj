@@ -27,6 +27,7 @@
 		7467996629B0DC9100339D5C /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995329B0DC9100339D5C /* Repository.swift */; };
 		7467996729B0DC9100339D5C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995529B0DC9100339D5C /* ViewModel.swift */; };
 		7467996829B0DC9100339D5C /* VmCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995629B0DC9100339D5C /* VmCloud.swift */; };
+		74E04ACC29B2423E0010A33B /* CloudSharingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E04ACB29B2423E0010A33B /* CloudSharingManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,8 @@
 		7467995329B0DC9100339D5C /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		7467995529B0DC9100339D5C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		7467995629B0DC9100339D5C /* VmCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VmCloud.swift; sourceTree = "<group>"; };
+		74E04ACB29B2423E0010A33B /* CloudSharingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingManager.swift; sourceTree = "<group>"; };
+		74E04ACE29B24A8F0010A33B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +87,7 @@
 		7402CB85296A099A000BC882 /* Coffeecule */ = {
 			isa = PBXGroup;
 			children = (
+				74E04ACE29B24A8F0010A33B /* Info.plist */,
 				7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */,
 				7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */,
 				7467994729B0DC9100339D5C /* Models */,
@@ -160,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				7467995529B0DC9100339D5C /* ViewModel.swift */,
+				74E04ACB29B2423E0010A33B /* CloudSharingManager.swift */,
 				7467995629B0DC9100339D5C /* VmCloud.swift */,
 			);
 			path = ViewModel;
@@ -248,6 +253,7 @@
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
 				7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */,
 				7467995F29B0DC9100339D5C /* Person.swift in Sources */,
+				74E04ACC29B2423E0010A33B /* CloudSharingManager.swift in Sources */,
 				7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */,
 				7467996629B0DC9100339D5C /* Repository.swift in Sources */,
 				7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */,
@@ -387,6 +393,9 @@
 				DEVELOPMENT_TEAM = 3UR85MK9RT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Coffeecule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -420,6 +429,9 @@
 				DEVELOPMENT_TEAM = 3UR85MK9RT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Coffeecule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
