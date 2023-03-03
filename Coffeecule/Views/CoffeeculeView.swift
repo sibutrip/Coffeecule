@@ -81,10 +81,8 @@ extension CoffeeculeView {
                 HStack {
                     Button("Yes", role: .destructive) {
                         Task(priority: .userInitiated) {
-                            vm.state = .loading
                             vm.buyCoffee()
                             vm.calculateBuyer()
-                            vm.state = .loaded
                         }
                     }
                     Button("No", role: .cancel) {
@@ -94,19 +92,6 @@ extension CoffeeculeView {
             }
             .disabled(vm.currentBuyer.name == "nobody" || vm.state != .loaded )
         }
-        //        .overlay {
-        //            ZStack {
-        //                switch vm.state {
-        //
-        //                case .loading:
-        //                    Color.gray.opacity(0.0)
-        //                    ProgressView()
-        //                default:
-        //                    EmptyView()
-        //                }
-        //            }
-        //            .ignoresSafeArea()
-        //        }
     }
     
     var relationshipWebChart: some View {

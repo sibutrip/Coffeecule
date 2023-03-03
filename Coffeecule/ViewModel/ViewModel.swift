@@ -9,6 +9,7 @@ import Foundation
 import CloudKit
 import UIKit
 import SwiftUI
+import Combine
 
 @MainActor
 class ViewModel: ObservableObject {
@@ -35,8 +36,7 @@ class ViewModel: ObservableObject {
     
     let readWriter: ReadWritable
     
-    @Published var people: [Person] = []
-    {
+    @Published var people: [Person] = [] {
         didSet {
             // when no people, set user defaults to false
             if self.people.count < 1 {
@@ -62,6 +62,7 @@ class ViewModel: ObservableObject {
             return false
         }
         currentBuyer = mostDebted?.key ?? Person(name: "nobody")
+        self.state = .loaded
     }
     
     var displayedDebts: [Person:Int] {
@@ -99,6 +100,7 @@ class ViewModel: ObservableObject {
     }
     
     func buyCoffee() {
+        self.state = .loading
         var transactions = [Transaction]()
         var updatedPeople = [Person]()
         var buyer = currentBuyer
@@ -139,7 +141,6 @@ class ViewModel: ObservableObject {
             await ReadWrite.shared.writeTransactionsToCloud(transactions)
         }
         Task {
-            //            await self.updatePeople(updatedPeople)
             await ReadWrite.shared.writePeopleToCloud(updatedPeople)
         }
     }

@@ -130,8 +130,8 @@
 				7467994829B0DC9100339D5C /* CloudKitError.swift */,
 				7467994929B0DC9100339D5C /* Person.swift */,
 				7467994A29B0DC9100339D5C /* ReadWriterHelpers */,
-				7467995129B0DC9100339D5C /* Transactions */,
 				7467995329B0DC9100339D5C /* Repository.swift */,
+				7467995229B0DC9100339D5C /* Transaction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -154,14 +154,6 @@
 				7467994F29B0DC9100339D5C /* DiskReadWrite.swift */,
 			);
 			path = "Old ReadWriters";
-			sourceTree = "<group>";
-		};
-		7467995129B0DC9100339D5C /* Transactions */ = {
-			isa = PBXGroup;
-			children = (
-				7467995229B0DC9100339D5C /* Transaction.swift */,
-			);
-			path = Transactions;
 			sourceTree = "<group>";
 		};
 		7467995429B0DC9100339D5C /* ViewModel */ = {

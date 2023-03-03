@@ -72,7 +72,6 @@ extension OnboardingView {
                         var peopleToAdd = addedPeople
                         peopleToAdd.append(newPerson)
                         vm.createNewCoffeecule(for: addedPeople)
-                        vm.state = .loaded
                         vm.calculateBuyer()
                         ReadWrite.shared.writePeopleToDisk(vm.people)
                         Task {
