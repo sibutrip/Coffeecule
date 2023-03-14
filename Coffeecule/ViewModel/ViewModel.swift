@@ -162,7 +162,7 @@ class ViewModel: ObservableObject {
     
     
     init(readWriter: ReadWritable) {
-        
+        UserDefaults.standard.set(true, forKey: "areZonesCreated")
         self.state = .loading
         self.readWriter = readWriter
         

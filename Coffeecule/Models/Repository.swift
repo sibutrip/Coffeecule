@@ -29,8 +29,8 @@ struct Repository {
     lazy var database = container.privateCloudDatabase
     
     /// Sharing requires using a custom record zone.
-    let recordZone = CKRecordZone(zoneName: "TransactionsTest")
-    let recordType = "TransactionsTest"
+    let recordZone = CKRecordZone(zoneName: "Transactions")
+    let recordType = "Corycule"
     
     private init() {
         guard let url = try? FileManager.default
