@@ -18,7 +18,7 @@ struct CoffeeculeView: View {
                 buyCoffeeButton
                 relationshipWebChart
             }
-            .navigationTitle("Coffeecule")
+            .navigationTitle(Title.shared.activeTitle)
             .refreshable {
                 Task { await vm.backgroundUpdateCloud() }
             }
@@ -122,20 +122,25 @@ extension CoffeeculeView {
     func chart(_ debt: [Person : Int])  -> some View {
         let displayedDebts = debt
         
-        return Chart(displayedDebts.keys.sorted(), id: \.self) {
-            BarMark(
-                x: .value("person", $0.name),
-                y: .value("cups bought", displayedDebts[$0] ?? 0)
-            ).foregroundStyle(displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
+        if #available(iOS 16, *) {
+            
+            return Chart(displayedDebts.keys.sorted(), id: \.self) {
+                BarMark(
+                    x: .value("person", $0.name),
+                    y: .value("cups bought", displayedDebts[$0] ?? 0)
+                ).foregroundStyle(displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
+            }
+        } else {
+            return EmptyView()
         }
     }
 }
-
-// MARK: - Preview
-
-struct CoffeeculeView_Previews: PreviewProvider {
-    static var previews: some View {
-        CoffeeculeView(vm: ViewModel(readWriter: ReadWrite.shared))
+    
+    // MARK: - Preview
+    
+    struct CoffeeculeView_Previews: PreviewProvider {
+        static var previews: some View {
+            CoffeeculeView(vm: ViewModel(readWriter: ReadWrite.shared))
+        }
     }
-}
-
+    

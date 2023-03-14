@@ -12,8 +12,10 @@ extension ViewModel {
     
     /// Prepares container by creating custom zone if needed.
     func initialize() async {
+        print("initializing")
         do {
             try await createZonesIfNeeded()
+            print("zones created")
         } catch {
             self.state = .error
         }
@@ -22,12 +24,29 @@ extension ViewModel {
     /// Creates the custom zone in use if needed.
     private func createZonesIfNeeded() async throws {
         if UserDefaults.standard.bool(forKey: "areZonesCreated") {
+            print("zones already made")
             return
         }
         
+        let id = CKRecord.ID(zoneID: RecordZones.Transactions().zoneID)
+        let rootRecord = CKRecord(recordType: "CoffeeculeRootTest", recordID: id)
+        let share = CKShare(rootRecord: rootRecord)
+        Repository.shared.ckShare = share
+        Repository.shared.rootRecord = rootRecord
+        
         do {
             print(try await Repository.shared.database.modifyRecordZones(saving: [RecordZones.Transactions(), RecordZones.People()], deleting: []))
+            print("zone creation success??")
             UserDefaults.standard.set(true, forKey: "areZonesCreated")
+            
+            
+            do {
+                let (saveResults,_) = try await Repository.shared.database.modifyRecords(saving: [share,rootRecord], deleting: [])
+            } catch {
+                print("could not upload share to database")
+            }
+            
+            
         } catch {
             print("ERROR: Failed to create custom zone: \(error.localizedDescription)")
             throw error

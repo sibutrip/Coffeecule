@@ -102,6 +102,7 @@ class ViewModel: ObservableObject {
     func buyCoffee() {
         self.state = .loading
         var transactions = [Transaction]()
+        var records = [CKRecord]()
         var updatedPeople = [Person]()
         var buyer = currentBuyer
         for receiver in people {
@@ -114,7 +115,9 @@ class ViewModel: ObservableObject {
                 }
                 if receiver.isPresent {
                     let transaction = createTransaction(buyer: buyer, receiver: receiver)
+                    let record = CloudShare.shared.createRecord(buyer: buyer, receiver: receiver)
                     transactions.append(transaction)
+                    records.append(record)
                     newBuyerDebt += 1
                 }
                 buyer.coffeesOwed[receiver.name] = newBuyerDebt
@@ -138,11 +141,16 @@ class ViewModel: ObservableObject {
         print(updatedPeople)
         ReadWrite.shared.writePeopleToDisk(updatedPeople)
         Task {
-            await ReadWrite.shared.writeTransactionsToCloud(transactions)
+            for record in records {
+                await CloudShare.shared.uploadRecordToCloud(record)
+            }
         }
-        Task {
-            await ReadWrite.shared.writePeopleToCloud(updatedPeople)
-        }
+//        Task {
+//            await ReadWrite.shared.writeTransactionsToCloud(transactions)
+//        }
+//        Task {
+//            await ReadWrite.shared.writePeopleToCloud(updatedPeople)
+//        }
     }
     
     func createNewCoffeecule(for names: [String]) {
@@ -171,6 +179,7 @@ class ViewModel: ObservableObject {
         
         Task(priority: .userInitiated) {
             await initialize()
+            _ = await CloudShare.shared.fetchShareRecord()
             if let updatedPeople = await backgroundUpdateCloud() {
                 self.people = updatedPeople
             }

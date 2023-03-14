@@ -7,10 +7,12 @@
 
 import Foundation
 import CloudKit
+import SwiftUI
 
 enum RecordZones: String {
     case Transactions = "TransactionsTest"
     case People = "PeopleTest"
+//    case Root = "RootTest"
     func callAsFunction() -> CKRecordZone {
         return CKRecordZone(zoneName: self.rawValue)
     }
@@ -22,6 +24,8 @@ struct Repository {
     let peopleUrl: URL
     let dummyPeopleUrl: URL
     var ckShare: CKShare?
+    var rootRecord: CKRecord?
+    
     
     /// Use the specified iCloud container ID, which should also be present in the entitlements file.
     lazy var container = CKContainer(identifier: "iCloud.com.CoryTripathy.Coffeecule")

@@ -1,0 +1,18 @@
+//
+//  Title.swift
+//  Coffeecule
+//
+//  Created by Cory Tripathy on 3/10/23.
+//
+
+import Foundation
+
+struct Title {
+    init() {
+        self.activeTitle = names.randomElement()!
+    }
+    let activeTitle: String
+    let names =
+    ["BrewCrew", "JavaJoint", "CoffeeKlatch", "BeanBuddies", "CafeClub", "CupofJoe", "CaffeineComrades", "EspressoExpress", "MochaMates", "Cream&SugarCrew", "CafeConnoisseurs", "LatteLovers", "FrappeFriends", "CupofFriends", "CaffeinatedConnections", "CoffeeChums", "Grind&Gossip", "PerkUpPals", "BrewedBuddies", "Mugs&Mates", "HotChats", "Roast&Toast", "JavaJammers", "ChaiChums", "EnergizedEntourage", "SteepedinFriendship", "CoffeeConnections", "CuppaCompanions", "TheBrewBunch", "CoffeeKlatch", "CupofCaring", "Drink&Discuss", "Coffee&Conversation", "PourOverPals", "BuddyBrews", "BeanBunch", "CafeConversation", "JavaJam", "PerkUpPartners", "CoffeeCarousers", "LatteLaughs", "CafeConviviality", "Cream&Converse", "Brew&Bond", "BaristaBuddies", "Roast&Relate", "Coffee&Chatter", "CafeConnections", "LatteLeaders", "CaffeinatedCrew", "JavaJunkies", "Mugs&Memories", "CoffeeChums", "Jolt&Joke", "Coffee&Companions", "JavaJamboree", "PercolatedPartners", "CuppaCrew", "MugMates", "CaffeineComrades", "TheCupClub", "CupO'Buddies", "Coffee&Camaraderie", "Chat&Chai", "Coffee&Comfort", "Java&Jokes", "CaffeinatedClique", "EspressoEntourage", "CaffeinatedCrew", "Java&Joviality", "CoffeeKlatch", "Buzz&Banter", "Mugs&Merriment", "Cream&Crumpets", "Perk&Palaver", "LatteLoyals", "Coffee&Companionship", "CuppaClique", "Cafe&Camaraderie", "Coffee&Conversation", "TheMorningMuckrakers", "Coffee&Companions", "Coffee&ChitChat", "Cafe&ChitChat", "CoffeeCompany", "CafeCabal", "LatteLeague", "BrewBuddies", "MorningMojo", "CafeChums", "CupofCharisma", "CoffeeKlatch", "CaffeinatedCacophony", "CaffeinatedConnections", "CafeConspirators", "CoffeeCrowd", "PercolatedPals", "CaffeinatedClubhouse", "Mugs&Memories", "ChaiChums", "LatteLoyalists", "CaffeinatedCoalition", "Coffee&Contention", "CafeCongregation", "PerkedUpPartners", "CafeCollaboration", "BrewedBuddies", "JavaJunkies", "MellowMates", "PerkedUpPals", "CuppaClique", "Roast&Reminisce", "Coffee&Connections", "CappuccinoConnections", "JavaJamboree", "CaffeinatedChums", "BeanBunch", "CoffeeClub", "CafeContemporaries", "LatteLovers", "Grind&Gossip", "Cream&Conversation", "CoffeeCrusaders", "CuppaCompanions", "JavaJoint", "CaffeeClatsch", "CaffeinatedCrew", "EspressoEntourage", "CafeConnoisseurs", "CoffeeClatch", "Mugs&Merriment", "CuppaCompany", "HotChats", "Perk&Palaver", "Cream&Crumpets", "Roast&Relate", "CafeConviviality", "BrewCrew", "BrewBunch", "Coffee&Cookies", "CafeChatters", "CupofCharacters", "JavaJam", "CafeConclave", "CuppaConversations", "Cappuccino&Company", "Java&Jokes", "Coffee&Companionship", "MorningMuckrakers", "Coffee&Conscience", "Buzz&Banter", "LatteLaughs", "MochaMates", "CaffeinatedCrew", "Java&Joviality", "ChaiChums", "Brew&Bond", "EspressoExpress", "LatteLeaders", "CafeCabal", "BrewBuddies", "CaffeinatedClique", "Brew&Bond", "Coffee&Companions", "CafeConnections", "BeanBuddies", "Coffee&Chatter", "Coffee&Companions", "PerkUpPals", "RoastRoulette", "LatteLoyals", "CaffeinatedCrew", "JavaJammers", "CupO'Buddies", "CuppaCrew", "CafeCompanions", "Coffee&Cookies", "CuppaCompany", "PercolatedPartners", "Buzzin'Buddies", "TheCupClub", "TheBrewBunch", "CaffeinatedCoalition", "CoffeeChums", "Cafe&Chatter", "MorningMojo", "BaristaBuddies", "CuppaConversations", "Coffee&Conversation", "Cream&SugarCrew", "MugMates", "Cafe&Camaraderie", "PerkedUpPartners", "Coffee&ChitChat", "TheLatteLot", "CafeContemporaries", "CoffeeCarousers", "CaffeinatedConnection", "EspressoEntourage", "CoffeeComeuppance"]
+    static let shared = Title()
+}
