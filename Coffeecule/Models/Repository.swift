@@ -9,8 +9,8 @@ import Foundation
 import CloudKit
 
 enum RecordZones: String {
-    case Transactions = "TransactionsTest"
-    case People = "PeopleTest"
+    case Transactions = "Transactions"
+    case People = "People"
     func callAsFunction() -> CKRecordZone {
         return CKRecordZone(zoneName: self.rawValue)
     }
