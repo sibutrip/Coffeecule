@@ -166,15 +166,18 @@ class ViewModel: ObservableObject {
         self.state = .loading
         self.readWriter = readWriter
         
-        self.people = ReadWrite.shared.readPeopleFromDisk().sorted()
-        self.calculateBuyer()
-        
-        Task(priority: .userInitiated) {
-            await initialize()
-            if let updatedPeople = await backgroundUpdateCloud() {
-                self.people = updatedPeople
-            }
+        Task {
+            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "Cory"), .init(name: "Tom"), .init(name: "Ty"), .init(name: "Tariq"), .init(name: "Zoe")]).sorted()
+            self.calculateBuyer()
         }
+        
+//        Task(priority: .userInitiated) {
+//            await initialize()
+//            if let updatedPeople = await backgroundUpdateCloud() {
+//                self.people = updatedPeople
+//            }
+//        }
         self.state = .loaded
     }
 }
