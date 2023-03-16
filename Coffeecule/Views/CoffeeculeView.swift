@@ -18,7 +18,7 @@ struct CoffeeculeView: View {
                 buyCoffeeButton
                 relationshipWebChart
             }
-            .navigationTitle("Coffeecule")
+            .navigationTitle(Title.shared.activeTitle)
             .refreshable {
                 Task { await vm.backgroundUpdateCloud() }
             }
