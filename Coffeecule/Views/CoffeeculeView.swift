@@ -10,6 +10,7 @@ import Charts
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
     @State var isBuying = false
+    @State var isSharing = false
     var body: some View {
         NavigationView {
             Form {
@@ -24,11 +25,14 @@ struct CoffeeculeView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
+                    shareToolbar
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    selectAllToolbar
+                    EditButton()
                 }
+            }
+            .sheet(isPresented: $isSharing) {
+                CloudSharingView(share: Repository.shared.ckShare!, record: Repository.shared.rootRecord!)
             }
         }
     }
@@ -116,6 +120,14 @@ extension CoffeeculeView {
             }
         } label: {
             Text("Select All")
+        }
+    }
+    
+    var shareToolbar: some View {
+        Button {
+        isSharing = true
+        } label: {
+            Image(systemName: "square.and.arrow.up")
         }
     }
     

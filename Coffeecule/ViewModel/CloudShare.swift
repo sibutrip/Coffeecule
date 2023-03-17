@@ -10,15 +10,19 @@ import CloudKit
 
 struct CloudShare {
     func fetchShareRecord() async  -> (CKRecord, CKShare) {
+        if let share = Repository.shared.ckShare, let rootRecord = Repository.shared.rootRecord {
+            return (rootRecord, share)
+        }
         
         let id = CKRecord.ID(zoneID: RecordZones.Transactions().zoneID)
         let rootRecord = CKRecord(recordType: "CoffeeculeRootTest", recordID: id)
 
-        if let share = Repository.shared.ckShare {
-            return (rootRecord, share)
-        }
+    
         
         let share = CKShare(rootRecord: rootRecord)
+        Repository.shared.ckShare = share
+        Repository.shared.rootRecord = rootRecord
+        
         
 //        share[CKShare.SystemFieldKey.title] = "Coffeecule" as CKRecordValue?
 //        share[CKShare.SystemFieldKey.shareType] = "Some type" as CKRecordValue?
