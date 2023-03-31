@@ -28,7 +28,7 @@ extension Readable {
 //        var peopleToAdd = [Person]()
      
         var names = people.map {
-            $0.name
+            $0.name.lowercased()
         }
         
         var peopleToAdd = names.map {
@@ -37,8 +37,8 @@ extension Readable {
         
         for transaction in transactions {
             
-            let buyer = transaction.buyerName
-            let receiver = transaction.receiverName
+            let buyer = transaction.buyerName.lowercased()
+            let receiver = transaction.receiverName.lowercased()
             
             if !names.contains(buyer) {
                 names.append(buyer)

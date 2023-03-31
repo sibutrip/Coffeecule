@@ -72,19 +72,18 @@ class ViewModel: ObservableObject {
             $0.isPresent
         }
         let presentNames: [String] = presentPeople.map {
-            $0.name
+            $0.name.lowercased()
         }
         for person in presentPeople {
             let debt: Int = person.coffeesOwed.reduce(0) { partialResult, dict in
-                if presentNames.contains(where: { name in
-                    dict.key == name
-                }) {
+                if presentNames.contains(dict.key) {
                     return partialResult + dict.value
                 }
-                return 0
+                return 0 + partialResult
             }
             debts[person] = debt
         }
+        print(debts)
         return debts
     }
     
@@ -116,6 +115,7 @@ class ViewModel: ObservableObject {
                     let transaction = createTransaction(buyer: buyer, receiver: receiver)
                     transactions.append(transaction)
                     newBuyerDebt += 1
+                    print("\(buyer.name) bought coffee for \(receiver.name)")
                 }
                 buyer.coffeesOwed[receiver.name] = newBuyerDebt
                 
@@ -130,7 +130,6 @@ class ViewModel: ObservableObject {
                 }
                 receiver.coffeesOwed[buyer.name] = newReceiverDebt
                 updatedPeople.append(receiver)
-                print("\(buyer.name) bought coffee for \(receiver.name)")
             }
         }
         updatedPeople.append(buyer)
@@ -168,7 +167,7 @@ class ViewModel: ObservableObject {
         
         Task {
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "Cory"), .init(name: "Tom"), .init(name: "Ty"), .init(name: "Tariq"), .init(name: "Zoe")]).sorted()
+            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
             self.calculateBuyer()
         }
         

@@ -125,7 +125,7 @@ extension CoffeeculeView {
         return Chart(displayedDebts.keys.sorted(), id: \.self) {
             BarMark(
                 x: .value("person", $0.name),
-                y: .value("cups bought", displayedDebts[$0] ?? 0)
+                y: .value("cups bought", displayedDebts[$0] ?? 10)
             ).foregroundStyle(displayedDebts[$0] ?? 0 > 0 ? .blue : .red)
         }
     }

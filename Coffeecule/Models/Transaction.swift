@@ -21,8 +21,8 @@ struct Transaction: Identifiable {
         }
 
         self.id = record.recordID.recordName
-        self.buyerName = buyerName.capitalized
-        self.receiverName = receiverName.capitalized
+        self.buyerName = buyerName.lowercased()
+        self.receiverName = receiverName.lowercased()
         self.associatedRecord = record
     }
 }
