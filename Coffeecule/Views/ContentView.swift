@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var vm = ViewModel(readWriter: ReadWrite.shared)
+    @StateObject var vm = ViewModel()
     var body: some View {
-        if vm.hasCoffeecule {
-            CoffeeculeView(vm: vm)
-        } else {
-            OnboardingView(vm: vm)
-        }
+//        if vm.hasCoffeecule {
+//            CoffeeculeView(vm: vm)
+//        } else {
+//            OnboardingView(vm: vm)
+//        }
+    Text("Ahh")
     }
 }
 

@@ -1,67 +1,77 @@
 //
 //  Repository.swift
-//  CoffeeculeTest
+//  SharedContainer
 //
-//  Created by Cory Tripathy on 1/27/23.
+//  Created by Cory Tripathy on 4/10/23.
 //
 
 import Foundation
 import CloudKit
 
-enum RecordZones: String {
-    case Transactions = "Transactions"
-    case People = "People"
-    func callAsFunction() -> CKRecordZone {
-        return CKRecordZone(zoneName: self.rawValue)
-    }
-}
-
-struct Repository {
-    let url: URL
-    let dummyUrl: URL
-    let peopleUrl: URL
-    let dummyPeopleUrl: URL
+class Repository {
     
-    /// Use the specified iCloud container ID, which should also be present in the entitlements file.
-    lazy var container = CKContainer(identifier: "iCloud.com.CoryTripathy.Coffeecule")
-    
-    /// This project uses the user's private database.
-    lazy var database = container.privateCloudDatabase
-    
-    /// Sharing requires using a custom record zone.
-    let recordZone = CKRecordZone(zoneName: "Transactions")
-    let recordType = "Corycule"
-    
-    private init() {
-        guard let url = try? FileManager.default
-            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("cachedTransactions.json") else {
-            fatalError("cannot write cachedTransactions")
+    init() {
+        Task {
+            do {
+                await self.createZonesIfNeeded()
+                self.appPermission = try await self.requestAppPermission()
+                self.accountStatus = try await self.container.accountStatus()
+                self.sharedCoffeeculeZone = try await self.container.sharedCloudDatabase.allRecordZones()[0]
+            } catch {
+                debugPrint(error)
+            }
         }
-        self.url = url
-        
-        guard let dummyUrl = try? FileManager.default
-            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("cachedDummyTransactions.json") else {
-            fatalError("cannot write cachedDummyTransactions")
-        }
-        self.dummyUrl = dummyUrl
-        
-        guard let peopleUrl = try? FileManager.default
-            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("people.json") else {
-            fatalError("cannot write people")
-        }
-        self.peopleUrl = peopleUrl
-        
-        guard let dummyPeopleUrl = try? FileManager.default
-            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("dummyPeople.json") else {
-            fatalError("cannot write people")
-        }
-        self.dummyPeopleUrl = dummyPeopleUrl
-        
     }
     
-    static var shared = Repository()
+    
+    
+    // PUBLIC
+    public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
+    public lazy var database = container.privateCloudDatabase
+    public let coffeeculeRecordZone = CKRecordZone(zoneName: "PersonZone") // private zone
+    public var sharedCoffeeculeZone: CKRecordZone? = nil
+    public var appPermission: Bool? = nil
+    public var accountStatus: CKAccountStatus? = nil
+    
+    // APP PERMISSION
+    
+    public func requestAppPermission() async throws -> Bool {
+        enum AppPermissionError: Error {
+            case noPermission,couldNotComplete,denied,granted, unknown
+        }
+        let permission = try await self.container.requestApplicationPermission(.userDiscoverability)
+        switch permission {
+        case .initialState:
+            throw AppPermissionError.noPermission
+        case .couldNotComplete:
+            throw AppPermissionError.couldNotComplete
+        case .denied:
+            throw AppPermissionError.denied
+        case .granted:
+             return true
+        @unknown default:
+            throw AppPermissionError.unknown
+        }
+    }
+    
+    public func fetchiCloudUserName() async throws -> String {
+        let id = try await self.container.userRecordID()
+        let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
+        if let name = returnedIdentity?.nameComponents?.givenName, var famName = returnedIdentity?.nameComponents?.familyName {
+            return "\(name) \(famName.removeFirst())."
+        }
+        return ""
+    }
+    
+    // PERSON DATABASE METHODS
+    private func createZonesIfNeeded() async {
+        do {
+            let (_,_) = try await self.database.modifyRecordZones(saving: [self.coffeeculeRecordZone], deleting: [])
+        } catch {
+            print("couldnt not create new zones")
+        }
+        UserDefaults.standard.set(true, forKey: "areZonesCreated")
+    }
+    
+    static let shared = Repository()
 }

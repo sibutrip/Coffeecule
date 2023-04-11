@@ -26,7 +26,6 @@ public struct Person: Codable, Identifiable {
         self.name = name
     }
     
-    
     /// Initializer when decoding from JSON
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
