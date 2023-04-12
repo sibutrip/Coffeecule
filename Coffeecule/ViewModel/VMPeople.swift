@@ -13,7 +13,8 @@ extension ViewModel {
         let record = await personService.createParticipantRecord(for: name)
         self.allRecords.append(record)
         await personService.saveSharedRecord(record)
-        self.people = 
+        self.people = personService.addPersonToCoffecule(name, to: self.people)
+        print(self.people)
     }
     
     public func createCoffeecule(name: String) async {

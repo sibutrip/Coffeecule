@@ -15,7 +15,7 @@
 		7467995A29B0DC9100339D5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994229B0DC9100339D5C /* ContentView.swift */; };
 		7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994429B0DC9100339D5C /* CloudDebug.swift */; };
 		7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */; };
-		7467995D29B0DC9100339D5C /* CoffeeculeTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */; };
+		7467995D29B0DC9100339D5C /* CoffeeculeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994629B0DC9100339D5C /* CoffeeculeApp.swift */; };
 		7467995F29B0DC9100339D5C /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994929B0DC9100339D5C /* Person.swift */; };
 		7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994D29B0DC9100339D5C /* CloudReadWrite.swift */; };
 		7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994E29B0DC9100339D5C /* DummyReadWrite.swift */; };
@@ -23,6 +23,8 @@
 		7467996529B0DC9100339D5C /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995229B0DC9100339D5C /* Transaction.swift */; };
 		7467996629B0DC9100339D5C /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995329B0DC9100339D5C /* Repository.swift */; };
 		7467996729B0DC9100339D5C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995529B0DC9100339D5C /* ViewModel.swift */; };
+		7478C72829E5FCC8006ED737 /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478C72729E5FCC8006ED737 /* CloudSharingView.swift */; };
+		7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478C72929E5FCE0006ED737 /* SharedContainerDebugView.swift */; };
 		74B0AB3729C35021002DA7BD /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0AB3629C35021002DA7BD /* Titles.swift */; };
 		74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */; };
 		74BA5F5529E5902400C28F2F /* PersonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5429E5902400C28F2F /* PersonService.swift */; };
@@ -42,7 +44,7 @@
 		7467994229B0DC9100339D5C /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7467994429B0DC9100339D5C /* CloudDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDebug.swift; sourceTree = "<group>"; };
 		7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DEBUGCoffeeculeView.swift; sourceTree = "<group>"; };
-		7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeTestApp.swift; sourceTree = "<group>"; };
+		7467994629B0DC9100339D5C /* CoffeeculeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeApp.swift; sourceTree = "<group>"; };
 		7467994929B0DC9100339D5C /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		7467994B29B0DC9100339D5C /* ReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWrite.swift; sourceTree = "<group>"; };
 		7467994D29B0DC9100339D5C /* CloudReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudReadWrite.swift; sourceTree = "<group>"; };
@@ -53,6 +55,9 @@
 		7467995329B0DC9100339D5C /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		7467995529B0DC9100339D5C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		7467995629B0DC9100339D5C /* VmCloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VmCloud.swift; sourceTree = "<group>"; };
+		7478C72729E5FCC8006ED737 /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
+		7478C72929E5FCE0006ED737 /* SharedContainerDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainerDebugView.swift; sourceTree = "<group>"; };
+		7478C72B29E5FD1B006ED737 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		74B0AB3629C35021002DA7BD /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
 		74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		74BA5F5429E5902400C28F2F /* PersonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonService.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 		7402CB85296A099A000BC882 /* Coffeecule */ = {
 			isa = PBXGroup;
 			children = (
+				7478C72B29E5FD1B006ED737 /* Info.plist */,
 				7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */,
 				74BA5F5129E58F9300C28F2F /* App */,
 				7467994729B0DC9100339D5C /* Models */,
@@ -117,6 +123,7 @@
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				7467994129B0DC9100339D5C /* OnboardingView.swift */,
+				7478C72729E5FCC8006ED737 /* CloudSharingView.swift */,
 				7467994229B0DC9100339D5C /* ContentView.swift */,
 			);
 			path = Views;
@@ -125,6 +132,7 @@
 		7467994329B0DC9100339D5C /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				7478C72929E5FCE0006ED737 /* SharedContainerDebugView.swift */,
 				7467994429B0DC9100339D5C /* CloudDebug.swift */,
 				7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */,
 			);
@@ -179,7 +187,7 @@
 		74BA5F5129E58F9300C28F2F /* App */ = {
 			isa = PBXGroup;
 			children = (
-				7467994629B0DC9100339D5C /* CoffeeculeTestApp.swift */,
+				7467994629B0DC9100339D5C /* CoffeeculeApp.swift */,
 				74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */,
 			);
 			path = App;
@@ -256,12 +264,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7478C72829E5FCC8006ED737 /* CloudSharingView.swift in Sources */,
 				7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */,
 				7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */,
 				7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */,
 				7467995A29B0DC9100339D5C /* ContentView.swift in Sources */,
 				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
-				7467995D29B0DC9100339D5C /* CoffeeculeTestApp.swift in Sources */,
+				7467995D29B0DC9100339D5C /* CoffeeculeApp.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
 				74BA5F5C29E5B98500C28F2F /* VMPeople.swift in Sources */,
@@ -272,6 +281,7 @@
 				74BA5F5529E5902400C28F2F /* PersonService.swift in Sources */,
 				7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */,
 				74BA5F5E29E5B98D00C28F2F /* VMTransactions.swift in Sources */,
+				7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */,
 				74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */,
 				7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */,
 				7467996529B0DC9100339D5C /* Transaction.swift in Sources */,
@@ -410,8 +420,8 @@
 				DEVELOPMENT_TEAM = 3UR85MK9RT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Corycule;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = Coffeecule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Coffeecule;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -422,7 +432,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.CoryTripathy.Corycule;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CoryTripathy.Coffeecule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -446,8 +456,8 @@
 				DEVELOPMENT_TEAM = 3UR85MK9RT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Corycule;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = Coffeecule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Coffeecule;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -458,7 +468,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.CoryTripathy.Corycule;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CoryTripathy.Coffeecule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

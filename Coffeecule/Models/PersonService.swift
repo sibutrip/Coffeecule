@@ -182,20 +182,15 @@ class PersonService: ObservableObject {
         }
     }
     
-    public func addPersonToCoffecule(_ person: String, to people: [Person]) -> [Person] {
-        var people = people
-        
-        var people = [Person]()
-        for buyer in names {
-            var newPerson = Person(name: buyer)
-            for receiver in names {
-                if receiver != buyer {
-                    newPerson.coffeesOwed[receiver] = 0
-                }
-            }
-            people.append(newPerson)
+    public func addPersonToCoffecule(_ name: String, to people: [Person]) -> [Person] {
+        var newPeople = [Person]()
+        for buyer in people {
+            var buyer = buyer
+            var coffeesOwed = buyer.coffeesOwed
+            coffeesOwed[name] = 0
+            buyer.coffeesOwed = coffeesOwed
+            newPeople.append(buyer)
         }
-        return people.sorted()
+        return newPeople.sorted()
     }
-    
 }
