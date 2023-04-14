@@ -40,6 +40,15 @@ class Repository {
     
     // APP PERMISSION
     
+    public func fetchSharedContainer() async throws {
+        let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
+        if sharedContainers.count > 0 {
+            self.sharedCoffeeculeZone = sharedContainers[0]
+        } else if sharedContainers.count > 1 {
+            print("ERROR: more than 1 shared container")
+        }
+    }
+    
     public func requestAppPermission() async throws -> Bool {
         enum AppPermissionError: Error {
             case noPermission,couldNotComplete,denied,granted, unknown

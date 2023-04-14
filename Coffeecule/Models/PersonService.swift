@@ -26,6 +26,13 @@ class PersonService: ObservableObject {
         case nameIsEmpty, recordAlreadyExists
     }
     
+    // INITIALIZER
+    init() {
+        Task {
+            await self.fetchOrCreateShare()
+        }
+    }
+
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
@@ -271,5 +278,4 @@ class PersonService: ObservableObject {
         people[receiverIndex].coffeesOwed[buyer] = newReceiverDebt
         return people
     }
-    
 }

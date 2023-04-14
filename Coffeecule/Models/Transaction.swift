@@ -15,8 +15,8 @@ struct Transaction: Identifiable {
     var associatedRecord: CKRecord
     
     init?(record: CKRecord) {
-        guard let buyerName = record["buyerName"] as? String,
-              let receiverName = record["receiverName"] as? String else {
+        guard let buyerName = record["buyer"] as? String,
+              let receiverName = record["receiver"] as? String else {
             return nil
         }
 
@@ -26,15 +26,22 @@ struct Transaction: Identifiable {
         self.associatedRecord = record
     }
     
-//    static func transactionsToPeople(_ transaction: [Transaction]) -> [Person]
+    static let transactionRecordName = "transaction"
     
-    static let transactionRecordName = "transactionRecord"
-    
-    static func createTransaction(buyer: Person, receiver: Person) -> Transaction {
-        let id = CKRecord.ID(zoneID: Repository.shared.coffeeculeRecordZone.zoneID)
-        let transactionRecord = CKRecord(recordType: transactionRecordName, recordID: id)
-        transactionRecord["buyerName"] = buyer.name
-        transactionRecord["receiverName"] = receiver.name
-        return Transaction(record: transactionRecord)!
+    init?(buyer: String, receiver: String) {
+//        if let zone = Repository.shared.sharedCoffeeculeZone {
+        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: Repository.shared.coffeeculeRecordZone.zoneID))
+            transactionRecord["buyer"] = buyer.capitalized
+            transactionRecord["receiver"] = receiver.capitalized
+            
+            self.id = transactionRecord.recordID.recordName
+            self.buyerName = buyer.capitalized
+            self.receiverName = buyer.capitalized
+            self.associatedRecord = transactionRecord
+            print("init success!!! u did it")
+//        } else {
+//            print("init failed")
+//            return nil
+//        }
     }
 }

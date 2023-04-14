@@ -40,7 +40,7 @@ struct ContentView: View {
                     }
                     Button("create cule") {
                         Task {
-                            await vm.createCoffeecule(name: vm.participantName)
+                            await vm.createCoffeecule()
                         }
                     }
                     Button("share cule") {
@@ -59,9 +59,11 @@ struct ContentView: View {
                 VStack {
                     Text("current buyer is \(vm.currentBuyer.name)")
                     Button("buy coffee") {
-                        vm.buyCoffee()
-                        vm.createDisplayedDebts()
-                        vm.calculateBuyer()
+                        Task {
+                            await vm.buyCoffee()
+                            vm.createDisplayedDebts()
+                            vm.calculateBuyer()
+                        }
                     }
                 }
             }

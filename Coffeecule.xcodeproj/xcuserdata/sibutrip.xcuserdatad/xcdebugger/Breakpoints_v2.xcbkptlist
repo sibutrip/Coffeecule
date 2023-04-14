@@ -23,8 +23,8 @@
             filePath = "Coffeecule/Models/PersonService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "fetchOrCreateShare()"
             landmarkType = "7">
             <Locations>
@@ -71,8 +71,8 @@
             filePath = "Coffeecule/Models/PersonService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "fetchOrCreateShare()"
             landmarkType = "7">
             <Locations>
@@ -149,8 +149,8 @@
             filePath = "Coffeecule/Models/PersonService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
             landmarkName = "fetchOrCreateShare()"
             landmarkType = "7">
             <Locations>
@@ -197,8 +197,8 @@
             filePath = "Coffeecule/Models/PersonService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "fetchOrCreateShare()"
             landmarkType = "7">
             <Locations>

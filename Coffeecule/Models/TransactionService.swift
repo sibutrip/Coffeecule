@@ -9,14 +9,12 @@ import Foundation
 import CloudKit
 
 class TransactionService {
-    private let transactionRecordName = "transactionRecord"
     private let repository = Repository.shared
     
-    public func saveTransaction(_ transaction: Transaction) async throws {
-        if let zone = self.repository.sharedCoffeeculeZone {
-            let record = CKRecord(recordType: transactionRecordName, recordID: CKRecord.ID(recordName: transaction.id, zoneID: zone.zoneID))
-            let _ = try await repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
-        }
+    public func saveTransactions(_ transactions: [Transaction]) async throws {
+        let records: [CKRecord] = transactions.map { $0.associatedRecord }
+//        let result = try await Repository.shared.container.sharedCloudDatabase.modifyRecords(saving: records, deleting: [])
+        let result = try await Repository.shared.container.privateCloudDatabase.modifyRecords(saving: records, deleting: [])
+        print(result.saveResults.description)
     }
-    
 }

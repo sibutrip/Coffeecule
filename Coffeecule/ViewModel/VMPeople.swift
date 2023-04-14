@@ -21,10 +21,12 @@ extension ViewModel {
         }
     }
     
-    public func createCoffeecule(name: String) async {
+    public func createCoffeecule() async {
         do {
+            let name = self.participantName
             let record = try personService.createRootRecord(for: name, in: self.people)
             self.allRecords.append(record)
+            self.people = personService.createPeopleFromScratch(from: [record])
             await personService.savePrivateRecord(record)
         } catch {
             debugPrint(error.localizedDescription)
@@ -36,13 +38,16 @@ extension ViewModel {
     }
     
     public func refreshData() async {
-        var (peopleRecords, transactions, share) = await personService.fetchRecords()
-        print(peopleRecords)
+        let (peopleRecords, transactions, share) = await personService.fetchRecords()
         var people = personService.createPeopleFromScratch(from: peopleRecords)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.allRecords = peopleRecords
         self.people = people
         personService.rootShare = share
+        print("received \(transactions.count) transactions")
+        _ = transactions.map {
+            print($0.buyerName,$0.receiverName)
+        }
     }
     
     public func calculateBuyer() {
@@ -61,10 +66,12 @@ extension ViewModel {
         self.currentBuyer = mostDebted?.key ?? Person(name: "nobody")
     }
     
-    public func buyCoffee() {
+    public func buyCoffee() async {
         enum BuyCoffeeError: Error {
             case missingMember
         }
+        
+        self.state = .loading
         
         if self.currentBuyer.name == "nobody" {
             return
@@ -84,8 +91,9 @@ extension ViewModel {
                         throw BuyCoffeeError.missingMember
                     }
                     if receiver.isPresent {
-                        let transaction = Transaction.createTransaction(buyer: buyer, receiver: receiver)
-                        transactions.append(transaction)
+                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name) {
+                            transactions.append(transaction)
+                        }
                         newBuyerDebt += 1
                         print("\(buyer.name) bought coffee for \(receiver.name)")
                     }
@@ -105,10 +113,14 @@ extension ViewModel {
                 }
             }
             updatedPeople.append(buyer)
+            self.people = updatedPeople
+            print(transactions.count)
+            try await self.transactionService.saveTransactions(transactions)
         } catch {
             debugPrint(error)
+            self.people = updatedPeople
         }
-        self.people = updatedPeople
+        self.state = .loaded
     }
     
     public func createDisplayedDebts() {
@@ -131,4 +143,5 @@ extension ViewModel {
         }
         self.displayedDebts = debts
     }
+    
 }

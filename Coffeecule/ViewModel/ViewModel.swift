@@ -34,6 +34,8 @@ class ViewModel: ObservableObject {
         self.state = .loading
         Task {
             do {
+                await self.personService.fetchOrCreateShare()
+                try await self.repository.fetchSharedContainer()
                 self.participantName = try await repository.fetchiCloudUserName()
                 await self.refreshData()
                 self.createDisplayedDebts()
