@@ -60,6 +60,7 @@ struct ContentView: View {
                     Text("current buyer is \(vm.currentBuyer.name)")
                     Button("buy coffee") {
                         vm.buyCoffee()
+                        vm.createDisplayedDebts()
                         vm.calculateBuyer()
                     }
                 }

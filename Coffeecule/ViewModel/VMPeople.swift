@@ -109,7 +109,6 @@ extension ViewModel {
         } catch {
             debugPrint(error)
         }
-        print(people)
         self.people = updatedPeople
     }
     
@@ -120,7 +119,7 @@ extension ViewModel {
             $0.isPresent
         }
         let presentNames: [String] = presentPeople.map {
-            $0.name.lowercased()
+            $0.name
         }
         for person in presentPeople {
             let debt: Int = person.coffeesOwed.reduce(0) { partialResult, dict in
@@ -131,6 +130,7 @@ extension ViewModel {
             }
             debts[person] = debt
         }
+        print(debts)
         self.displayedDebts = debts
     }
 }

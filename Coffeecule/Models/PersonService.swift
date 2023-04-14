@@ -216,7 +216,9 @@ class PersonService: ObservableObject {
             .map { Person(name: $0) }
         for name in names {
             for index in 0..<people.count {
-                people[index].coffeesOwed[name] = 0
+                if name != people[index].name {
+                    people[index].coffeesOwed[name] = 0
+                }
             }
         }
         print("created people \(people)")
