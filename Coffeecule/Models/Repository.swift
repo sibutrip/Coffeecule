@@ -16,7 +16,12 @@ class Repository {
                 await self.createZonesIfNeeded()
                 self.appPermission = try await self.requestAppPermission()
                 self.accountStatus = try await self.container.accountStatus()
-                self.sharedCoffeeculeZone = try await self.container.sharedCloudDatabase.allRecordZones()[0]
+                let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
+                if sharedContainers.count > 0 {
+                    self.sharedCoffeeculeZone = sharedContainers[0]
+                } else if sharedContainers.count > 1 {
+                    print("ERROR: more than 1 shared container")
+                }
             } catch {
                 debugPrint(error)
             }
@@ -59,6 +64,8 @@ class Repository {
         let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
         if let name = returnedIdentity?.nameComponents?.givenName, var famName = returnedIdentity?.nameComponents?.familyName {
             return "\(name) \(famName.removeFirst())."
+        } else {
+            print("could not unwrap name")
         }
         return ""
     }

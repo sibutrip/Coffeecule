@@ -18,29 +18,32 @@ class PersonService: ObservableObject {
     private let participantRecordName = "participantRecord"
     private let repository = Repository.shared
     
+    enum PeopleSource {
+        case scratch, existing
+    }
+    
+    enum PersonRecordsError: Error {
+        case nameIsEmpty, recordAlreadyExists
+    }
+    
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
-    public func fetchOrCreateShare() async {
-        func fetchShare() async -> CKShare? {
-            var share: CKShare? = nil
-            let predicate = NSPredicate(value: true)
-            let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
-            let (results, _) = try! await repository.database.records(matching: query, inZoneWith: repository.coffeeculeRecordZone.zoneID,desiredKeys: nil, resultsLimit: 10)
-            for (_, result) in results {
-                switch result {
-                case .success(let record):
-                    share = record as! CKShare?
-                    return share
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            return share
+    public func fetchOrCreateShare() async{
+        var share: CKShare? = nil
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
+        guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.coffeeculeRecordZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
+            self.rootShare = await createRootShare()
+            return
         }
-        var share = await fetchShare()
-        if share == nil {
-            share = await createRootShare()
+        for (_, result) in results {
+            switch result {
+            case .success(let record):
+                share = record as! CKShare?
+            case .failure(let error):
+                print(error)
+            }
         }
         self.rootShare = share
     }
@@ -50,21 +53,29 @@ class PersonService: ObservableObject {
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Person"
         let resultTest = try! await self.repository.database.modifyRecords(saving: [share], deleting: [])
+        print(resultTest.saveResults.debugDescription)
         return share
     }
     
-    public func createRootRecord(for name: String) throws -> CKRecord {
-        enum RootRecordError: Error {
-            case nameIsEmpty, rootRecordAlreadyExists
+    public func createRootRecord(for name: String, in people: [Person]) throws -> CKRecord {
+        if name.isEmpty { throw PersonRecordsError.nameIsEmpty }
+        if people.contains(where: { person in
+            person.name == name
+        }) {
+            throw PersonRecordsError.recordAlreadyExists
         }
-        if name.isEmpty { throw RootRecordError.nameIsEmpty }
-        if self.rootRecord != nil { throw RootRecordError.rootRecordAlreadyExists }
         let record = CKRecord(recordType: rootRecordName, recordID: CKRecord.ID(recordName: name, zoneID: repository.coffeeculeRecordZone.zoneID))
         self.rootRecord = record
         return record
     }
     
-    public func createParticipantRecord(for name: String) async -> CKRecord {
+    public func createParticipantRecord(for name: String, in people: [Person]) async throws -> CKRecord {
+        if name.isEmpty { throw PersonRecordsError.nameIsEmpty }
+        if people.contains(where: { person in
+            person.name == name
+        }) {
+            throw PersonRecordsError.recordAlreadyExists
+        }
         let zone = try! await repository.container.sharedCloudDatabase.allRecordZones()[0]
         let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: zone.zoneID))
         return record
@@ -82,13 +93,14 @@ class PersonService: ObservableObject {
     public func savePrivateRecord(_ record: CKRecord) async {
         do {
             let result = try await self.repository.database.modifyRecords(saving: [record], deleting: [])
+            print(result.saveResults.debugDescription)
         } catch {
             debugPrint(error)
         }
     }
     
     /// fetches from private container
-    public func fetchPrivatePeople() async -> [CKRecord]{
+    public func fetchPrivatePeople() async -> [CKRecord] {
         var records = [CKRecord]()
         let predicate = NSPredicate(value: true)
         
@@ -118,20 +130,19 @@ class PersonService: ObservableObject {
     }
     
     /// fetches from shared container
-    public func fetchRecords(scope: CKDatabase.Scope) async -> ([CKRecord], [CKRecord], CKShare?) {
-//        let databases = [repository.container.database(with: .shared), repository.container.database(with: .private)]
+    public func fetchRecords(scope: CKDatabase.Scope) async -> ([CKRecord], [Transaction], CKShare?) {
         var people: [CKRecord] = []
-        var transactions: [CKRecord] = []
+        var transactions: [Transaction] = []
         var share: CKShare? = nil
         
-        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async throws -> ([CKRecord], [CKRecord], CKShare?) {
+        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async throws -> ([CKRecord], [Transaction], CKShare?) {
             /// `recordZoneChanges` can return multiple consecutive changesets before completing, so
             /// we use a loop to process multiple results if needed, indicated by the `moreComing` flag.
             var awaitingChanges = true
             /// After each loop, if more changes are coming, they are retrieved by using the `changeToken` property.
             var nextChangeToken: CKServerChangeToken? = nil
             var people: [CKRecord] = []
-            var transactions: [CKRecord] = []
+            var transactions: [Transaction] = []
             var share: CKShare? = nil
             
             while awaitingChanges {
@@ -144,7 +155,7 @@ class PersonService: ObservableObject {
                     if record.recordType == rootRecordName || record.recordType == participantRecordName {
                         people.append(record)
                     } else if record.recordType == "transaction" {
-                        transactions.append(record)
+                        transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
                         if let recievedShare = record as? CKShare {
                             share = recievedShare
@@ -156,15 +167,18 @@ class PersonService: ObservableObject {
         }
         
         do {
-            async let sharedZones = try repository.container.sharedCloudDatabase.allRecordZones()
-            async let privateZones = try repository.container.privateCloudDatabase.allRecordZones()
-            let zones = try await sharedZones + privateZones
+            let sharedZones = try await repository.container.sharedCloudDatabase.allRecordZones()
+            let privateZone = repository.coffeeculeRecordZone
+            let zones = [privateZone] + sharedZones
             
             // Using this task group, fetch each zone's contacts in parallel.
-            try await withThrowingTaskGroup(of: ([CKRecord], [CKRecord], CKShare?).self) { group in
+            try await withThrowingTaskGroup(of: ([CKRecord], [Transaction], CKShare?).self) { group in
                 for zone in zones {
                     group.addTask {
-                        try await recordsInZone(zone, scope: scope)
+                        if zone == privateZone {
+                            return try await recordsInZone(zone, scope: .private)
+                        }
+                        return try await recordsInZone(zone, scope: .shared)
                     }
                 }
                 
@@ -193,4 +207,63 @@ class PersonService: ObservableObject {
         }
         return newPeople.sorted()
     }
+    
+    func createPeopleFromScratch(from records: [CKRecord]) -> [Person] {
+        let names = records.map {
+            $0.recordID.recordName
+        }
+        var people = names
+            .map { Person(name: $0) }
+        for name in names {
+            for index in 0..<people.count {
+                people[index].coffeesOwed[name] = 0
+            }
+        }
+        print("created people \(people)")
+        return people
+    }
+    
+    func createPeopleFromExisting(with transactions: [Transaction], and people: [Person]) -> [Person] {
+        
+        var peopleToAdd = people
+        
+        for transaction in transactions {
+            let buyer = transaction.buyerName
+            let receiver = transaction.receiverName
+            peopleToAdd = incrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
+            peopleToAdd = decrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
+        }
+        return peopleToAdd
+    }
+    
+    private func incrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
+        var people = people
+        guard let buyerIndex = people.firstIndex(where: {
+            $0.name == buyer
+        }) else {
+            debugPrint("transaction buyer: \(buyer) is not in the people array")
+            return [Person]()
+        }
+        
+        var newBuyerDebt = people[buyerIndex].coffeesOwed[receiver] ?? 0
+        newBuyerDebt += 1
+        people[buyerIndex].coffeesOwed[receiver] = newBuyerDebt
+        return people
+    }
+    
+    private func decrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
+        var people = people
+        guard let receiverIndex = people.firstIndex(where: {
+            $0.name == receiver
+        }) else {
+            debugPrint("transaction receiver: \(receiver) is not in the people array")
+            return [Person]()
+        }
+        
+        var newReceiverDebt = people[receiverIndex].coffeesOwed[buyer] ?? 0
+        newReceiverDebt -= 1
+        people[receiverIndex].coffeesOwed[buyer] = newReceiverDebt
+        return people
+    }
+    
 }

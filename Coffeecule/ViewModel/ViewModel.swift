@@ -22,7 +22,7 @@ class ViewModel: ObservableObject {
     enum State: Equatable {
         case loading, loaded, noCoffeecule, noPermission, error
     }
-     
+    
     @Published public var participantName: String = ""
     @Published public var allRecords = [CKRecord]()
     @Published var state: State = .loading
@@ -33,7 +33,11 @@ class ViewModel: ObservableObject {
     init() {
         self.state = .loading
         Task {
-            
+            do {
+                self.participantName = try await repository.fetchiCloudUserName()
+            } catch {
+                print(error)
+            }
         }
         self.state = .loaded
     }

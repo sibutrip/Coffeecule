@@ -13,8 +13,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text("your name is: \(vm.participantName)")
-            List(vm.allRecords, id: \.self) {
-                Text($0.recordID.recordName)
+            List(vm.people, id: \.self) { person in
+                HStack {
+                    Text(person.name)
+                    Text(person.coffeesOwed.description)
+                }
             }
             Button("refetch cule") {
                 Task {

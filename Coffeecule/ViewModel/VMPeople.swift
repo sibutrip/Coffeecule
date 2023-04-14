@@ -9,17 +9,22 @@ import Foundation
 import CloudKit
 
 extension ViewModel {
+    
     public func joinCoffeecule(name: String) async {
-        let record = await personService.createParticipantRecord(for: name)
-        self.allRecords.append(record)
-        await personService.saveSharedRecord(record)
-        self.people = personService.addPersonToCoffecule(name, to: self.people)
-        print(self.people)
+        do {
+            let record = try await personService.createParticipantRecord(for: name, in: self.people)
+            self.allRecords.append(record)
+            await personService.saveSharedRecord(record)
+            self.people = personService.addPersonToCoffecule(name, to: self.people)
+            print(self.people)
+        } catch {
+            debugPrint(error)
+        }
     }
     
     public func createCoffeecule(name: String) async {
         do {
-            let record = try personService.createRootRecord(for: name)
+            let record = try personService.createRootRecord(for: name, in: self.people)
             self.allRecords.append(record)
             await personService.savePrivateRecord(record)
         } catch {
@@ -32,9 +37,86 @@ extension ViewModel {
     }
     
     public func refreshData() async {
-        var (people, transactions, share) = await personService.fetchRecords(scope: .shared)
-        people.append(contentsOf: await personService.fetchPrivatePeople())
-        self.allRecords.removeAll()
-        self.allRecords = people
+        var (peopleRecords, transactions, share) = await personService.fetchRecords(scope: .shared)
+        peopleRecords.append(contentsOf: await personService.fetchPrivatePeople())
+        var people = personService.createPeopleFromScratch(from: peopleRecords)
+        people = personService.createPeopleFromExisting(with: transactions, and: people)
+        self.allRecords = peopleRecords
+        self.people = people
+        personService.rootShare = share
+    }
+    
+    public func calculateBuyer(for people: [Person], debts: [Person:Int]) -> Person {
+        if people.count == 1 {
+            return Person(name: "nobody")
+        }
+        
+        let mostDebted = debts.max { first, second in
+            if first.key.isPresent && second.key.isPresent {
+                return first.value > second.value
+            }
+            return false
+        }
+        return mostDebted?.key ?? Person(name: "nobody")
+    }
+    
+    public func buyCoffee(people: [Person], currentBuyer: Person) throws -> [Person] {
+        enum BuyCoffeeError: Error {
+            case missingMember
+        }
+        var transactions = [Transaction]()
+        var updatedPeople = [Person]()
+        var buyer = currentBuyer
+        for receiver in people {
+            var receiver = receiver
+            if receiver.name != buyer.name {
+                guard var newBuyerDebt = buyer.coffeesOwed[receiver.name] else {
+                    debugPrint("something is wrong...")
+                    debugPrint("could not find \(buyer.name) coffees owed for \(receiver.name)")
+                    throw BuyCoffeeError.missingMember
+                }
+                if receiver.isPresent {
+                    let transaction = Transaction.createTransaction(buyer: buyer, receiver: receiver)
+                    transactions.append(transaction)
+                    newBuyerDebt += 1
+                    print("\(buyer.name) bought coffee for \(receiver.name)")
+                }
+                buyer.coffeesOwed[receiver.name] = newBuyerDebt
+                
+                
+                guard var newReceiverDebt = receiver.coffeesOwed[buyer.name] else {
+                    debugPrint("something is wrong...")
+                    debugPrint("could not find \(receiver.name) coffees owed for \(buyer.name)")
+                    throw BuyCoffeeError.missingMember
+                }
+                if receiver.isPresent {
+                    newReceiverDebt -= 1
+                }
+                receiver.coffeesOwed[buyer.name] = newReceiverDebt
+                updatedPeople.append(receiver)
+            }
+        }
+        updatedPeople.append(buyer)
+        return updatedPeople
+    }
+    
+    public func createDisplayedDebts(people: [Person]) -> [Person:Int] {
+        var debts = [Person:Int]()
+        let presentPeople: [Person] = people.filter {
+            $0.isPresent
+        }
+        let presentNames: [String] = presentPeople.map {
+            $0.name.lowercased()
+        }
+        for person in presentPeople {
+            let debt: Int = person.coffeesOwed.reduce(0) { partialResult, dict in
+                if presentNames.contains(dict.key) {
+                    return partialResult + dict.value
+                }
+                return 0 + partialResult
+            }
+            debts[person] = debt
+        }
+        return debts
     }
 }
