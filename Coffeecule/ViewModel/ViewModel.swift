@@ -35,6 +35,9 @@ class ViewModel: ObservableObject {
         Task {
             do {
                 self.participantName = try await repository.fetchiCloudUserName()
+                await self.refreshData()
+                self.createDisplayedDebts()
+                self.calculateBuyer()
             } catch {
                 print(error)
             }

@@ -221,7 +221,6 @@ class PersonService: ObservableObject {
                 }
             }
         }
-        print("created people \(people)")
         return people
     }
     

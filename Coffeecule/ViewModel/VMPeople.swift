@@ -16,7 +16,6 @@ extension ViewModel {
             self.allRecords.append(record)
             await personService.saveSharedRecord(record)
             self.people = personService.addPersonToCoffecule(name, to: self.people)
-            print(self.people)
         } catch {
             debugPrint(error)
         }
@@ -38,6 +37,7 @@ extension ViewModel {
     
     public func refreshData() async {
         var (peopleRecords, transactions, share) = await personService.fetchRecords(scope: .shared)
+        print(peopleRecords)
         peopleRecords.append(contentsOf: await personService.fetchPrivatePeople())
         var people = personService.createPeopleFromScratch(from: peopleRecords)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
@@ -130,7 +130,6 @@ extension ViewModel {
             }
             debts[person] = debt
         }
-        print(debts)
         self.displayedDebts = debts
     }
 }
