@@ -29,7 +29,7 @@ class PersonService: ObservableObject {
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
-    public func fetchOrCreateShare() async{
+    public func fetchOrCreateShare() async {
         var share: CKShare? = nil
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
@@ -44,6 +44,10 @@ class PersonService: ObservableObject {
             case .failure(let error):
                 print(error)
             }
+        }
+        if results.count == 0 {
+            self.rootShare = await createRootShare()
+            return
         }
         self.rootShare = share
     }
@@ -130,7 +134,7 @@ class PersonService: ObservableObject {
     }
     
     /// fetches from shared container
-    public func fetchRecords(scope: CKDatabase.Scope) async -> ([CKRecord], [Transaction], CKShare?) {
+    public func fetchRecords() async -> ([CKRecord], [Transaction], CKShare?) {
         var people: [CKRecord] = []
         var transactions: [Transaction] = []
         var share: CKShare? = nil
@@ -154,6 +158,7 @@ class PersonService: ObservableObject {
                 for record in receivedRecords {
                     if record.recordType == rootRecordName || record.recordType == participantRecordName {
                         people.append(record)
+                        print(zone.description)
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {

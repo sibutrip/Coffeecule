@@ -36,9 +36,8 @@ extension ViewModel {
     }
     
     public func refreshData() async {
-        var (peopleRecords, transactions, share) = await personService.fetchRecords(scope: .shared)
+        var (peopleRecords, transactions, share) = await personService.fetchRecords()
         print(peopleRecords)
-        peopleRecords.append(contentsOf: await personService.fetchPrivatePeople())
         var people = personService.createPeopleFromScratch(from: peopleRecords)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.allRecords = peopleRecords
