@@ -177,8 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				7467995529B0DC9100339D5C /* ViewModel.swift */,
-				74BA5F5D29E5B98D00C28F2F /* VMTransactions.swift */,
 				74BA5F5B29E5B98500C28F2F /* VMPeople.swift */,
+				74BA5F5D29E5B98D00C28F2F /* VMTransactions.swift */,
 				7467995629B0DC9100339D5C /* VmCloud.swift */,
 			);
 			path = ViewModel;

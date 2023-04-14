@@ -46,9 +46,11 @@ extension ViewModel {
         personService.rootShare = share
     }
     
-    public func calculateBuyer(for people: [Person], debts: [Person:Int]) -> Person {
+    public func calculateBuyer() {
+        let people = self.people
+        let debts = self.displayedDebts
         if people.count == 1 {
-            return Person(name: "nobody")
+            self.currentBuyer = Person(name: "nobody")
         }
         
         let mostDebted = debts.max { first, second in
@@ -57,50 +59,62 @@ extension ViewModel {
             }
             return false
         }
-        return mostDebted?.key ?? Person(name: "nobody")
+        self.currentBuyer = mostDebted?.key ?? Person(name: "nobody")
     }
     
-    public func buyCoffee(people: [Person], currentBuyer: Person) throws -> [Person] {
+    public func buyCoffee() {
         enum BuyCoffeeError: Error {
             case missingMember
         }
-        var transactions = [Transaction]()
-        var updatedPeople = [Person]()
-        var buyer = currentBuyer
-        for receiver in people {
-            var receiver = receiver
-            if receiver.name != buyer.name {
-                guard var newBuyerDebt = buyer.coffeesOwed[receiver.name] else {
-                    debugPrint("something is wrong...")
-                    debugPrint("could not find \(buyer.name) coffees owed for \(receiver.name)")
-                    throw BuyCoffeeError.missingMember
-                }
-                if receiver.isPresent {
-                    let transaction = Transaction.createTransaction(buyer: buyer, receiver: receiver)
-                    transactions.append(transaction)
-                    newBuyerDebt += 1
-                    print("\(buyer.name) bought coffee for \(receiver.name)")
-                }
-                buyer.coffeesOwed[receiver.name] = newBuyerDebt
-                
-                
-                guard var newReceiverDebt = receiver.coffeesOwed[buyer.name] else {
-                    debugPrint("something is wrong...")
-                    debugPrint("could not find \(receiver.name) coffees owed for \(buyer.name)")
-                    throw BuyCoffeeError.missingMember
-                }
-                if receiver.isPresent {
-                    newReceiverDebt -= 1
-                }
-                receiver.coffeesOwed[buyer.name] = newReceiverDebt
-                updatedPeople.append(receiver)
-            }
+        
+        if self.currentBuyer.name == "nobody" {
+            return
         }
-        updatedPeople.append(buyer)
-        return updatedPeople
+        var updatedPeople = [Person]()
+        do {
+            let people = self.people
+            let currentBuyer = self.currentBuyer
+            var transactions = [Transaction]()
+            var buyer = currentBuyer
+            for receiver in people {
+                var receiver = receiver
+                if receiver.name != buyer.name {
+                    guard var newBuyerDebt = buyer.coffeesOwed[receiver.name] else {
+                        debugPrint("something is wrong...")
+                        debugPrint("could not find \(buyer.name) coffees owed for \(receiver.name)")
+                        throw BuyCoffeeError.missingMember
+                    }
+                    if receiver.isPresent {
+                        let transaction = Transaction.createTransaction(buyer: buyer, receiver: receiver)
+                        transactions.append(transaction)
+                        newBuyerDebt += 1
+                        print("\(buyer.name) bought coffee for \(receiver.name)")
+                    }
+                    buyer.coffeesOwed[receiver.name] = newBuyerDebt
+                    
+                    
+                    guard var newReceiverDebt = receiver.coffeesOwed[buyer.name] else {
+                        debugPrint("something is wrong...")
+                        debugPrint("could not find \(receiver.name) coffees owed for \(buyer.name)")
+                        throw BuyCoffeeError.missingMember
+                    }
+                    if receiver.isPresent {
+                        newReceiverDebt -= 1
+                    }
+                    receiver.coffeesOwed[buyer.name] = newReceiverDebt
+                    updatedPeople.append(receiver)
+                }
+            }
+            updatedPeople.append(buyer)
+        } catch {
+            debugPrint(error)
+        }
+        print(people)
+        self.people = updatedPeople
     }
     
-    public func createDisplayedDebts(people: [Person]) -> [Person:Int] {
+    public func createDisplayedDebts() {
+        let people = self.people
         var debts = [Person:Int]()
         let presentPeople: [Person] = people.filter {
             $0.isPresent
@@ -117,6 +131,6 @@ extension ViewModel {
             }
             debts[person] = debt
         }
-        return debts
+        self.displayedDebts = debts
     }
 }
