@@ -1,25 +1,25 @@
-////
-////  ContentView.swift
-////  CoffeeculeTest
-////
-////  Created by Cory Tripathy on 2/20/23.
-////
 //
-//import SwiftUI
+//  ContentView.swift
+//  CoffeeculeTest
 //
-//struct ContentView: View {
-//    @StateObject var vm = ViewModel()
-//    var body: some View {
-//        if vm.hasCoffeecule {
-//            CoffeeculeView(vm: vm)
-//        } else {
-//            OnboardingView(vm: vm)
-//        }
-//    }
-//}
+//  Created by Cory Tripathy on 2/20/23.
 //
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
+
+import SwiftUI
+
+struct ContentView: View {
+    @StateObject var vm = ViewModel()
+    var body: some View {
+        if vm.hasCoffeecule {
+            CoffeeculeView(vm: vm)
+        } else {
+            JoinView(vm: vm)
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}

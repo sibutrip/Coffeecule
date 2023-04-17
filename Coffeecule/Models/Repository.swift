@@ -74,7 +74,7 @@ class Repository {
         if let name = returnedIdentity?.nameComponents?.givenName, var famName = returnedIdentity?.nameComponents?.familyName {
             return "\(name) \(famName.removeFirst())."
         } else {
-            print("could not unwrap name")
+            print("could not unwrap name for \(returnedIdentity?.description)")
         }
         return ""
     }

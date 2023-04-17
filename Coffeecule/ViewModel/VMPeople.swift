@@ -12,10 +12,12 @@ extension ViewModel {
     
     public func joinCoffeecule(name: String) async {
         do {
+            self.hasCoffeecule = true
             let record = try await personService.createParticipantRecord(for: name, in: self.people)
             self.allRecords.append(record)
             await personService.saveSharedRecord(record)
             self.people = personService.addPersonToCoffecule(name, to: self.people)
+            self.hasCoffeecule = true
         } catch {
             debugPrint(error)
         }

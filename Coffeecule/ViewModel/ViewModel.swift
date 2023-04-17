@@ -40,11 +40,11 @@ class ViewModel: ObservableObject {
                 await self.refreshData()
                 self.createDisplayedDebts()
                 self.calculateBuyer()
+                self.state = .loaded
             } catch {
                 print(error)
             }
         }
-        self.state = .loaded
     }
 }
 

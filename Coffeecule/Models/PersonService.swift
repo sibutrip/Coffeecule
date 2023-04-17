@@ -87,7 +87,7 @@ class PersonService: ObservableObject {
         }) {
             throw PersonRecordsError.recordAlreadyExists
         }
-        let zone = try! await repository.container.sharedCloudDatabase.allRecordZones()[0]
+        let zone = try await repository.container.sharedCloudDatabase.allRecordZones()[0]
         let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: zone.zoneID))
         return record
     }
