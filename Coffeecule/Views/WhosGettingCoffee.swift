@@ -14,6 +14,7 @@ struct WhosGettingCoffee: View {
     @State private var deletingPerson = false
     @State private var personToDelete = Person(name: "nobody")
     @State private var deleteError = false
+    @Binding var isSharing: Bool
     
     var body: some View {
         Section("Who's getting coffee?") {
@@ -39,6 +40,17 @@ struct WhosGettingCoffee: View {
                                 .opacity(vm.people[index].isPresent ? 1.0 : 0.0)
                             Text("\(person.name)")
                                 .foregroundColor(.black)
+                        }
+                    }
+                }
+                if self.editMode?.wrappedValue != .inactive {
+                    Button {
+                        Task { await vm.shareCoffeecule() }
+                        isSharing = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "person.crop.circle.fill.badge.plus")
+                            Text("New bro")
                         }
                     }
                 }

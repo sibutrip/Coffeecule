@@ -10,10 +10,12 @@ import Charts
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
     @State var isBuying = false
+    @State var isSharing = false
+
     var body: some View {
         NavigationView {
             Form {
-                WhosGettingCoffee(vm: vm)
+                WhosGettingCoffee(vm: vm, isSharing: $isSharing)
                 itsTimeForPersonToGetCoffee
                 buyCoffeeButton
                 relationshipWebChart
@@ -30,6 +32,9 @@ struct CoffeeculeView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     selectAllToolbar
                 }
+            }
+            .sheet(isPresented: $isSharing) {
+                CloudSharingView(repo: vm.personService)
             }
         }
     }

@@ -14,6 +14,7 @@ struct JoinView: View {
             Button("join as \(vm.participantName)") {
                 Task {
                     await vm.joinCoffeecule(name: vm.participantName)
+                    await vm.refreshData()
                 }
             }
         } else {
