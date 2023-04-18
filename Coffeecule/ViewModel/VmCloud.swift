@@ -21,9 +21,9 @@ extension ViewModel {
     
     /// Creates the custom zone in use if needed.
     private func createZonesIfNeeded() async throws {
-        if UserDefaults.standard.bool(forKey: "areZonesCreated") {
-            return
-        }
+//        if UserDefaults.standard.bool(forKey: "areZonesCreated") {
+//            return
+//        }
         
         do {
             print(try await Repository.shared.database.modifyRecordZones(saving: [RecordZones.Transactions(), RecordZones.People()], deleting: []))

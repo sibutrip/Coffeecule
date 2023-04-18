@@ -166,8 +166,10 @@ class ViewModel: ObservableObject {
         self.readWriter = readWriter
         
         Task {
+            await self.initialize()
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
+//            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
+            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
             self.calculateBuyer()
         }
         
