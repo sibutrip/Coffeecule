@@ -29,7 +29,7 @@ struct Transaction: Identifiable {
     static let transactionRecordName = "transaction"
     
     init?(buyer: String, receiver: String) {
-        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: Repository.shared.coffeeculeRecordZone.zoneID))
+        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: Repository.shared.coffeeculeRecordZone.zoneID))
         transactionRecord["buyer"] = buyer.capitalized
         transactionRecord["receiver"] = receiver.capitalized
         

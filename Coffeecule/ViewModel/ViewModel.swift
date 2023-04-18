@@ -24,7 +24,6 @@ class ViewModel: ObservableObject {
     }
     
     @Published public var participantName: String = ""
-//    @Published public var allRecords = [CKRecord]()
     @Published var state: State = .loading
     @Published var people: [Person] = []
     @Published var currentBuyer = Person(name: "nobody")

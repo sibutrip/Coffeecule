@@ -102,13 +102,13 @@ class PersonService: ObservableObject {
         return record
     }
     
-    public func createParticipantRecord(for name: String, in people: [Person]) async throws -> CKRecord {
-        if name.isEmpty { throw PersonRecordsError.nameIsEmpty }
-        if people.contains(where: { person in
-            person.name == name
-        }) {
-            throw PersonRecordsError.recordAlreadyExists
-        }
+    public func createParticipantRecord(for name: String, in people: [Person]) -> CKRecord {
+//        if name.isEmpty { throw PersonRecordsError.nameIsEmpty }
+//        if people.contains(where: { person in
+//            person.name == name
+//        }) {
+//            throw PersonRecordsError.recordAlreadyExists
+//        }
 //        let zone = try await repository.container.sharedCloudDatabase.allRecordZones()[0]
         let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: repository.coffeeculeRecordZone.zoneID))
         return record

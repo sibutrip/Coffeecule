@@ -15,15 +15,16 @@ struct JoinView: View {
     var body: some View {
         if vm.state == .loaded {
             VStack {
+                Spacer()
                 Button("join a coffeecule") {
                     Task {
                         guard let _ = try? await vm.joinCoffeecule(name: vm.participantName)
                         else {
-                            print("cant join cule")
                             return
                         }
                     }
                 }
+                Spacer()
                 Button("create a cule") {
                     Task {
                         guard let _ = try? await vm.onCoffeeculeLoad() else {
@@ -35,6 +36,7 @@ struct JoinView: View {
                         vm.hasCoffeecule = true
                     }
                 }
+                Spacer()
             }
             .alert("accept a cule invite to join a cule sorry", isPresented: $tryingToJoinACule) {
                 Button("alrighty", role: .cancel) {
