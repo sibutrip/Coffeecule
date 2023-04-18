@@ -171,7 +171,7 @@ class ViewModel: ObservableObject {
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
             self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
 //            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
-//            #error("run the above line to re-make a cule.")
+            #error("run the above line to re-make a cule.")
             self.calculateBuyer()
         }
         
