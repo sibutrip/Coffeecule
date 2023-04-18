@@ -66,13 +66,13 @@ class ViewModel: ObservableObject {
     }
     
     var displayedDebts: [Person:Int] {
-        var debts = [Person:Int]()
         let people = self.people
+        var debts = [Person:Int]()
         let presentPeople: [Person] = people.filter {
             $0.isPresent
         }
         let presentNames: [String] = presentPeople.map {
-            $0.name.lowercased()
+            $0.name
         }
         for person in presentPeople {
             let debt: Int = person.coffeesOwed.reduce(0) { partialResult, dict in
@@ -83,6 +83,7 @@ class ViewModel: ObservableObject {
             }
             debts[person] = debt
         }
+//        self.displayedDebts = debts
         print(debts)
         return debts
     }
@@ -168,8 +169,9 @@ class ViewModel: ObservableObject {
         Task {
             await self.initialize()
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-//            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
-            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
+            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
+//            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
+//            #error("run the above line to re-make a cule.")
             self.calculateBuyer()
         }
         
