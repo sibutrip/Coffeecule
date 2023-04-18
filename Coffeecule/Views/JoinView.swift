@@ -26,7 +26,7 @@ struct JoinView: View {
                 }
                 Button("create a cule") {
                     Task {
-                        guard let _ = try? await vm.onLoad() else {
+                        guard let _ = try? await vm.onCoffeeculeLoad() else {
                             couldntCreateCule = true
                             return
                         }

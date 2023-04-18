@@ -33,12 +33,12 @@ struct CoffeeculeView: View {
                     selectAllToolbar
                 }
             }
-            .task {
-                guard let _ = try? await vm.onLoad() else {
-                    couldntGetPermission = true
-                    return
-                }
-            }
+//            .task {
+//                guard let _ = try? await vm.onLoad() else {
+//                    couldntGetPermission = true
+//                    return
+//                }
+//            }
             .sheet(isPresented: $isSharing) {
                 CloudSharingView(repo: vm.personService)
             }

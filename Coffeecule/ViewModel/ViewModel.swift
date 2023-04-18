@@ -31,7 +31,7 @@ class ViewModel: ObservableObject {
     @Published var displayedDebts: [Person:Int] = [:]
     @Published var hasShare = false
     
-    public func onLoad() async throws {
+    public func onCoffeeculeLoad() async throws {
         self.state = .loading
         self.repository.userName = try await repository.fetchiCloudUserName()
         self.participantName = self.shortenName(repository.userName)
@@ -49,8 +49,13 @@ class ViewModel: ObservableObject {
     }
     
     init() {
-        self.participantName = self.shortenName(repository.userName)
-        self.state = .loaded
+        Task {
+            self.state = .loading
+            repository.userName = try! await self.repository.fetchiCloudUserName()
+            self.participantName = self.shortenName(repository.userName)
+            self.state = .loaded
+            print(self.participantName)
+        }
     }
 }
 
