@@ -19,7 +19,7 @@ struct ContentView: View {
         }
         .task {
             vm.state = .loading
-            vm.participantName = try! await vm.repository.fetchiCloudUserName()
+            vm.participantName = vm.shortenName(vm.repository.userName)
             vm.state = .loaded
             print("Done")
         }

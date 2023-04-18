@@ -16,12 +16,7 @@ class Repository {
                 await self.createZonesIfNeeded()
                 self.appPermission = try await self.requestAppPermission()
                 self.accountStatus = try await self.container.accountStatus()
-                let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
-                if sharedContainers.count > 0 {
-                    self.sharedCoffeeculeZone = sharedContainers[0]
-                } else if sharedContainers.count > 1 {
-                    print("ERROR: more than 1 shared container")
-                }
+                self.userName = try await self.fetchiCloudUserName()
             } catch {
                 debugPrint(error)
             }
@@ -33,17 +28,18 @@ class Repository {
     // PUBLIC
     public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     public lazy var database = container.privateCloudDatabase
-    public let coffeeculeRecordZone = CKRecordZone(zoneName: "PersonZone") // private zone
-    public var sharedCoffeeculeZone: CKRecordZone? = nil
+    public var coffeeculeRecordZone = CKRecordZone(zoneName: "PersonZone") // private zone
+//    public var sharedCoffeeculeZone: CKRecordZone? = nil
     public var appPermission: Bool? = nil
     public var accountStatus: CKAccountStatus? = nil
+    public var userName: PersonNameComponents? = nil
     
     // APP PERMISSION
     
     public func fetchSharedContainer() async throws {
         let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
         if sharedContainers.count > 0 {
-            self.sharedCoffeeculeZone = sharedContainers[0]
+            self.coffeeculeRecordZone = sharedContainers[0]
         } else if sharedContainers.count > 1 {
             print("ERROR: more than 1 shared container")
         }
@@ -68,16 +64,18 @@ class Repository {
         }
     }
     
-    public func fetchiCloudUserName() async throws -> String {
+    public func fetchiCloudUserName() async throws -> PersonNameComponents {
         let id = try await self.container.userRecordID()
-        let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
-        if let name = returnedIdentity?.nameComponents?.givenName, var famName = returnedIdentity?.nameComponents?.familyName {
-            return "\(name) \(famName.removeFirst())."
-        } else {
-            print("could not unwrap name for \(returnedIdentity?.description)")
+        guard let returnedIdentity = try? await self.container.userIdentity(forUserRecordID: id) else {
+            return PersonNameComponents()
         }
-        return ""
+        guard let name = returnedIdentity.nameComponents else {
+            return PersonNameComponents()
+        }
+        return name
     }
+
+    
     
     // PERSON DATABASE METHODS
     private func createZonesIfNeeded() async {

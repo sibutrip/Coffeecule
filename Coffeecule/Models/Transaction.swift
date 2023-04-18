@@ -28,9 +28,8 @@ struct Transaction: Identifiable {
     
     static let transactionRecordName = "transaction"
     
-    init?(buyer: String, receiver: String, in scope: CKRecordZone) {
-        //        if let zone = Repository.shared.sharedCoffeeculeZone {
-        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: scope.zoneID))
+    init?(buyer: String, receiver: String) {
+        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: Repository.shared.coffeeculeRecordZone.zoneID))
         transactionRecord["buyer"] = buyer.capitalized
         transactionRecord["receiver"] = receiver.capitalized
         
@@ -38,7 +37,6 @@ struct Transaction: Identifiable {
         self.buyerName = buyer.capitalized
         self.receiverName = buyer.capitalized
         self.associatedRecord = transactionRecord
-        print("init success!!! u did it")
         //        } else {
         //            print("init failed")
         //            return nil

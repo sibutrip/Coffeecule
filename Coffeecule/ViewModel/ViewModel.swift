@@ -33,16 +33,23 @@ class ViewModel: ObservableObject {
     
     public func onLoad() async throws {
         self.state = .loading
-//        await self.personService.fetchOrCreateShare()
-        try await self.repository.fetchSharedContainer()
-        self.participantName = try await repository.fetchiCloudUserName()
+        self.repository.userName = try await repository.fetchiCloudUserName()
+        self.participantName = self.shortenName(repository.userName)
         await self.refreshData()
+        if self.participantName == personService.rootRecord?.recordID.recordName {
+            print("this is the owner")
+        } else {
+            print("this is not the owner")
+            try! await self.repository.fetchSharedContainer()
+        }
         self.createDisplayedDebts()
         self.calculateBuyer()
         self.state = .loaded
+        print("participant name is \(self.participantName)")
     }
     
     init() {
+        self.participantName = self.shortenName(repository.userName)
         self.state = .loaded
     }
 }

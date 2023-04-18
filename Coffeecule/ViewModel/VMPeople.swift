@@ -13,9 +13,9 @@ extension ViewModel {
     public func joinCoffeecule(name: String) async throws {
         await self.refreshData()
         do {
-            self.hasCoffeecule = true
             try await repository.fetchSharedContainer()
             let record = try await personService.createParticipantRecord(for: name, in: self.people)
+            print(record)
             //            self.allRecords.append(record)
             await personService.saveSharedRecord(record)
             self.people = personService.addPersonToCoffecule(name, to: self.people)
@@ -43,16 +43,15 @@ extension ViewModel {
     
     public func refreshData() async {
         let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
+        print(peopleNames)
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people
-        //        personService.rootShare =
         self.hasShare = hasShare
-        print("received \(transactions.count) transactions")
+        print("received \(transactions.count) transactions:")
         _ = transactions.map {
             print($0.buyerName,$0.receiverName)
         }
-        print(peopleNames)
     }
     
     public func calculateBuyer() {
@@ -87,8 +86,7 @@ extension ViewModel {
             let currentBuyer = self.currentBuyer
             var transactions = [Transaction]()
             var buyer = currentBuyer
-            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
-        #warning("OKAY! here's whats going on. the participants use the shared zone. the owner uses the private zone")
+//            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
             for receiver in people {
                 var receiver = receiver
                 if receiver.name != buyer.name {
@@ -98,7 +96,7 @@ extension ViewModel {
                         throw BuyCoffeeError.missingMember
                     }
                     if receiver.isPresent {
-                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name, in: self.participantName == self.personService.rootRecord?.recordID.recordName ? repository.coffeeculeRecordZone : repository.sharedCoffeeculeZone!) {
+                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name) {
                             transactions.append(transaction)
                         }
                         newBuyerDebt += 1
@@ -154,5 +152,14 @@ extension ViewModel {
         }
         self.displayedDebts = debts
         print(debts)
+    }
+    
+    public func shortenName(_ nameComponents: PersonNameComponents?) -> String {
+        guard let nameComponents = nameComponents else { return "" }
+        if let name = nameComponents.givenName, var famName = nameComponents.familyName {
+            return "\(name) \(famName.removeFirst())."
+        } else {
+            return ""
+        }
     }
 }

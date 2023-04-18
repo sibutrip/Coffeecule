@@ -28,11 +28,11 @@ class PersonService: ObservableObject {
     
     // INITIALIZER
     init() {
-//        Task {
-//            await self.fetchOrCreateShare()
-//        }
+        //        Task {
+        //            try? repository.fetchSharedContainer()
+        //        }
     }
-
+    
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
@@ -41,7 +41,7 @@ class PersonService: ObservableObject {
         var share: CKShare? = nil
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
-
+        
         guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.coffeeculeRecordZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
             self.rootShare = await createRootShare()
             return
@@ -109,8 +109,8 @@ class PersonService: ObservableObject {
         }) {
             throw PersonRecordsError.recordAlreadyExists
         }
-        let zone = try await repository.container.sharedCloudDatabase.allRecordZones()[0]
-        let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: zone.zoneID))
+//        let zone = try await repository.container.sharedCloudDatabase.allRecordZones()[0]
+        let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: repository.coffeeculeRecordZone.zoneID))
         return record
     }
     
@@ -185,9 +185,14 @@ class PersonService: ObservableObject {
                 awaitingChanges = zoneChanges.moreComing
                 nextChangeToken = zoneChanges.changeToken
                 for record in receivedRecords {
-                    if record.recordType == rootRecordName || record.recordType == participantRecordName {
+                    if record.recordType == rootRecordName {
                         people.append(record.recordID.recordName)
-                        print(zone.description)
+                        print("found root record")
+                        self.rootRecord = record
+                    } else if record.recordType == participantRecordName {
+                        print("found partic record")
+
+                        people.append(record.recordID.recordName)
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
@@ -200,33 +205,43 @@ class PersonService: ObservableObject {
         }
         
         do {
-            let sharedZones = try await repository.container.sharedCloudDatabase.allRecordZones()
-            let privateZone = repository.coffeeculeRecordZone
-            let zones = [privateZone] + sharedZones
+//            var zones = [CKRecordZone]()
+//            if let sharedZones = try? await repository.container.sharedCloudDatabase.allRecordZones() {
+//                zones.append(contentsOf: sharedZones)
+//            }
+//            let privateZone = repository.coffeeculeRecordZone
+//            zones.append(privateZone)
+            try await repository.fetchSharedContainer()
+            var zones = [repository.coffeeculeRecordZone]
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([String], [Transaction], Bool).self) { group in
                 for zone in zones {
                     group.addTask {
-                        if zone == privateZone {
-                            return try await recordsInZone(zone, scope: .private)
+                        if let results = try? await recordsInZone(zone, scope: .shared) {
+                            return results
                         }
-                        return try await recordsInZone(zone, scope: .shared)
+                        if let results = try? await recordsInZone(zone, scope: .private) {
+                            return results
+                        }
+                        return ([], [], false)
+
                     }
-                }
-                
-                // As each result comes back, append it to a combined array to finally return.
-                for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
-                    people.append(contentsOf: returnedPeople)
-                    transactions.append(contentsOf: returnedTransactions)
-                    hasShare = didReturnShare
+                    
+                    // As each result comes back, append it to a combined array to finally return.
+                    for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
+                        people.append(contentsOf: returnedPeople)
+                        transactions.append(contentsOf: returnedTransactions)
+                        hasShare = didReturnShare
+                    }
                 }
             }
             return (people, transactions, hasShare)
         } catch {
-            debugPrint(error)
+            debugPrint(error.localizedDescription+"Aaaa")
             return([], [], false)
         }
+        
     }
     
     public func addPersonToCoffecule(_ name: String, to people: [Person]) -> [Person] {
@@ -242,9 +257,9 @@ class PersonService: ObservableObject {
     }
     
     func createPeopleFromScratch(from names: [String]) -> [Person] {
-//        let names = records.map {
-//            $0.recordID.recordName
-//        }
+        //        let names = records.map {
+        //            $0.recordID.recordName
+        //        }
         var people = names
             .map { Person(name: $0) }
         for name in names {
@@ -267,9 +282,9 @@ class PersonService: ObservableObject {
             peopleToAdd = incrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
             peopleToAdd = decrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
         }
-//        _ = people.map {
-//            print($0.coffeesOwed)
-//        }
+        //        _ = people.map {
+        //            print($0.coffeesOwed)
+        //        }
         return peopleToAdd
     }
     

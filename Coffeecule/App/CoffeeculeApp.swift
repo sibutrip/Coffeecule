@@ -32,4 +32,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-#error("change it so non-owners use shared container exclusively and owner uses private exclusively")
