@@ -9,16 +9,46 @@ import SwiftUI
 
 struct JoinView: View {
     @ObservedObject var vm: ViewModel
+    @State private var tryingToJoinACule = false
+    @State private var couldntCreateCule = false
+    
     var body: some View {
         if vm.state == .loaded {
-            Button("join as \(vm.participantName)") {
-                Task {
-                    await vm.joinCoffeecule(name: vm.participantName)
-                    await vm.refreshData()
+            VStack {
+                Button("join a coffeecule") {
+                    Task {
+                        guard let _ = try? await vm.joinCoffeecule(name: vm.participantName)
+                        else {
+                            print("cant join cule")
+                            return
+                        }
+                    }
+                }
+                Button("create a cule") {
+                    Task {
+                        guard let _ = try? await vm.onLoad() else {
+                            couldntCreateCule = true
+                            return
+                        }
+                        await vm.createCoffeecule()
+                        await vm.refreshData()
+                        vm.hasCoffeecule = true
+                    }
+                }
+            }
+            .alert("accept a cule invite to join a cule sorry", isPresented: $tryingToJoinACule) {
+                Button("alrighty", role: .cancel) {
+                    tryingToJoinACule = false
+                }
+            }
+            .alert("couldnt make cule try again", isPresented: $couldntCreateCule) {
+                Button("alrighty", role: .cancel) {
+                    couldntCreateCule = false
                 }
             }
         } else {
             ProgressView()
+            
         }
     }
 }

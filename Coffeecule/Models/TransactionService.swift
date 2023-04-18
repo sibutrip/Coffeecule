@@ -11,10 +11,10 @@ import CloudKit
 class TransactionService {
     private let repository = Repository.shared
     
-    public func saveTransactions(_ transactions: [Transaction]) async throws {
+    public func saveTransactions(_ transactions: [Transaction], in database: CKDatabase) async throws {
         let records: [CKRecord] = transactions.map { $0.associatedRecord }
-//        let result = try await Repository.shared.container.sharedCloudDatabase.modifyRecords(saving: records, deleting: [])
-        let result = try await Repository.shared.container.privateCloudDatabase.modifyRecords(saving: records, deleting: [])
+        let result = try await database.modifyRecords(saving: records, deleting: [])
+//        let result = try await Repository.shared.container.privateCloudDatabase.modifyRecords(saving: records, deleting: [])
         print(result.saveResults.description)
     }
 }

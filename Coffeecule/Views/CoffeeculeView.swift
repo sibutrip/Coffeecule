@@ -11,6 +11,7 @@ struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
     @State var isBuying = false
     @State var isSharing = false
+    @State var couldntGetPermission = false
 
     var body: some View {
         NavigationView {
@@ -19,7 +20,6 @@ struct CoffeeculeView: View {
                 itsTimeForPersonToGetCoffee
                 buyCoffeeButton
                 relationshipWebChart
-                
             }
             .navigationTitle(Title.shared.activeTitle)
             .refreshable {
@@ -33,8 +33,17 @@ struct CoffeeculeView: View {
                     selectAllToolbar
                 }
             }
+            .task {
+                guard let _ = try? await vm.onLoad() else {
+                    couldntGetPermission = true
+                    return
+                }
+            }
             .sheet(isPresented: $isSharing) {
                 CloudSharingView(repo: vm.personService)
+            }
+            .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
+                Button("ok den", role: .cancel) { couldntGetPermission = false}
             }
         }
     }

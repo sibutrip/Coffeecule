@@ -8,11 +8,17 @@ import SwiftUI
 import CloudKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
+    var userDidAcceptInvite = false
 
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let contentView = ContentView()
+        
+        if self.userDidAcceptInvite {
+            contentView.vm.hasCoffeecule = true
+        }
 
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -52,8 +58,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 debugPrint("Error accepting CloudKit Share: \(error)")
             }
         }
-
         operation.qualityOfService = .utility
         container.add(operation)
+        self.userDidAcceptInvite = true
     }
 }

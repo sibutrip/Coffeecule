@@ -28,18 +28,20 @@ class PersonService: ObservableObject {
     
     // INITIALIZER
     init() {
-        Task {
-            await self.fetchOrCreateShare()
-        }
+//        Task {
+//            await self.fetchOrCreateShare()
+//        }
     }
 
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
     public func fetchOrCreateShare() async {
+        if self.rootShare != nil { return }
         var share: CKShare? = nil
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
+
         guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.coffeeculeRecordZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
             self.rootShare = await createRootShare()
             return
@@ -59,10 +61,30 @@ class PersonService: ObservableObject {
         self.rootShare = share
     }
     
+    public func fetchShare() async throws {
+        enum FetchShareError: Error {
+            case invalidShare,noShareFound
+        }
+        
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
+        let (results, _) = try await repository.database.records(matching: query, inZoneWith: repository.coffeeculeRecordZone.zoneID,desiredKeys: nil, resultsLimit: 10)
+        for (_, result) in results {
+            switch result {
+            case .success(let record):
+                self.rootShare = record as? CKShare
+                return
+            case .failure(_):
+                throw FetchShareError.invalidShare
+            }
+        }
+        throw FetchShareError.noShareFound
+    }
+    
     private func createRootShare() async -> CKShare {
         let share = CKShare(recordZoneID: repository.coffeeculeRecordZone.zoneID)
         share.publicPermission = .readWrite
-        share[CKShare.SystemFieldKey.title] = "Person"
+        share[CKShare.SystemFieldKey.title] = "Coffeecule"
         let resultTest = try! await self.repository.database.modifyRecords(saving: [share], deleting: [])
         print(resultTest.saveResults.debugDescription)
         return share
@@ -141,20 +163,20 @@ class PersonService: ObservableObject {
     }
     
     /// fetches from shared container
-    public func fetchRecords() async -> ([CKRecord], [Transaction], CKShare?) {
-        var people: [CKRecord] = []
+    public func fetchRecords() async -> ([String], [Transaction], Bool) {
+        var people: [String] = []
         var transactions: [Transaction] = []
-        var share: CKShare? = nil
+        var hasShare: Bool = false
         
-        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async throws -> ([CKRecord], [Transaction], CKShare?) {
+        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async throws -> ([String], [Transaction], Bool) {
             /// `recordZoneChanges` can return multiple consecutive changesets before completing, so
             /// we use a loop to process multiple results if needed, indicated by the `moreComing` flag.
             var awaitingChanges = true
             /// After each loop, if more changes are coming, they are retrieved by using the `changeToken` property.
             var nextChangeToken: CKServerChangeToken? = nil
-            var people: [CKRecord] = []
+            var people: [String] = []
             var transactions: [Transaction] = []
-            var share: CKShare? = nil
+            var hasShare: Bool = false
             
             while awaitingChanges {
                 let zoneChanges = try await Repository.shared.container.database(with: scope).recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
@@ -164,18 +186,17 @@ class PersonService: ObservableObject {
                 nextChangeToken = zoneChanges.changeToken
                 for record in receivedRecords {
                     if record.recordType == rootRecordName || record.recordType == participantRecordName {
-                        people.append(record)
+                        people.append(record.recordID.recordName)
                         print(zone.description)
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
-                        if let recievedShare = record as? CKShare {
-                            share = recievedShare
-                        }
+                        self.rootShare = record as? CKShare
+                        hasShare = true
                     }
                 }
             }
-            return (people, transactions, share)
+            return (people, transactions, hasShare)
         }
         
         do {
@@ -184,7 +205,7 @@ class PersonService: ObservableObject {
             let zones = [privateZone] + sharedZones
             
             // Using this task group, fetch each zone's contacts in parallel.
-            try await withThrowingTaskGroup(of: ([CKRecord], [Transaction], CKShare?).self) { group in
+            try await withThrowingTaskGroup(of: ([String], [Transaction], Bool).self) { group in
                 for zone in zones {
                     group.addTask {
                         if zone == privateZone {
@@ -195,16 +216,16 @@ class PersonService: ObservableObject {
                 }
                 
                 // As each result comes back, append it to a combined array to finally return.
-                for try await (returnedPeople, returnedTransactions, returnedShare) in group {
+                for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
                     people.append(contentsOf: returnedPeople)
                     transactions.append(contentsOf: returnedTransactions)
-                    share = returnedShare
+                    hasShare = didReturnShare
                 }
             }
-            return (people, transactions, share)
+            return (people, transactions, hasShare)
         } catch {
             debugPrint(error)
-            return([], [], nil)
+            return([], [], false)
         }
     }
     
@@ -220,10 +241,10 @@ class PersonService: ObservableObject {
         return newPeople.sorted()
     }
     
-    func createPeopleFromScratch(from records: [CKRecord]) -> [Person] {
-        let names = records.map {
-            $0.recordID.recordName
-        }
+    func createPeopleFromScratch(from names: [String]) -> [Person] {
+//        let names = records.map {
+//            $0.recordID.recordName
+//        }
         var people = names
             .map { Person(name: $0) }
         for name in names {
@@ -246,6 +267,9 @@ class PersonService: ObservableObject {
             peopleToAdd = incrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
             peopleToAdd = decrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
         }
+//        _ = people.map {
+//            print($0.coffeesOwed)
+//        }
         return peopleToAdd
     }
     

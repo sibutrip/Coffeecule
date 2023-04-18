@@ -24,27 +24,26 @@ class ViewModel: ObservableObject {
     }
     
     @Published public var participantName: String = ""
-    @Published public var allRecords = [CKRecord]()
+//    @Published public var allRecords = [CKRecord]()
     @Published var state: State = .loading
     @Published var people: [Person] = []
     @Published var currentBuyer = Person(name: "nobody")
     @Published var displayedDebts: [Person:Int] = [:]
+    @Published var hasShare = false
+    
+    public func onLoad() async throws {
+        self.state = .loading
+//        await self.personService.fetchOrCreateShare()
+        try await self.repository.fetchSharedContainer()
+        self.participantName = try await repository.fetchiCloudUserName()
+        await self.refreshData()
+        self.createDisplayedDebts()
+        self.calculateBuyer()
+        self.state = .loaded
+    }
     
     init() {
-        self.state = .loading
-        Task {
-            do {
-                await self.personService.fetchOrCreateShare()
-                try await self.repository.fetchSharedContainer()
-                self.participantName = try await repository.fetchiCloudUserName()
-                await self.refreshData()
-                self.createDisplayedDebts()
-                self.calculateBuyer()
-                self.state = .loaded
-            } catch {
-                print(error)
-            }
-        }
+        self.state = .loaded
     }
 }
 

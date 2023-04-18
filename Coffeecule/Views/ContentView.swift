@@ -10,10 +10,18 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var vm = ViewModel()
     var body: some View {
-        if vm.hasCoffeecule {
-            CoffeeculeView(vm: vm)
-        } else {
-            JoinView(vm: vm)
+        VStack {
+            if vm.hasCoffeecule {
+                CoffeeculeView(vm: vm)
+            } else {
+                JoinView(vm: vm)
+            }
+        }
+        .task {
+            vm.state = .loading
+            vm.participantName = try! await vm.repository.fetchiCloudUserName()
+            vm.state = .loaded
+            print("Done")
         }
     }
 }

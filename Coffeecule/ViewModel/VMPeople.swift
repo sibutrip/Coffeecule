@@ -10,11 +10,13 @@ import CloudKit
 
 extension ViewModel {
     
-    public func joinCoffeecule(name: String) async {
+    public func joinCoffeecule(name: String) async throws {
+        await self.refreshData()
         do {
             self.hasCoffeecule = true
+            try await repository.fetchSharedContainer()
             let record = try await personService.createParticipantRecord(for: name, in: self.people)
-            self.allRecords.append(record)
+            //            self.allRecords.append(record)
             await personService.saveSharedRecord(record)
             self.people = personService.addPersonToCoffecule(name, to: self.people)
             self.hasCoffeecule = true
@@ -27,8 +29,8 @@ extension ViewModel {
         do {
             let name = self.participantName
             let record = try personService.createRootRecord(for: name, in: self.people)
-            self.allRecords.append(record)
-            self.people = personService.createPeopleFromScratch(from: [record])
+            //            self.allRecords.append(record)
+            self.people = personService.createPeopleFromScratch(from: [self.participantName])
             await personService.savePrivateRecord(record)
         } catch {
             debugPrint(error.localizedDescription)
@@ -40,16 +42,17 @@ extension ViewModel {
     }
     
     public func refreshData() async {
-        let (peopleRecords, transactions, share) = await personService.fetchRecords()
-        var people = personService.createPeopleFromScratch(from: peopleRecords)
+        let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
+        var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
-        self.allRecords = peopleRecords
         self.people = people
-        personService.rootShare = share
+        //        personService.rootShare =
+        self.hasShare = hasShare
         print("received \(transactions.count) transactions")
         _ = transactions.map {
             print($0.buyerName,$0.receiverName)
         }
+        print(peopleNames)
     }
     
     public func calculateBuyer() {
@@ -84,6 +87,8 @@ extension ViewModel {
             let currentBuyer = self.currentBuyer
             var transactions = [Transaction]()
             var buyer = currentBuyer
+            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
+        #warning("OKAY! here's whats going on. the participants use the shared zone. the owner uses the private zone")
             for receiver in people {
                 var receiver = receiver
                 if receiver.name != buyer.name {
@@ -93,7 +98,7 @@ extension ViewModel {
                         throw BuyCoffeeError.missingMember
                     }
                     if receiver.isPresent {
-                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name) {
+                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name, in: self.participantName == self.personService.rootRecord?.recordID.recordName ? repository.coffeeculeRecordZone : repository.sharedCoffeeculeZone!) {
                             transactions.append(transaction)
                         }
                         newBuyerDebt += 1
@@ -117,7 +122,11 @@ extension ViewModel {
             updatedPeople.append(buyer)
             self.people = updatedPeople
             print(transactions.count)
-            try await self.transactionService.saveTransactions(transactions)
+            if self.participantName == self.personService.rootRecord?.recordID.recordName {
+                try await self.transactionService.saveTransactions(transactions, in: repository.container.privateCloudDatabase)
+            } else {
+                try await self.transactionService.saveTransactions(transactions, in: repository.container.sharedCloudDatabase)
+            }
         } catch {
             debugPrint(error)
             self.people = updatedPeople
@@ -144,6 +153,6 @@ extension ViewModel {
             debts[person] = debt
         }
         self.displayedDebts = debts
+        print(debts)
     }
-    
 }

@@ -23,6 +23,7 @@ struct WhosGettingCoffee: View {
                     let person = vm.people[index]
                     Button {
                         vm.people[index].isPresent.toggle()
+                        vm.createDisplayedDebts()
                         vm.calculateBuyer()
                     } label: {
                         HStack {
@@ -45,14 +46,16 @@ struct WhosGettingCoffee: View {
                 }
                 if self.editMode?.wrappedValue != .inactive {
                     Button {
-                        Task { await vm.shareCoffeecule() }
-                        isSharing = true
+                        Task {
+                            await vm.shareCoffeecule()
+                            isSharing = true
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "person.crop.circle.fill.badge.plus")
                             Text("New bro")
                         }
-                    }
+                    }.disabled(vm.state == .loading)
                 }
             }
             .alert("Deleting is not available yet", isPresented: $deletingPerson) {

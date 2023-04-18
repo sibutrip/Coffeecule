@@ -19,7 +19,7 @@ struct Transaction: Identifiable {
               let receiverName = record["receiver"] as? String else {
             return nil
         }
-
+        
         self.id = record.recordID.recordName
         self.buyerName = buyerName.capitalized
         self.receiverName = receiverName.capitalized
@@ -28,20 +28,20 @@ struct Transaction: Identifiable {
     
     static let transactionRecordName = "transaction"
     
-    init?(buyer: String, receiver: String) {
-//        if let zone = Repository.shared.sharedCoffeeculeZone {
-        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: Repository.shared.coffeeculeRecordZone.zoneID))
-            transactionRecord["buyer"] = buyer.capitalized
-            transactionRecord["receiver"] = receiver.capitalized
-            
-            self.id = transactionRecord.recordID.recordName
-            self.buyerName = buyer.capitalized
-            self.receiverName = buyer.capitalized
-            self.associatedRecord = transactionRecord
-            print("init success!!! u did it")
-//        } else {
-//            print("init failed")
-//            return nil
-//        }
+    init?(buyer: String, receiver: String, in scope: CKRecordZone) {
+        //        if let zone = Repository.shared.sharedCoffeeculeZone {
+        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: Date().description, zoneID: scope.zoneID))
+        transactionRecord["buyer"] = buyer.capitalized
+        transactionRecord["receiver"] = receiver.capitalized
+        
+        self.id = transactionRecord.recordID.recordName
+        self.buyerName = buyer.capitalized
+        self.receiverName = buyer.capitalized
+        self.associatedRecord = transactionRecord
+        print("init success!!! u did it")
+        //        } else {
+        //            print("init failed")
+        //            return nil
+        //        }
     }
 }
