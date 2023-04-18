@@ -97,7 +97,8 @@ class PersonService: ObservableObject {
         }) {
             throw PersonRecordsError.recordAlreadyExists
         }
-        let record = CKRecord(recordType: rootRecordName, recordID: CKRecord.ID(recordName: name, zoneID: repository.coffeeculeRecordZone.zoneID))
+        let record = CKRecord(recordType: rootRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: repository.coffeeculeRecordZone.zoneID))
+        record["name"] = name
         self.rootRecord = record
         return record
     }
@@ -110,7 +111,8 @@ class PersonService: ObservableObject {
 //            throw PersonRecordsError.recordAlreadyExists
 //        }
 //        let zone = try await repository.container.sharedCloudDatabase.allRecordZones()[0]
-        let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: name, zoneID: repository.coffeeculeRecordZone.zoneID))
+        let record = CKRecord(recordType: participantRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: repository.coffeeculeRecordZone.zoneID))
+        record["name"] = name
         return record
     }
     
@@ -186,13 +188,13 @@ class PersonService: ObservableObject {
                 nextChangeToken = zoneChanges.changeToken
                 for record in receivedRecords {
                     if record.recordType == rootRecordName {
-                        people.append(record.recordID.recordName)
+                        people.append(record["name"] as! String)
                         print("found root record")
                         self.rootRecord = record
                     } else if record.recordType == participantRecordName {
-                        print("found partic record")
+                        print("found participant record")
 
-                        people.append(record.recordID.recordName)
+                        people.append(record["name"] as! String)
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
@@ -212,7 +214,7 @@ class PersonService: ObservableObject {
 //            let privateZone = repository.coffeeculeRecordZone
 //            zones.append(privateZone)
             try await repository.fetchSharedContainer()
-            var zones = [repository.coffeeculeRecordZone]
+            let zones = [repository.coffeeculeRecordZone]
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([String], [Transaction], Bool).self) { group in
