@@ -32,6 +32,7 @@ class ViewModel: ObservableObject {
     
     public func onCoffeeculeLoad() async throws {
         self.state = .loading
+        try await self.repository.fetchiCloudUserName()
         self.repository.userName = try await repository.fetchiCloudUserName()
         self.participantName = self.shortenName(repository.userName)
         await self.refreshData()
@@ -53,7 +54,6 @@ class ViewModel: ObservableObject {
             repository.userName = try! await self.repository.fetchiCloudUserName()
             self.participantName = self.shortenName(repository.userName)
             self.state = .loaded
-            print(self.participantName)
         }
     }
 }

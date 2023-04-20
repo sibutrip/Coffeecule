@@ -66,10 +66,8 @@ class Repository {
     
     public func fetchiCloudUserName() async throws -> PersonNameComponents {
         let id = try await self.container.userRecordID()
-        guard let returnedIdentity = try? await self.container.userIdentity(forUserRecordID: id) else {
-            return PersonNameComponents()
-        }
-        guard let name = returnedIdentity.nameComponents else {
+        let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
+        guard let name = returnedIdentity?.nameComponents else {
             return PersonNameComponents()
         }
         return name
