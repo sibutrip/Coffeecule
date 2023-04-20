@@ -11,15 +11,16 @@ import CloudKit
 extension ViewModel {
         
     public func joinCoffeecule(name: String) async throws {
-        await self.refreshData()
         do {
+            await self.refreshData()
+            if self.personService.rootShare == nil { return }
+            self.repository.appPermission = try await self.repository.requestAppPermission()
             repository.userName = try! await self.repository.fetchiCloudUserName()
             if self.participantName.isEmpty { return }
             try await repository.fetchSharedContainer()
             let record = personService.createParticipantRecord(for: name, in: self.people)
             await personService.saveSharedRecord(record)
             self.people = personService.addPersonToCoffecule(name, to: self.people)
-            if self.personService.rootShare == nil { return }
             self.hasCoffeecule = true
         } catch {
             debugPrint(error)

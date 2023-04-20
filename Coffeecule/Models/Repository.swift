@@ -72,8 +72,6 @@ class Repository {
         }
         return name
     }
-
-    
     
     // PERSON DATABASE METHODS
     private func createZonesIfNeeded() async {
