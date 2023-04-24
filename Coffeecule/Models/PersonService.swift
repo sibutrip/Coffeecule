@@ -81,7 +81,7 @@ class PersonService: ObservableObject {
         throw FetchShareError.noShareFound
     }
     
-    private func createRootShare() async -> CKShare {
+    public func createRootShare() async -> CKShare {
         let share = CKShare(recordZoneID: repository.coffeeculeRecordZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
@@ -90,13 +90,7 @@ class PersonService: ObservableObject {
         return share
     }
     
-    public func createRootRecord(for name: String, in people: [Person]) throws -> CKRecord {
-        if name.isEmpty { throw PersonRecordsError.nameIsEmpty }
-        if people.contains(where: { person in
-            person.name == name
-        }) {
-            throw PersonRecordsError.recordAlreadyExists
-        }
+    public func createRootRecord(for name: String, in people: [Person]) -> CKRecord {
         let record = CKRecord(recordType: rootRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: repository.coffeeculeRecordZone.zoneID))
         record["name"] = name
         self.rootRecord = record
@@ -213,19 +207,27 @@ class PersonService: ObservableObject {
 //            }
 //            let privateZone = repository.coffeeculeRecordZone
 //            zones.append(privateZone)
-            try await repository.fetchSharedContainer()
-            let zones = [repository.coffeeculeRecordZone]
+            
+            
+            var zones = try await repository.container.sharedCloudDatabase.allRecordZones()
+            if zones.count > 0 {
+                zones = [zones[0]]
+            }
+            zones.append(CKRecordZone(zoneName: "PersonZone"))
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([String], [Transaction], Bool).self) { group in
                 for zone in zones {
                     group.addTask {
                         if let results = try? await recordsInZone(zone, scope: .shared) {
+                            print("found shared zone records")
                             return results
                         }
                         if let results = try? await recordsInZone(zone, scope: .private) {
+                            print("found private zone records")
                             return results
                         }
+                        print("found no zone records")
                         return ([], [], false)
 
                     }

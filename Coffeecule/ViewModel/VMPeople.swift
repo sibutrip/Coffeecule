@@ -9,34 +9,69 @@ import Foundation
 import CloudKit
 
 extension ViewModel {
-        
-    public func joinCoffeecule(name: String) async throws {
-        do {
-            await self.refreshData()
-            if self.personService.rootShare == nil { return }
-            self.repository.appPermission = try await self.repository.requestAppPermission()
-            repository.userName = try! await self.repository.fetchiCloudUserName()
-            if self.participantName.isEmpty { return }
-            try await repository.fetchSharedContainer()
-            let record = personService.createParticipantRecord(for: name, in: self.people)
-            await personService.saveSharedRecord(record)
-            self.people = personService.addPersonToCoffecule(name, to: self.people)
-            self.hasCoffeecule = true
-        } catch {
-            debugPrint(error)
+    
+    public func joinCoffeecule() async {
+        self.state = .loading
+        await self.refreshData()
+        if self.personService.rootShare == nil {
+            state = .noShareFound
+            return
         }
+        if self.participantName.isEmpty {
+            print("name is empty")
+            state = .nameFieldEmpty
+            return
+        }
+        if self.people.contains(where: {
+            $0.name == self.participantName
+        }) {
+            state = .nameAlreadyExists
+            return
+        }
+        do {
+            try await repository.fetchSharedContainer()
+        } catch {
+            state = .noSharedContainerFound
+            return
+        }
+        let record = personService.createParticipantRecord(for: self.participantName, in: self.people)
+        await personService.saveSharedRecord(record)
+        self.people = personService.addPersonToCoffecule(self.participantName, to: self.people)
+        self.hasCoffeecule = true
+        self.state = .loaded
     }
     
     public func createCoffeecule() async {
-        do {
-            let name = self.participantName
-            let record = try personService.createRootRecord(for: name, in: self.people)
-            //            self.allRecords.append(record)
-            self.people = personService.createPeopleFromScratch(from: [self.participantName])
-            await personService.savePrivateRecord(record)
-        } catch {
-            debugPrint(error.localizedDescription)
+        self.state = .loading
+        await self.refreshData()
+        if self.personService.rootShare != nil {
+            state = .culeAlreadyExists
+            return
         }
+        if self.participantName.isEmpty {
+            state = .nameFieldEmpty
+            return
+        }
+        if self.people.contains(where: {
+            $0.name == self.participantName
+        }) {
+            state = .nameAlreadyExists
+            return
+        }
+        if personService.rootShare != nil {
+            state = .culeAlreadyExists
+            return
+        }
+        let name = self.participantName
+        let record = personService.createRootRecord(for: name, in: self.people)
+        self.people = personService.createPeopleFromScratch(from: [self.participantName])
+        await personService.savePrivateRecord(record)
+        await self.refreshData()
+        self.createDisplayedDebts()
+        self.calculateBuyer()
+        personService.rootShare = await personService.createRootShare()
+        self.state = .loaded
+        print("done")
     }
     
     public func shareCoffeecule() async {
@@ -45,11 +80,13 @@ extension ViewModel {
     
     public func refreshData() async {
         let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
-        print(peopleNames)
+        //        if self.hasShare == false {
+        //            self.state = .noShareFound
+        //            return
+        //        }
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people
-        self.hasShare = hasShare
         print("received \(transactions.count) transactions:")
         _ = transactions.map {
             print($0.buyerName,$0.receiverName)
@@ -88,7 +125,7 @@ extension ViewModel {
             let currentBuyer = self.currentBuyer
             var transactions = [Transaction]()
             var buyer = currentBuyer
-//            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
+            //            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
             for receiver in people {
                 var receiver = receiver
                 if receiver.name != buyer.name {

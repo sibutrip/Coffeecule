@@ -29,9 +29,9 @@ struct CoffeeculeView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    selectAllToolbar
-                }
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    selectAllToolbar
+//                }
             }
 //            .task {
 //                guard let _ = try? await vm.onLoad() else {

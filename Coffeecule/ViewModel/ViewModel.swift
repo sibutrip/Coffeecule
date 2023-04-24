@@ -19,42 +19,39 @@ class ViewModel: ObservableObject {
     let personService = PersonService()
     let transactionService = TransactionService()
     
-    enum State: Equatable {
-        case loading, loaded, noCoffeecule, noPermission, error
+    enum State: String, Equatable, LocalizedError {
+        case loading
+        case loaded
+        case noPermission = "app does not have permission to use your iCloud"
+        case nameFieldEmpty = "name field is empty"
+        case nameAlreadyExists = "name already exists in this coffeecule"
+        case noShareFound = "could not find cule. make sure you open an invite the owner has shared"
+        case noSharedContainerFound = "internal error: could not find shared data"
+        case culeAlreadyExists = "cannot create cule. you already have one"
     }
     
     @Published public var participantName: String = ""
-    @Published var state: State = .loading
+    @Published var state: State = .loaded {
+        didSet {
+            print(self.state)
+        }
+    }
     @Published var people: [Person] = []
     @Published var currentBuyer = Person(name: "nobody")
     @Published var displayedDebts: [Person:Int] = [:]
-    @Published var hasShare = false
+    var hasShare: Bool {
+        personService.rootShare != nil ? true : false
+    }
     
-    public func onCoffeeculeLoad() async throws {
+    public func onCoffeeculeLoad() async {
         self.state = .loading
-        try await self.repository.fetchiCloudUserName()
-        self.repository.userName = try await repository.fetchiCloudUserName()
-        self.participantName = self.shortenName(repository.userName)
         await self.refreshData()
-        if self.participantName == personService.rootRecord?.recordID.recordName {
-            print("this is the owner")
-        } else {
-            print("this is not the owner")
-            try! await self.repository.fetchSharedContainer()
-        }
         self.createDisplayedDebts()
         self.calculateBuyer()
         self.state = .loaded
         print("participant name is \(self.participantName)")
     }
     
-    init() {
-        Task {
-            self.state = .loading
-            repository.userName = try! await self.repository.fetchiCloudUserName()
-            self.participantName = self.shortenName(repository.userName)
-            self.state = .loaded
-        }
-    }
+    init() { }
 }
 

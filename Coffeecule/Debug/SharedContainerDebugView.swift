@@ -51,7 +51,7 @@ struct DebugView: View {
                     }
                     Button("join as \(vm.participantName)") {
                         Task {
-                            guard let _ = try? await vm.joinCoffeecule(name: vm.participantName) else {
+                            guard let _ = try? await vm.joinCoffeecule() else {
                                 return
                             }
                         }

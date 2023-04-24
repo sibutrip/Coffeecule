@@ -9,48 +9,101 @@ import SwiftUI
 
 struct JoinView: View {
     @ObservedObject var vm: ViewModel
-    @State private var tryingToJoinACule = false
+    @State private var couldNotJoinCule = false
     @State private var couldntCreateCule = false
+    @State private var joinIsDisabled = false
     
     var body: some View {
-        if vm.state == .loaded {
+        NavigationStack {
             VStack {
                 Spacer()
-                Button("join a coffeecule") {
-                    Task {
-                        guard let _ = try? await vm.joinCoffeecule(name: vm.participantName)
-                        else {
-                            return
+                NavigationLink("join a coffeecule") {
+                    List {
+                        TextField("join as...", text: $vm.participantName)
+                        Button("join") {
+                            Task {
+                                joinIsDisabled = true
+                                await vm.joinCoffeecule()
+                                switch vm.state {
+                                case .loading:
+                                    return
+                                case .loaded:
+                                    return
+                                case .noPermission:
+                                    couldNotJoinCule = true
+                                case .nameFieldEmpty:
+                                    couldNotJoinCule = true
+                                case .nameAlreadyExists:
+                                    couldNotJoinCule = true
+                                case .noShareFound:
+                                    couldNotJoinCule = true
+                                case .noSharedContainerFound:
+                                    couldNotJoinCule = true
+                                case .culeAlreadyExists:
+                                    couldNotJoinCule = true
+                                }
+                                joinIsDisabled = false
+                            }
+                        }
+                        .disabled(joinIsDisabled)
+                    }
+                    .navigationTitle(Title.shared.activeTitle)
+                    .overlay {
+                        if vm.state == .loading {
+                            ProgressView()
+                        }
+                    }
+                }
+                
+                .task {
+                    await vm.refreshData()
+                }
+                .alert(vm.state.rawValue, isPresented: $couldNotJoinCule) {
+                    Button("ok den", role: .cancel) {
+                        couldNotJoinCule = false
+                    }
+                }
+                
+                Spacer()
+                NavigationLink("create a coffeecule") {
+                    List {
+                        TextField("create as...", text: $vm.participantName)
+                        Button("create") {
+                            Task {
+                                joinIsDisabled = true
+                                await vm.createCoffeecule()
+                                switch vm.state {
+                                case .loading:
+                                    return
+                                case .loaded:
+                                    couldNotJoinCule = true
+                                case .noPermission:
+                                    couldNotJoinCule = true
+                                case .nameFieldEmpty:
+                                    couldNotJoinCule = true
+                                case .nameAlreadyExists:
+                                    couldNotJoinCule = true
+                                case .noShareFound:
+                                    couldNotJoinCule = true
+                                case .noSharedContainerFound:
+                                    couldNotJoinCule = true
+                                case .culeAlreadyExists:
+                                    couldNotJoinCule = true
+                                }
+                                joinIsDisabled = false
+                            }
+                        }
+                        .disabled(joinIsDisabled)
+                    }
+                    .navigationTitle(Title.shared.activeTitle)
+                    .overlay {
+                        if vm.state == .loading {
+                            ProgressView()
                         }
                     }
                 }
                 Spacer()
-                Button("create a cule") {
-                    Task {
-                        guard let _ = try? await vm.onCoffeeculeLoad() else {
-                            couldntCreateCule = true
-                            return
-                        }
-                        await vm.createCoffeecule()
-                        await vm.refreshData()
-                        vm.hasCoffeecule = true
-                    }
-                }
-                Spacer()
             }
-            .alert("accept a cule invite to join a cule sorry", isPresented: $tryingToJoinACule) {
-                Button("alrighty", role: .cancel) {
-                    tryingToJoinACule = false
-                }
-            }
-            .alert("couldnt make cule try again", isPresented: $couldntCreateCule) {
-                Button("alrighty", role: .cancel) {
-                    couldntCreateCule = false
-                }
-            }
-        } else {
-            ProgressView()
-            
         }
     }
 }
