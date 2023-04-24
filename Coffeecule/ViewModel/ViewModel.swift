@@ -46,6 +46,7 @@ class ViewModel: ObservableObject {
             }
         }
     }
+    @Published var displayedDebts: [Person: Int] = [:]
     
     /// not a computed property because if people have the same debt it will recompute and randomize each time you access it :(
     func calculateBuyer() {
@@ -62,10 +63,11 @@ class ViewModel: ObservableObject {
             return false
         }
         currentBuyer = mostDebted?.key ?? Person(name: "nobody")
+        self.displayedDebts = self.createDisplayedDebts()
         self.state = .loaded
     }
     
-    var displayedDebts: [Person:Int] {
+    func createDisplayedDebts() -> [Person:Int] {
         let people = self.people
         var debts = [Person:Int]()
         let presentPeople: [Person] = people.filter {
@@ -168,11 +170,11 @@ class ViewModel: ObservableObject {
         
         Task {
             await self.initialize()
-            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+//            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
 //            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
-            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
+//            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
             
-//#error("run the above line instead of the ReadWrite.shared.transactionsToPeople method to re-make a cule.")
+//#error("run the above line instead of the ReadWrite.shared.transactionsToPeople method to re-make a cule. then run the app with the transactionsToPeopleMethod")
             self.calculateBuyer()
         }
         
