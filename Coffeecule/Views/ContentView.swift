@@ -16,7 +16,11 @@ struct ContentView: View {
             if vm.hasShare == true {
                 CoffeeculeView(vm: vm)
             } else {
-                JoinView(vm: vm)
+                if isLoading {
+                    EmptyView()
+                } else {
+                    JoinView(vm: vm)
+                }
             }
         }
         .overlay {

@@ -10,7 +10,6 @@ import SwiftUI
 struct JoinView: View {
     @ObservedObject var vm: ViewModel
     @State private var couldNotJoinCule = false
-    @State private var couldntCreateCule = false
     @State private var joinIsDisabled = false
     
     var body: some View {

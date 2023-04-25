@@ -44,12 +44,7 @@ extension ViewModel {
     public func refreshData() async {
         self.state = .loading
         await populateData()
-        if self.hasShare {
-            self.state = .loaded
-        } else {
-            self.state = .loaded
-            print("refresh found no share")
-        }
+        self.state = .loaded
     }
     
     public func createCoffeecule() async {
@@ -91,13 +86,13 @@ extension ViewModel {
     
     private func populateData() async {
         let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
-        self.hasShare = hasShare
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people
         print("received \(transactions.count) transactions")
         print("received \(peopleNames.count) people names")
         print("found a share: \(hasShare ? "yes" : "no")")
+        self.hasShare = hasShare
     }
     
     public func calculateBuyer() {

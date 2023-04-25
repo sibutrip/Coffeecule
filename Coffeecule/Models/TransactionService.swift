@@ -15,6 +15,6 @@ class TransactionService {
         let records: [CKRecord] = transactions.map { $0.associatedRecord }
         let result = try await database.modifyRecords(saving: records, deleting: [])
 //        let result = try await Repository.shared.container.privateCloudDatabase.modifyRecords(saving: records, deleting: [])
-        print(result.saveResults.description+"Aaaa")
+        print(result.saveResults.description)
     }
 }
