@@ -32,7 +32,6 @@
 		74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5629E59A6A00C28F2F /* TransactionService.swift */; };
 		74BA5F5C29E5B98500C28F2F /* VMPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5B29E5B98500C28F2F /* VMPeople.swift */; };
 		74BA5F5E29E5B98D00C28F2F /* VMTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5D29E5B98D00C28F2F /* VMTransactions.swift */; };
-		74ED788D29F6BE2700B89090 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ED788C29F6BE2700B89090 /* AlertView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,7 +66,6 @@
 		74BA5F5629E59A6A00C28F2F /* TransactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionService.swift; sourceTree = "<group>"; };
 		74BA5F5B29E5B98500C28F2F /* VMPeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMPeople.swift; sourceTree = "<group>"; };
 		74BA5F5D29E5B98D00C28F2F /* VMTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMTransactions.swift; sourceTree = "<group>"; };
-		74ED788C29F6BE2700B89090 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +123,6 @@
 			isa = PBXGroup;
 			children = (
 				747D5A0829ED7A1500546F03 /* JoinView.swift */,
-				74ED788C29F6BE2700B89090 /* AlertView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				7467994129B0DC9100339D5C /* OnboardingView.swift */,
@@ -275,7 +272,6 @@
 				7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */,
 				7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */,
 				7467995A29B0DC9100339D5C /* ContentView.swift in Sources */,
-				74ED788D29F6BE2700B89090 /* AlertView.swift in Sources */,
 				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
 				7467995D29B0DC9100339D5C /* CoffeeculeApp.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,

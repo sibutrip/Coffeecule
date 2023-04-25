@@ -10,13 +10,26 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var vm = ViewModel()
     @State private var couldNotGetPermission = false
+    @State private var isLoading = false
     var body: some View {
         VStack {
-            if vm.personService.rootShare != nil {
+            if vm.hasShare == true {
                 CoffeeculeView(vm: vm)
             } else {
                 JoinView(vm: vm)
             }
+        }
+        .overlay {
+            if isLoading {
+                ProgressView()
+            } else {
+                EmptyView()
+            }
+        }
+        .task {
+            isLoading = true
+            await vm.refreshData()
+            isLoading = false
         }
     }
 }

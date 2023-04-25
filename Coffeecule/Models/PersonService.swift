@@ -27,11 +27,7 @@ class PersonService: ObservableObject {
     }
     
     // INITIALIZER
-    init() {
-        //        Task {
-        //            try? repository.fetchSharedContainer()
-        //        }
-    }
+    init() { }
     
     // MARK: - PRIVATE METHODS
     
@@ -59,6 +55,7 @@ class PersonService: ObservableObject {
             return
         }
         self.rootShare = share
+        return
     }
     
     public func fetchShare() async throws {
@@ -201,17 +198,12 @@ class PersonService: ObservableObject {
         }
         
         do {
-//            var zones = [CKRecordZone]()
-//            if let sharedZones = try? await repository.container.sharedCloudDatabase.allRecordZones() {
-//                zones.append(contentsOf: sharedZones)
-//            }
-//            let privateZone = repository.coffeeculeRecordZone
-//            zones.append(privateZone)
-            
-            
+        
             var zones = try await repository.container.sharedCloudDatabase.allRecordZones()
             if zones.count > 0 {
                 zones = [zones[0]]
+            } else if zones.count > 1 {
+                fatalError("more than 1 shared zone")
             }
             zones.append(CKRecordZone(zoneName: "PersonZone"))
             
@@ -219,6 +211,8 @@ class PersonService: ObservableObject {
             try await withThrowingTaskGroup(of: ([String], [Transaction], Bool).self) { group in
                 for zone in zones {
                     group.addTask {
+                        
+                        // if shared records are found return them and exit the function without fetching private records.
                         if let results = try? await recordsInZone(zone, scope: .shared) {
                             print("found shared zone records")
                             return results

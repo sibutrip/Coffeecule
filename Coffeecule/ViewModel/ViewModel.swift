@@ -31,7 +31,7 @@ class ViewModel: ObservableObject {
     }
     
     @Published public var participantName: String = ""
-    @Published var state: State = .loaded {
+    @Published var state: State = .loading {
         didSet {
             print(self.state)
         }
@@ -39,19 +39,7 @@ class ViewModel: ObservableObject {
     @Published var people: [Person] = []
     @Published var currentBuyer = Person(name: "nobody")
     @Published var displayedDebts: [Person:Int] = [:]
-    var hasShare: Bool {
-        personService.rootShare != nil ? true : false
-    }
-    
-    public func onCoffeeculeLoad() async {
-        self.state = .loading
-        await self.refreshData()
-        self.createDisplayedDebts()
-        self.calculateBuyer()
-        self.state = .loaded
-        print("participant name is \(self.participantName)")
-    }
-    
+    @Published var hasShare = false
     init() { }
 }
 

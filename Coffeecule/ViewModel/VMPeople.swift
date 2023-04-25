@@ -12,7 +12,7 @@ extension ViewModel {
     
     public func joinCoffeecule() async {
         self.state = .loading
-        await self.refreshData()
+        await self.populateData()
         if self.personService.rootShare == nil {
             state = .noShareFound
             return
@@ -41,9 +41,20 @@ extension ViewModel {
         self.state = .loaded
     }
     
+    public func refreshData() async {
+        self.state = .loading
+        await populateData()
+        if self.hasShare {
+            self.state = .loaded
+        } else {
+            self.state = .loaded
+            print("refresh found no share")
+        }
+    }
+    
     public func createCoffeecule() async {
         self.state = .loading
-        await self.refreshData()
+        await self.populateData()
         if self.personService.rootShare != nil {
             state = .culeAlreadyExists
             return
@@ -66,31 +77,26 @@ extension ViewModel {
         let record = personService.createRootRecord(for: name, in: self.people)
         self.people = personService.createPeopleFromScratch(from: [self.participantName])
         await personService.savePrivateRecord(record)
-        await self.refreshData()
         self.createDisplayedDebts()
         self.calculateBuyer()
         personService.rootShare = await personService.createRootShare()
+        self.hasShare = true
         self.state = .loaded
-        print("done")
     }
     
     public func shareCoffeecule() async {
         await personService.fetchOrCreateShare()
+        self.hasShare = true
     }
     
-    public func refreshData() async {
+    private func populateData() async {
         let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
-        //        if self.hasShare == false {
-        //            self.state = .noShareFound
-        //            return
-        //        }
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people
-        print("received \(transactions.count) transactions:")
-        _ = transactions.map {
-            print($0.buyerName,$0.receiverName)
-        }
+        print("received \(transactions.count) transactions")
+        print("received \(peopleNames.count) people names")
+        print("found a share: \(hasShare ? "yes" : "no")")
     }
     
     public func calculateBuyer() {
