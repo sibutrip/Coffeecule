@@ -91,6 +91,7 @@ extension ViewModel {
     
     private func populateData() async {
         let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
+        self.hasShare = hasShare
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people

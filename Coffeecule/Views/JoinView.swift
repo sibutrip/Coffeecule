@@ -15,97 +15,93 @@ struct JoinView: View {
     
     var body: some View {
         NavigationStack {
-            if vm.state != .loading {
-                VStack {
-                    Spacer()
-                    NavigationLink("join a coffeecule") {
-                        List {
-                            TextField("join as...", text: $vm.participantName)
-                            Button("join") {
-                                self.joinIsDisabled = true
-                                Task {
-                                    await vm.createCoffeecule()
-                                    self.joinIsDisabled = false
-                                    switch vm.state {
-                                    case .loading:
-                                        return
-                                    case .loaded:
-                                        return
-                                    case .noPermission:
-                                        couldNotJoinCule = true
-                                    case .nameFieldEmpty:
-                                        couldNotJoinCule = true
-                                    case .nameAlreadyExists:
-                                        couldNotJoinCule = true
-                                    case .noShareFound:
-                                        couldNotJoinCule = true
-                                    case .noSharedContainerFound:
-                                        couldNotJoinCule = true
-                                    case .culeAlreadyExists:
-                                        couldNotJoinCule = true
-                                    }
+            VStack {
+                Spacer()
+                NavigationLink("join a coffeecule") {
+                    List {
+                        TextField("join as...", text: $vm.participantName)
+                        Button("join") {
+                            self.joinIsDisabled = true
+                            Task(priority: .userInitiated) {
+                                await vm.joinCoffeecule()
+                                switch vm.state {
+                                case .loading:
+                                    break
+                                case .loaded:
+                                    break
+                                case .noPermission:
+                                    couldNotJoinCule = true
+                                case .nameFieldEmpty:
+                                    couldNotJoinCule = true
+                                case .nameAlreadyExists:
+                                    couldNotJoinCule = true
+                                case .noShareFound:
+                                    couldNotJoinCule = true
+                                case .noSharedContainerFound:
+                                    couldNotJoinCule = true
+                                case .culeAlreadyExists:
+                                    couldNotJoinCule = true
                                 }
+                                self.joinIsDisabled = false
                             }
-                            .disabled(joinIsDisabled)
                         }
-                        .navigationTitle(Title.shared.activeTitle)
-                        .overlay {
-                            if joinIsDisabled {
-                                ProgressView()
-                            }
+                        .navigationBarBackButtonHidden(joinIsDisabled)
+                        .disabled(joinIsDisabled || vm.participantName.isEmpty)
+                    }
+                    .navigationTitle(Title.shared.activeTitle)
+                    .overlay {
+                        if joinIsDisabled {
+                            ProgressView()
                         }
                     }
-                    
-                    Spacer()
-                    NavigationLink("create a coffeecule") {
-                        List {
-                            TextField("create as...", text: $vm.participantName)
-                            Button("create") {
-                                self.joinIsDisabled = true
-                                Task {
-                                    await vm.createCoffeecule()
-                                    self.joinIsDisabled = false
-                                    switch vm.state {
-                                    case .loading:
-                                        return
-                                    case .loaded:
-                                        return
-                                    case .noPermission:
-                                        couldNotJoinCule = true
-                                    case .nameFieldEmpty:
-                                        couldNotJoinCule = true
-                                    case .nameAlreadyExists:
-                                        couldNotJoinCule = true
-                                    case .noShareFound:
-                                        couldNotJoinCule = true
-                                    case .noSharedContainerFound:
-                                        couldNotJoinCule = true
-                                    case .culeAlreadyExists:
-                                        couldNotJoinCule = true
-                                    }
-                                }
-                            }
-                            .disabled(joinIsDisabled)
-                        }
-                        .navigationTitle(Title.shared.activeTitle)
-                        .overlay {
-                            if joinIsDisabled {
-                                ProgressView()
-                            }
-                        }
-                    }
-                    Spacer()
                 }
                 
-                .alert(vm.state.rawValue, isPresented: $couldNotJoinCule) {
-                    Button("ok den", role: .cancel) {
-                        couldNotJoinCule = false
-                        joinIsDisabled = false
+                Spacer()
+                NavigationLink("create a coffeecule") {
+                    List {
+                        TextField("create as...", text: $vm.participantName)
+                        Button("create") {
+                            self.joinIsDisabled = true
+                            Task(priority: .userInitiated) {
+                                await vm.createCoffeecule()
+                                switch vm.state {
+                                case .loading:
+                                    break
+                                case .loaded:
+                                    break
+                                case .noPermission:
+                                    couldNotJoinCule = true
+                                case .nameFieldEmpty:
+                                    couldNotJoinCule = true
+                                case .nameAlreadyExists:
+                                    couldNotJoinCule = true
+                                case .noShareFound:
+                                    couldNotJoinCule = true
+                                case .noSharedContainerFound:
+                                    couldNotJoinCule = true
+                                case .culeAlreadyExists:
+                                    couldNotJoinCule = true
+                                }
+                                self.joinIsDisabled = false
+                            }
+                        }
+                        .navigationBarBackButtonHidden(joinIsDisabled)
+                        .disabled(joinIsDisabled || vm.participantName.isEmpty)
+                    }
+                    .navigationTitle(Title.shared.activeTitle)
+                    .overlay {
+                        if joinIsDisabled {
+                            ProgressView()
+                        }
                     }
                 }
+                Spacer()
             }
-            else {
-                ProgressView()
+            .alert(vm.state.rawValue, isPresented: $couldNotJoinCule) {
+                Button("ok den", role: .cancel) {
+                    couldNotJoinCule = false
+                    joinIsDisabled = false
+                }
             }
         }
     }
