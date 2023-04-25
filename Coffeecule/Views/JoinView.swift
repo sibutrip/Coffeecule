@@ -20,6 +20,31 @@ struct JoinView: View {
                 NavigationLink("join a coffeecule") {
                     List {
                         TextField("join as...", text: $vm.participantName)
+                            .onSubmit {
+                                self.joinIsDisabled = true
+                                Task(priority: .userInitiated) {
+                                    await vm.joinCoffeecule()
+                                    switch vm.state {
+                                    case .loading:
+                                        break
+                                    case .loaded:
+                                        break
+                                    case .noPermission:
+                                        couldNotJoinCule = true
+                                    case .nameFieldEmpty:
+                                        couldNotJoinCule = true
+                                    case .nameAlreadyExists:
+                                        couldNotJoinCule = true
+                                    case .noShareFound:
+                                        couldNotJoinCule = true
+                                    case .noSharedContainerFound:
+                                        couldNotJoinCule = true
+                                    case .culeAlreadyExists:
+                                        couldNotJoinCule = true
+                                    }
+                                    self.joinIsDisabled = false
+                                }
+                            }
                         Button("join") {
                             self.joinIsDisabled = true
                             Task(priority: .userInitiated) {
@@ -60,6 +85,31 @@ struct JoinView: View {
                 NavigationLink("create a coffeecule") {
                     List {
                         TextField("create as...", text: $vm.participantName)
+                            .onSubmit {
+                                self.joinIsDisabled = true
+                                Task(priority: .userInitiated) {
+                                    await vm.joinCoffeecule()
+                                    switch vm.state {
+                                    case .loading:
+                                        break
+                                    case .loaded:
+                                        break
+                                    case .noPermission:
+                                        couldNotJoinCule = true
+                                    case .nameFieldEmpty:
+                                        couldNotJoinCule = true
+                                    case .nameAlreadyExists:
+                                        couldNotJoinCule = true
+                                    case .noShareFound:
+                                        couldNotJoinCule = true
+                                    case .noSharedContainerFound:
+                                        couldNotJoinCule = true
+                                    case .culeAlreadyExists:
+                                        couldNotJoinCule = true
+                                    }
+                                    self.joinIsDisabled = false
+                                }
+                            }
                         Button("create") {
                             self.joinIsDisabled = true
                             Task(priority: .userInitiated) {
