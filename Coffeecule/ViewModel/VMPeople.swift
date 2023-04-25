@@ -37,7 +37,8 @@ extension ViewModel {
         let record = personService.createParticipantRecord(for: self.participantName, in: self.people)
         await personService.saveSharedRecord(record)
         self.people = personService.addPersonToCoffecule(self.participantName, to: self.people)
-        self.hasCoffeecule = true
+        print(people)
+        self.hasShare = true
         self.state = .loaded
     }
     

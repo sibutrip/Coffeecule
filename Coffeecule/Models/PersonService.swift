@@ -230,7 +230,9 @@ class PersonService: ObservableObject {
                     for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
                         people.append(contentsOf: returnedPeople)
                         transactions.append(contentsOf: returnedTransactions)
-                        hasShare = didReturnShare
+                        if didReturnShare {
+                            hasShare = true
+                        }
                     }
                 }
             }

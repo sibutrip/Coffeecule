@@ -14,6 +14,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if vm.hasShare == true {
+                #error("if you accept a cule but dont create a profile, you wont be able to create your person")
                 CoffeeculeView(vm: vm)
             } else {
                 if isLoading {
