@@ -14,7 +14,6 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if vm.hasShare == true {
-                #error("if you accept a cule but dont create a profile, you wont be able to create your person")
                 CoffeeculeView(vm: vm)
             } else {
                 if isLoading {
@@ -24,6 +23,11 @@ struct ContentView: View {
                 }
             }
         }
+//        .sheet(isPresented: vm.repository.) {
+//            List {
+//                Text("Owner: \(vm.personService.rootRecord!["name"] as! String)")
+//            }
+//        }
         .overlay {
             if isLoading {
                 ProgressView()

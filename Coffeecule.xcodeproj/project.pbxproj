@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
+		744C450A29FC53500062B47C /* AppAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450929FC53500062B47C /* AppAccess.swift */; };
 		7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467993F29B0DC9100339D5C /* CoffeeculeView.swift */; };
 		7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */; };
 		7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994129B0DC9100339D5C /* OnboardingView.swift */; };
 		7467995A29B0DC9100339D5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994229B0DC9100339D5C /* ContentView.swift */; };
 		7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994429B0DC9100339D5C /* CloudDebug.swift */; };
 		7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */; };
-		7467995D29B0DC9100339D5C /* CoffeeculeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994629B0DC9100339D5C /* CoffeeculeApp.swift */; };
+		7467995D29B0DC9100339D5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994629B0DC9100339D5C /* AppDelegate.swift */; };
 		7467995F29B0DC9100339D5C /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994929B0DC9100339D5C /* Person.swift */; };
 		7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994D29B0DC9100339D5C /* CloudReadWrite.swift */; };
 		7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994E29B0DC9100339D5C /* DummyReadWrite.swift */; };
@@ -38,6 +39,7 @@
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		744C450929FC53500062B47C /* AppAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAccess.swift; sourceTree = "<group>"; };
 		7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Coffeecule.entitlements; sourceTree = "<group>"; };
 		7467993F29B0DC9100339D5C /* CoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeView.swift; sourceTree = "<group>"; };
 		7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhosGettingCoffee.swift; sourceTree = "<group>"; };
@@ -45,7 +47,7 @@
 		7467994229B0DC9100339D5C /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7467994429B0DC9100339D5C /* CloudDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDebug.swift; sourceTree = "<group>"; };
 		7467994529B0DC9100339D5C /* DEBUGCoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DEBUGCoffeeculeView.swift; sourceTree = "<group>"; };
-		7467994629B0DC9100339D5C /* CoffeeculeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeApp.swift; sourceTree = "<group>"; };
+		7467994629B0DC9100339D5C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7467994929B0DC9100339D5C /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		7467994B29B0DC9100339D5C /* ReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWrite.swift; sourceTree = "<group>"; };
 		7467994D29B0DC9100339D5C /* CloudReadWrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudReadWrite.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				7467995529B0DC9100339D5C /* ViewModel.swift */,
+				744C450929FC53500062B47C /* AppAccess.swift */,
 				74BA5F5B29E5B98500C28F2F /* VMPeople.swift */,
 				74BA5F5D29E5B98D00C28F2F /* VMTransactions.swift */,
 				7467995629B0DC9100339D5C /* VmCloud.swift */,
@@ -190,7 +193,7 @@
 		74BA5F5129E58F9300C28F2F /* App */ = {
 			isa = PBXGroup;
 			children = (
-				7467994629B0DC9100339D5C /* CoffeeculeApp.swift */,
+				7467994629B0DC9100339D5C /* AppDelegate.swift */,
 				74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */,
 			);
 			path = App;
@@ -273,7 +276,7 @@
 				7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */,
 				7467995A29B0DC9100339D5C /* ContentView.swift in Sources */,
 				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
-				7467995D29B0DC9100339D5C /* CoffeeculeApp.swift in Sources */,
+				7467995D29B0DC9100339D5C /* AppDelegate.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
 				74BA5F5C29E5B98500C28F2F /* VMPeople.swift in Sources */,
@@ -287,6 +290,7 @@
 				74BA5F5E29E5B98D00C28F2F /* VMTransactions.swift in Sources */,
 				7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */,
 				74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */,
+				744C450A29FC53500062B47C /* AppAccess.swift in Sources */,
 				7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */,
 				7467996529B0DC9100339D5C /* Transaction.swift in Sources */,
 				74B0AB3729C35021002DA7BD /* Titles.swift in Sources */,

@@ -33,6 +33,7 @@ class Repository {
     public var appPermission: Bool? = nil
     public var accountStatus: CKAccountStatus? = nil
     public var userName: PersonNameComponents? = nil
+    public var acceptedInvite = false
     
     // APP PERMISSION
     
