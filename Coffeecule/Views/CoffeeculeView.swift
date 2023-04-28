@@ -12,40 +12,38 @@ struct CoffeeculeView: View {
     @State var isBuying = false
     @State var isSharing = false
     @State var couldntGetPermission = false
-
+    
     var body: some View {
-//        NavigationView {
-            Form {
-                WhosGettingCoffee(vm: vm, isSharing: $isSharing)
-                itsTimeForPersonToGetCoffee
-                buyCoffeeButton
-                relationshipWebChart
+        Form {
+            WhosGettingCoffee(vm: vm, isSharing: $isSharing)
+            itsTimeForPersonToGetCoffee
+            buyCoffeeButton
+            relationshipWebChart
+        }
+        .navigationTitle(Title.activeTitle)
+        .refreshable {
+            Task { await vm.refreshData() }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
             }
-            .navigationTitle(Title.activeTitle)
-            .refreshable {
-                Task { await vm.refreshData() }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
-                }
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    selectAllToolbar
-//                }
-            }
-//            .task {
-//                guard let _ = try? await vm.onLoad() else {
-//                    couldntGetPermission = true
-//                    return
-//                }
-//            }
-            .sheet(isPresented: $isSharing) {
-                CloudSharingView(repo: vm.personService)
-            }
-            .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
-                Button("ok den", role: .cancel) { couldntGetPermission = false}
-            }
-//        }
+            //                ToolbarItem(placement: .navigationBarTrailing) {
+            //                    selectAllToolbar
+            //                }
+        }
+        //            .task {
+        //                guard let _ = try? await vm.onLoad() else {
+        //                    couldntGetPermission = true
+        //                    return
+        //                }
+        //            }
+        .sheet(isPresented: $isSharing) {
+            CloudSharingView(repo: vm.personService)
+        }
+        .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
+            Button("ok den", role: .cancel) { couldntGetPermission = false}
+        }
     }
 }
 

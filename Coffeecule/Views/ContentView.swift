@@ -21,7 +21,7 @@ struct ContentView: View {
                     if isLoading {
                         EmptyView()
                     } else {
-                        JoinView(vm: vm)
+                        OnboardingView(vm: vm)
                     }
                 }
             }

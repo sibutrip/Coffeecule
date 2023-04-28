@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JoinSheet: View {
     @ObservedObject var vm: ViewModel
+    @Environment(\.dismiss) var dismiss: DismissAction
     @Binding var isLoading: Bool
     var sortedPeople: [Person] {
         vm.people.sorted(by: { first, second in
@@ -35,8 +36,8 @@ struct JoinSheet: View {
                     }
                     Button("join as new member") { }
                     Button("I'm already in this coffeecule") {
+                        dismiss()
                     }
-                    
                 }
                 .navigationTitle("Join coffeecule")
             }

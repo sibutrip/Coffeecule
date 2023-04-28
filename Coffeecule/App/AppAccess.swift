@@ -8,9 +8,8 @@
 import Foundation
 
 class AppAccess: ObservableObject {
-    @Published var accessedFromShare = false
+    @Published var accessedFromShare: Bool
     init(accessedFromShare: Bool) {
         self.accessedFromShare = accessedFromShare
-        print("FDsnfuidsfoids")
     }
 }
