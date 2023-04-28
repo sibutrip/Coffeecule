@@ -34,7 +34,9 @@ struct JoinSheet: View {
                             }
                         }
                     }
-                    Button("join as new member") { }
+                    NavigationLink("join as new member") {
+                        JoinView(vm: vm)
+                    }
                     Button("I'm already in this coffeecule") {
                         dismiss()
                     }
