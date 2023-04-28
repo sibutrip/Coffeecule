@@ -13,7 +13,7 @@ struct JoinView: View {
     @State private var joinIsDisabled = false
     
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             VStack {
                 Spacer()
                 NavigationLink("join a coffeecule") {
@@ -72,7 +72,7 @@ struct JoinView: View {
                         .navigationBarBackButtonHidden(joinIsDisabled)
                         .disabled(joinIsDisabled || vm.participantName.isEmpty)
                     }
-                    .navigationTitle(Title.shared.activeTitle)
+                    .navigationTitle(Title.activeTitle)
                     .overlay {
                         if joinIsDisabled {
                             ProgressView()
@@ -137,7 +137,7 @@ struct JoinView: View {
                         .navigationBarBackButtonHidden(joinIsDisabled)
                         .disabled(joinIsDisabled || vm.participantName.isEmpty)
                     }
-                    .navigationTitle(Title.shared.activeTitle)
+                    .navigationTitle(Title.activeTitle)
                     .overlay {
                         if joinIsDisabled {
                             ProgressView()
@@ -152,7 +152,7 @@ struct JoinView: View {
                     joinIsDisabled = false
                 }
             }
-        }
+//        }
     }
 }
 

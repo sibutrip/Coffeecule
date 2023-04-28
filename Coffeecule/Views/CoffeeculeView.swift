@@ -14,14 +14,14 @@ struct CoffeeculeView: View {
     @State var couldntGetPermission = false
 
     var body: some View {
-        NavigationView {
+//        NavigationView {
             Form {
                 WhosGettingCoffee(vm: vm, isSharing: $isSharing)
                 itsTimeForPersonToGetCoffee
                 buyCoffeeButton
                 relationshipWebChart
             }
-            .navigationTitle(Title.shared.activeTitle)
+            .navigationTitle(Title.activeTitle)
             .refreshable {
                 Task { await vm.refreshData() }
             }
@@ -45,7 +45,7 @@ struct CoffeeculeView: View {
             .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
                 Button("ok den", role: .cancel) { couldntGetPermission = false}
             }
-        }
+//        }
     }
 }
 

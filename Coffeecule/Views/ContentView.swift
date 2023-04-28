@@ -8,43 +8,45 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var appAccess: AppAccess
     @StateObject var vm = ViewModel()
     @State private var couldNotGetPermission = false
-    @State private var isLoading = false
+    @State private var isLoading = true
     var body: some View {
-        VStack {
-            if vm.hasShare == true {
-                CoffeeculeView(vm: vm)
-            } else {
-                if isLoading {
-                    EmptyView()
+        NavigationStack {
+            VStack {
+                if vm.hasShare == true {
+                    CoffeeculeView(vm: vm)
                 } else {
-                    JoinView(vm: vm)
+                    if isLoading {
+                        EmptyView()
+                    } else {
+                        JoinView(vm: vm)
+                    }
                 }
             }
-        }
-//        .sheet(isPresented: vm.repository.) {
-//            List {
-//                Text("Owner: \(vm.personService.rootRecord!["name"] as! String)")
-//            }
-//        }
-        .overlay {
-            if isLoading {
-                ProgressView()
-            } else {
-                EmptyView()
+            .task {
+                isLoading = true
+                await vm.refreshData()
+                isLoading = false
             }
+            .sheet(isPresented: $appAccess.accessedFromShare) {
+                JoinSheet(vm: vm, isLoading: $isLoading)
+            }
+            .overlay {
+                if isLoading {
+                    ProgressView()
+                } else {
+                    EmptyView()
+                }
         }
-        .task {
-            isLoading = true
-            await vm.refreshData()
-            isLoading = false
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(AppAccess(accessedFromShare: false))
+        ContentView().environmentObject(AppAccess(accessedFromShare: true))
     }
 }

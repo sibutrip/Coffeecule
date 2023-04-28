@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let contentView = ContentView().environmentObject(AppAccess())
+        let contentView = ContentView().environmentObject(AppAccess(accessedFromShare: false))
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -55,10 +55,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         operation.qualityOfService = .utility
         container.add(operation)
         
-        Repository.shared.acceptedInvite = true
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(AppAccess()))
+        window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(AppAccess(accessedFromShare: true)))
+        
         self.window = window
         window.makeKeyAndVisible()
         

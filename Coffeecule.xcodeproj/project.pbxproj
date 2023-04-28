@@ -10,6 +10,7 @@
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
 		744C450A29FC53500062B47C /* AppAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450929FC53500062B47C /* AppAccess.swift */; };
+		744C450C29FC5DCE0062B47C /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450B29FC5DCE0062B47C /* JoinSheet.swift */; };
 		7467995729B0DC9100339D5C /* CoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467993F29B0DC9100339D5C /* CoffeeculeView.swift */; };
 		7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */; };
 		7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467994129B0DC9100339D5C /* OnboardingView.swift */; };
@@ -40,6 +41,7 @@
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		744C450929FC53500062B47C /* AppAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAccess.swift; sourceTree = "<group>"; };
+		744C450B29FC5DCE0062B47C /* JoinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSheet.swift; sourceTree = "<group>"; };
 		7459BCDC296AFFB400C637A3 /* Coffeecule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Coffeecule.entitlements; sourceTree = "<group>"; };
 		7467993F29B0DC9100339D5C /* CoffeeculeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeculeView.swift; sourceTree = "<group>"; };
 		7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhosGettingCoffee.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				7467994129B0DC9100339D5C /* OnboardingView.swift */,
 				7478C72729E5FCC8006ED737 /* CloudSharingView.swift */,
 				7467994229B0DC9100339D5C /* ContentView.swift */,
+				744C450B29FC5DCE0062B47C /* JoinSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				744C450C29FC5DCE0062B47C /* JoinSheet.swift in Sources */,
 				7478C72829E5FCC8006ED737 /* CloudSharingView.swift in Sources */,
 				7467995929B0DC9100339D5C /* OnboardingView.swift in Sources */,
 				7467995C29B0DC9100339D5C /* DEBUGCoffeeculeView.swift in Sources */,
