@@ -170,11 +170,11 @@ class ViewModel: ObservableObject {
         
         Task {
             await self.initialize()
-//            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-//            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
-//            createNewCoffeecule(for: ["Cory","Tom","Ty","Zoe","Tariq"])
+            let transactions = await ReadWrite.shared.readTransactionsFromCloud()
+            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
+//            createNewCoffeecule(for: ["cory","tom","ty","zoe","tariq"])
             
-#error("run the above line to re-make a cule.")
+//#error("run the above line to re-make a cule.")
             self.calculateBuyer()
         }
         

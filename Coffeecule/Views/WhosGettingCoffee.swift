@@ -22,6 +22,7 @@ struct WhosGettingCoffee: View {
                     let person = vm.people[index]
                     Button {
                         vm.people[index].isPresent.toggle()
+                        vm.displayedDebts = vm.createDisplayedDebts()
                         vm.calculateBuyer()
                     } label: {
                         HStack {
