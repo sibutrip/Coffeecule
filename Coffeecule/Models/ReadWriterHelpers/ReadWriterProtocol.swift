@@ -31,8 +31,15 @@ extension Readable {
             $0.name.lowercased()
         }
         
-        var peopleToAdd = names.map {
-            Person(name: $0)
+        var peopleToAdd = [Person]()
+        for buyer in names {
+            var newPerson = Person(name: buyer)
+            for receiver in names {
+                if receiver != buyer {
+                    newPerson.coffeesOwed[receiver] = 0
+                }
+            }
+            peopleToAdd.append(newPerson)
         }
         
         for transaction in transactions {
