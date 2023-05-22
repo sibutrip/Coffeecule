@@ -37,7 +37,8 @@ struct WhosGettingCoffee: View {
                                 }
                             }
                             Image(systemName: "checkmark")
-                                .opacity(vm.people[index].isPresent ? 1.0 : 0.0)
+                                .opacity(vm
+                                    .people[index].isPresent ? 1.0 : 0.0)
                             Text("\(person.name)")
                                 .foregroundColor(.black)
                         }

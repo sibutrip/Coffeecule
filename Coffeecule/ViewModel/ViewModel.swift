@@ -158,7 +158,6 @@ class ViewModel: ObservableObject {
             }
             people.append(newPerson)
         }
-        self.people = people.sorted()
         self.hasCoffeecule = true
     }
     
@@ -171,10 +170,7 @@ class ViewModel: ObservableObject {
         Task {
             await self.initialize()
             let transactions = await ReadWrite.shared.readTransactionsFromCloud()
-            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()
-//            createNewCoffeecule(for: ["cory","tom","ty","zoe","tariq"])
-            
-//#error("run the above line to re-make a cule.")
+            self.people = ReadWrite.shared.transactionsToPeople(transactions, people: [.init(name: "cory"), .init(name: "tom"), .init(name: "ty"), .init(name: "tariq"), .init(name: "zoe")]).sorted()            
             self.calculateBuyer()
         }
         
