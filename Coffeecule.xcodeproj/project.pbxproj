@@ -126,10 +126,10 @@
 		7467993E29B0DC9100339D5C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7467994229B0DC9100339D5C /* ContentView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				7478C72729E5FCC8006ED737 /* CloudSharingView.swift */,
-				7467994229B0DC9100339D5C /* ContentView.swift */,
 				744C450B29FC5DCE0062B47C /* JoinSheet.swift */,
 				744C450D29FC63810062B47C /* JoinView.swift */,
 				744C450F29FC63D80062B47C /* OnboardingView.swift */,

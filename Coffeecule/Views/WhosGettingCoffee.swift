@@ -44,7 +44,7 @@ struct WhosGettingCoffee: View {
                         }
                     }
                 }
-                if self.editMode?.wrappedValue != .inactive {
+                if self.editMode?.wrappedValue != .inactive || vm.people.count == 0 {
                     Button {
                         Task {
                             await vm.shareCoffeecule()
@@ -53,7 +53,7 @@ struct WhosGettingCoffee: View {
                     } label: {
                         HStack {
                             Image(systemName: "person.crop.circle.fill.badge.plus")
-                            Text("New bro")
+                            Text("Add New Person")
                         }
                     }.disabled(vm.state == .loading)
                 }

@@ -204,4 +204,8 @@ extension ViewModel {
             return ""
         }
     }
+    
+    public func deleteCoffeecule() {
+        
+    }
 }

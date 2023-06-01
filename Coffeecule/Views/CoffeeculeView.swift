@@ -11,7 +11,9 @@ struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
     @State var isBuying = false
     @State var isSharing = false
+    @State var isDeletingCoffeecule = false
     @State var couldntGetPermission = false
+    @Environment(\.editMode) private var editMode
     
     var body: some View {
         Form {
@@ -19,7 +21,17 @@ struct CoffeeculeView: View {
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
             relationshipWebChart
+            if self.editMode?.wrappedValue != .inactive {
+                Section {
+                    Button("Delete Coffeecule") {
+                        isDeletingCoffeecule = true
+                    }
+                    .foregroundColor(.red)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
         }
+        .environment(\.editMode, editMode)
         .navigationTitle(Title.activeTitle)
         .refreshable {
             Task { await vm.refreshData() }
@@ -43,6 +55,17 @@ struct CoffeeculeView: View {
         }
         .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
             Button("ok den", role: .cancel) { couldntGetPermission = false}
+        }
+        .alert("Are you sure you want to delete your Coffeecule? This action is not reversable.", isPresented: $isDeletingCoffeecule) {
+            HStack {
+                Button("Yes", role: .destructive) {
+                    vm.deleteCoffeecule()
+                }
+                Button("No", role: .cancel) {
+                    isDeletingCoffeecule = false
+                }
+                
+            }
         }
     }
 }
