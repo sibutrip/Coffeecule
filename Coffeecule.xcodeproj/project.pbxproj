@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
+		7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */; };
 		744C450A29FC53500062B47C /* AppAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450929FC53500062B47C /* AppAccess.swift */; };
 		744C450C29FC5DCE0062B47C /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450B29FC5DCE0062B47C /* JoinSheet.swift */; };
 		744C450E29FC63810062B47C /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450D29FC63810062B47C /* JoinView.swift */; };
@@ -40,6 +41,7 @@
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantType.swift; sourceTree = "<group>"; };
 		744C450929FC53500062B47C /* AppAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAccess.swift; sourceTree = "<group>"; };
 		744C450B29FC5DCE0062B47C /* JoinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSheet.swift; sourceTree = "<group>"; };
 		744C450D29FC63810062B47C /* JoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				7467995329B0DC9100339D5C /* Repository.swift */,
 				74BA5F5429E5902400C28F2F /* PersonService.swift */,
+				7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */,
 				74BA5F5629E59A6A00C28F2F /* TransactionService.swift */,
 				7467994929B0DC9100339D5C /* Person.swift */,
 				7467995229B0DC9100339D5C /* Transaction.swift */,
@@ -282,6 +285,7 @@
 				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
 				7467995D29B0DC9100339D5C /* AppDelegate.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,
+				7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */,
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
 				74BA5F5C29E5B98500C28F2F /* VMPeople.swift in Sources */,
 				7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */,

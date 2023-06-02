@@ -59,7 +59,13 @@ struct CoffeeculeView: View {
         .alert("Are you sure you want to delete your Coffeecule? This action is not reversable.", isPresented: $isDeletingCoffeecule) {
             HStack {
                 Button("Yes", role: .destructive) {
-                    vm.deleteCoffeecule()
+                    Task {
+                        do {
+                            try await vm.deleteCoffeecule()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
                 }
                 Button("No", role: .cancel) {
                     isDeletingCoffeecule = false

@@ -16,7 +16,7 @@ class Repository {
                 await self.createZonesIfNeeded()
                 self.appPermission = try await self.requestAppPermission()
                 self.accountStatus = try await self.container.accountStatus()
-                self.userName = try await self.fetchiCloudUserName()
+                self.userIdentity = try await self.fetchUserIdentity()
             } catch {
                 debugPrint(error)
             }
@@ -26,22 +26,36 @@ class Repository {
     
     
     // PUBLIC
+    public var userIdentity: CKUserIdentity?
     public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     public lazy var database = container.privateCloudDatabase
-    public var coffeeculeRecordZone = CKRecordZone(zoneName: "PersonZone") // private zone
+    public var zone: CKRecordZone {
+        if let sharedZone = sharedZone {
+            return sharedZone
+        } else {
+            return privateZone
+        }
+    }
+    private var privateZone = CKRecordZone(zoneName: "PersonZone") // private zone
+    private var sharedZone: CKRecordZone?
 //    public var sharedCoffeeculeZone: CKRecordZone? = nil
     public var appPermission: Bool? = nil
     public var accountStatus: CKAccountStatus? = nil
-    public var userName: PersonNameComponents? = nil
+    
+    public lazy var allZones = [privateZone,sharedZone].compactMap { $0 }
     
     // APP PERMISSION
     
+    public func fetchPrivateOrSharedZone() {
+        
+    }
+    
     public func fetchSharedContainer() async throws {
         let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
-        if sharedContainers.count > 0 {
-            self.coffeeculeRecordZone = sharedContainers[0]
-        } else if sharedContainers.count > 1 {
-            print("ERROR: more than 1 shared container")
+        if sharedContainers.count > 1 {
+           print("ERROR: more than 1 shared container")
+        } else if sharedContainers.count == 1 {
+            self.sharedZone = sharedContainers[0]
         }
     }
     
@@ -64,23 +78,19 @@ class Repository {
         }
     }
     
-    public func fetchiCloudUserName() async throws -> PersonNameComponents {
+    public func fetchUserIdentity() async throws -> CKUserIdentity? {
         let id = try await self.container.userRecordID()
         let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
-        guard let name = returnedIdentity?.nameComponents else {
-            return PersonNameComponents()
-        }
-        return name
+        return returnedIdentity
     }
     
     // PERSON DATABASE METHODS
     private func createZonesIfNeeded() async {
         do {
-            let (_,_) = try await self.database.modifyRecordZones(saving: [self.coffeeculeRecordZone], deleting: [])
+            let (_,_) = try await self.database.modifyRecordZones(saving: [self.privateZone], deleting: [])
         } catch {
             print("couldnt not create new zones")
         }
-        UserDefaults.standard.set(true, forKey: "areZonesCreated")
     }
     
     static let shared = Repository()

@@ -86,7 +86,8 @@ extension ViewModel {
     }
     
     private func populateData() async {
-        let (peopleNames, transactions, hasShare) = await personService.fetchRecords()
+        let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
+        let peopleNames: [String] = fetchedPeople.map { $0.name }
         var people = personService.createPeopleFromScratch(from: peopleNames)
         people = personService.createPeopleFromExisting(with: transactions, and: people)
         self.people = people
@@ -205,7 +206,8 @@ extension ViewModel {
         }
     }
     
-    public func deleteCoffeecule() {
-        
+    public func deleteCoffeecule() async throws {
+        try await personService.deleteAllTransactions()
+        self.hasShare = false
     }
 }
