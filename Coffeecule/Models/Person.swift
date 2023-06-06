@@ -13,31 +13,38 @@ public struct Person: Identifiable {
     /// Properties
     public let id = UUID()
     let name: String
-    var isPresent = true
-    var coffeesOwed: [String: Int] = [:]
-    var associatedRecord: CKRecord?
-    var userRecordName: String //CKRecord.ID.recordName
+//    var coffeesOwed: [String: Int] = [:]
+    var associatedRecord: CKRecord
     
     /// Coding Key
     private enum CodingKeys: String, CodingKey {
         case name, isPresent, coffeesOwed, userRecordName, associatedRecord
     }
     
-    /// Initializer from onboarding
-//    init(name: String, userRecordName: String) {
-//        self.name = name
-//        self.userRecordName = userRecordName
-//    }
+    func save() async throws {
+        let result = try await Repository.shared.database.modifyRecords(saving: [self.associatedRecord], deleting: [])
+        print(result.saveResults.debugDescription)
+    }
     
-    /// Initializer from cloudkit, onboarding
-    init(name: String, associatedRecord: CKRecord? = nil) {
+    /// Initializer from cloudkit
+    init(name: String, associatedRecord: CKRecord) {
         self.name = name
         self.associatedRecord = associatedRecord
-        if let record = associatedRecord {
-            self.userRecordName = record[name] as! String
-        } else {
-            self.userRecordName = ""
-        }
+    }
+    
+    /// initializer from new name. creates a ckrecord
+    init(name: String, participantType: ParticipantType) {
+        self.name = name
+        let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: Repository.shared.zone.zoneID))
+        record["name"] = name
+        self.associatedRecord = record
+    }
+    
+    /// empty person
+    init() {
+        self.name = "nobody"
+        let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: Repository.shared.zone.zoneID))
+        associatedRecord = record
     }
     
     /// Initializer when decoding from JSON

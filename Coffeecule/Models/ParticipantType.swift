@@ -7,6 +7,7 @@
 
 import Foundation
 
-enum ParticipantType {
-    case root, participant
+enum ParticipantType: String {
+    case root = "rootRecord"
+    case participant = "participantRecord"
 }

@@ -123,7 +123,7 @@ extension CoffeeculeView {
                 HStack {
                     Button("Yes", role: .destructive) {
                         Task(priority: .userInitiated) {
-                            await vm.buyCoffee()
+//                            await vm.buyCoffee()
                             vm.createDisplayedDebts()
                             vm.calculateBuyer()
                         }
@@ -154,8 +154,8 @@ extension CoffeeculeView {
     
     var selectAllToolbar: some View {
         Button {
-            for index in vm.people.indices {
-                vm.people[index].isPresent = true
+            for index in vm.relationships.indices {
+                vm.relationships[index].isPresent = true
             }
         } label: {
             Text("Select All")

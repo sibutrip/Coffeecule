@@ -12,17 +12,18 @@ struct WhosGettingCoffee: View {
     @ObservedObject var vm: ViewModel
     @Environment(\.editMode) private var editMode
     @State private var deletingPerson = false
-    @State private var personToDelete = Person(name: "nobody")
+    @State private var personToDelete = Person()
     @State private var deleteError = false
     @Binding var isSharing: Bool
     
     var body: some View {
         Section("Who's getting coffee?") {
             List {
-                ForEach(vm.people.indices, id: \.self) { index in
-                    let person = vm.people[index]
+                ForEach(vm.relationships.indices, id: \.self) { index in
+                    let relationship = vm.relationships[index]
+                    let person = relationship.person
                     Button {
-                        vm.people[index].isPresent.toggle()
+                        vm.relationships[index].isPresent.toggle()
                         vm.createDisplayedDebts()
                         vm.calculateBuyer()
                     } label: {
@@ -38,13 +39,13 @@ struct WhosGettingCoffee: View {
                                 }
                             }
                             Image(systemName: "checkmark")
-                                .opacity(vm.people[index].isPresent ? 1.0 : 0.0)
+                                .opacity(vm.relationships[index].isPresent ? 1.0 : 0.0)
                             Text("\(person.name)")
                                 .foregroundColor(Color.primary)
                         }
                     }
                 }
-                if self.editMode?.wrappedValue != .inactive || vm.people.count == 0 {
+                if self.editMode?.wrappedValue != .inactive || vm.relationships.count == 0 {
                     Button {
                         Task {
                             await vm.shareCoffeecule()

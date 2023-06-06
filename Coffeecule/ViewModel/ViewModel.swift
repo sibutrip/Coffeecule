@@ -36,8 +36,8 @@ class ViewModel: ObservableObject {
             print(self.state)
         }
     }
-    @Published var people: [Person] = []
-    @Published var currentBuyer = Person(name: "nobody")
+    @Published var relationships: [Relationships] = Relationships.all
+    @Published var currentBuyer = Person()
     @Published var displayedDebts: [Person:Int] = [:]
     @Published var hasShare = false
     init() { }

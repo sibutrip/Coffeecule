@@ -12,8 +12,10 @@ struct JoinSheet: View {
     @Environment(\.dismiss) var dismiss: DismissAction
     @Binding var isLoading: Bool
     var sortedPeople: [Person] {
-        vm.people.sorted(by: { first, second in
+        vm.relationships
+            .sorted(by: { first, second in
             first.name == vm.personService.rootRecord!["name"] as? String ?? "" })
+            .map { $0.person }
     }
     var body: some View {
         if isLoading {

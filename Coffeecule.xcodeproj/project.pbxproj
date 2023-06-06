@@ -10,6 +10,7 @@
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
 		7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */; };
+		7413E4282A2A3A3A00EFA01E /* Relationships.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413E4272A2A3A3A00EFA01E /* Relationships.swift */; };
 		744C450A29FC53500062B47C /* AppAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450929FC53500062B47C /* AppAccess.swift */; };
 		744C450C29FC5DCE0062B47C /* JoinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450B29FC5DCE0062B47C /* JoinSheet.swift */; };
 		744C450E29FC63810062B47C /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744C450D29FC63810062B47C /* JoinView.swift */; };
@@ -42,6 +43,7 @@
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantType.swift; sourceTree = "<group>"; };
+		7413E4272A2A3A3A00EFA01E /* Relationships.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relationships.swift; sourceTree = "<group>"; };
 		744C450929FC53500062B47C /* AppAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAccess.swift; sourceTree = "<group>"; };
 		744C450B29FC5DCE0062B47C /* JoinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSheet.swift; sourceTree = "<group>"; };
 		744C450D29FC63810062B47C /* JoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */,
 				74BA5F5629E59A6A00C28F2F /* TransactionService.swift */,
 				7467994929B0DC9100339D5C /* Person.swift */,
+				7413E4272A2A3A3A00EFA01E /* Relationships.swift */,
 				7467995229B0DC9100339D5C /* Transaction.swift */,
 				7467994A29B0DC9100339D5C /* ReadWriterHelpers */,
 				74B0AB3629C35021002DA7BD /* Titles.swift */,
@@ -295,6 +298,7 @@
 				74BA5F5529E5902400C28F2F /* PersonService.swift in Sources */,
 				7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */,
 				74BA5F5E29E5B98D00C28F2F /* VMTransactions.swift in Sources */,
+				7413E4282A2A3A3A00EFA01E /* Relationships.swift in Sources */,
 				744C451029FC63D80062B47C /* OnboardingView.swift in Sources */,
 				7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */,
 				74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */,

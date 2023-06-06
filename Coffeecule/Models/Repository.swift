@@ -16,7 +16,9 @@ class Repository {
                 await self.createZonesIfNeeded()
                 self.appPermission = try await self.requestAppPermission()
                 self.accountStatus = try await self.container.accountStatus()
-                self.userIdentity = try await self.fetchUserIdentity()
+                try await self.fetchUserIdentity()
+                try await self.fetchSharedContainer()
+                
             } catch {
                 debugPrint(error)
             }
@@ -27,6 +29,8 @@ class Repository {
     
     // PUBLIC
     public var userIdentity: CKUserIdentity?
+    public var userName: String?
+    
     public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     public lazy var database = container.privateCloudDatabase
     public var zone: CKRecordZone {
@@ -38,7 +42,7 @@ class Repository {
     }
     private var privateZone = CKRecordZone(zoneName: "PersonZone") // private zone
     private var sharedZone: CKRecordZone?
-//    public var sharedCoffeeculeZone: CKRecordZone? = nil
+    //    public var sharedCoffeeculeZone: CKRecordZone? = nil
     public var appPermission: Bool? = nil
     public var accountStatus: CKAccountStatus? = nil
     
@@ -53,7 +57,7 @@ class Repository {
     public func fetchSharedContainer() async throws {
         let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()
         if sharedContainers.count > 1 {
-           print("ERROR: more than 1 shared container")
+            print("ERROR: more than 1 shared container")
         } else if sharedContainers.count == 1 {
             self.sharedZone = sharedContainers[0]
         }
@@ -72,16 +76,19 @@ class Repository {
         case .denied:
             throw AppPermissionError.denied
         case .granted:
-             return true
+            return true
         @unknown default:
             throw AppPermissionError.unknown
         }
     }
     
-    public func fetchUserIdentity() async throws -> CKUserIdentity? {
+    public func fetchUserIdentity() async throws {
         let id = try await self.container.userRecordID()
         let returnedIdentity = try await self.container.userIdentity(forUserRecordID: id)
-        return returnedIdentity
+        self.userIdentity = returnedIdentity
+        if let returnedIdentity = returnedIdentity {
+            self.userName = returnedIdentity.nameComponents!.formatted()
+        }
     }
     
     // PERSON DATABASE METHODS

@@ -14,16 +14,16 @@ struct DebugView: View {
         VStack {
             Text("your name is: \(vm.participantName)")
             List {
-                ForEach(vm.people.indices, id: \.self) { index in
-                    let person = vm.people[index]
+                ForEach(vm.relationships.indices, id: \.self) { index in
+                    let person = vm.relationships[index]
                     Button {
-                        vm.people[index].isPresent.toggle()
+                        vm.relationships[index].isPresent.toggle()
                         vm.createDisplayedDebts()
                         vm.calculateBuyer()
                     } label: {
                         HStack {
                             Image(systemName: "checkmark")
-                                .opacity(vm.people[index].isPresent ? 1.0 : 0.0)
+                                .opacity(vm.relationships[index].isPresent ? 1.0 : 0.0)
                             Text("\(person.name)")
                                 .foregroundColor(.black)
                             Text(person.coffeesOwed.description)
