@@ -11,35 +11,25 @@ struct ContentView: View {
     @EnvironmentObject var appAccess: AppAccess
     @StateObject var vm = ViewModel()
     @State private var couldNotGetPermission = false
-    @State private var isLoading = true
     var body: some View {
         NavigationStack {
             VStack {
-                if vm.hasShare == true {
-                    CoffeeculeView(vm: vm)
+                if vm.state == .loading {
+                    ProgressView()
                 } else {
-                    if isLoading {
-                        EmptyView()
+                    if vm.hasShare == true {
+                        CoffeeculeView(vm: vm)
                     } else {
                         OnboardingView(vm: vm)
                     }
                 }
             }
             .task {
-                isLoading = true
                 await vm.refreshData()
-                isLoading = false
             }
-            .sheet(isPresented: $appAccess.accessedFromShare) {
-                JoinSheet(vm: vm, isLoading: $isLoading)
-            }
-            .overlay {
-                if isLoading {
-                    ProgressView()
-                } else {
-                    EmptyView()
-                }
-        }
+//            .sheet(isPresented: $appAccess.accessedFromShare) {
+//                JoinSheet(vm: vm)
+//            }
         }
     }
 }

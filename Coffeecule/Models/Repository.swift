@@ -33,16 +33,15 @@ class Repository {
     
     public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     public lazy var database = container.privateCloudDatabase
-    public var zone: CKRecordZone {
+    public var currentZone: CKRecordZone {
         if let sharedZone = sharedZone {
             return sharedZone
         } else {
             return privateZone
         }
     }
-    private var privateZone = CKRecordZone(zoneName: "PersonZone") // private zone
+    private var privateZone = CKRecordZone(zoneName: "Coffeecule") // private zone
     private var sharedZone: CKRecordZone?
-    //    public var sharedCoffeeculeZone: CKRecordZone? = nil
     public var appPermission: Bool? = nil
     public var accountStatus: CKAccountStatus? = nil
     

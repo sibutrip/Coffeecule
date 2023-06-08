@@ -7,13 +7,11 @@
 
 import Foundation
 import CloudKit
-import UIKit
+//import UIKit
 import SwiftUI
 
 @MainActor
 class ViewModel: ObservableObject {
-    
-    @AppStorage("hasCoffeecule") var hasCoffeecule = false
     
     let repository = Repository.shared
     let personService = PersonService()
@@ -36,10 +34,23 @@ class ViewModel: ObservableObject {
             print(self.state)
         }
     }
-    @Published var relationships: [Relationships] = Relationships.all
+    @Published var relationships: [Relationships] = []
     @Published var currentBuyer = Person()
     @Published var displayedDebts: [Person:Int] = [:]
-    @Published var hasShare = false
-    init() { }
+    @Published var hasShare = false {
+        didSet {
+            print("has share is \(hasShare)")
+        }
+    }
+    
+    init() {
+        Task {
+            do {
+                try await self.initialize()
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 

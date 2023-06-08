@@ -40,7 +40,7 @@ class PersonService: ObservableObject {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
         
-        guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.zone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
+        guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
             await createRootShare()
             return
         }
@@ -67,7 +67,7 @@ class PersonService: ObservableObject {
         
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
-        let (results, _) = try await repository.database.records(matching: query, inZoneWith: repository.zone.zoneID,desiredKeys: nil, resultsLimit: 10)
+        let (results, _) = try await repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10)
         for (_, result) in results {
             switch result {
             case .success(let record):
@@ -80,39 +80,37 @@ class PersonService: ObservableObject {
         throw FetchShareError.noShareFound
     }
     
-    public func createRootShare() async {
-        let share = CKShare(recordZoneID: repository.zone.zoneID)
+    public func createRootShare() async -> Bool {
+        let share = CKShare(recordZoneID: repository.currentZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
         let resultTest = try! await self.repository.database.modifyRecords(saving: [share], deleting: [])
-        print(resultTest.saveResults.debugDescription)
         self.rootShare = share
+        return true
     }
     
     public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
-        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.zone.zoneID))
+        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
         record["name"] = name
         self.rootRecord = record
         return record
     }
     
-    public func saveSharedRecord(_ record: CKRecord) async {
-        do {
-            let result = try await Repository.shared.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
-            print(result.saveResults)
-        } catch {
-            debugPrint(error)
+    public func saveRecord(_ record: CKRecord, participantType: ParticipantType) async throws {
+        switch participantType {
+        case .root:
+            try await savePrivateRecord(record)
+        case .participant:
+            try await saveSharedRecord(record)
         }
     }
+    private func saveSharedRecord(_ record: CKRecord) async throws {
+        let _ = try await Repository.shared.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+    }
     
-//    public func savePrivateRecord(_ record: CKRecord) async {
-//        do {
-//            let result = try await self.repository.database.modifyRecords(saving: [record], deleting: [])
-//            print(result.saveResults.debugDescription)
-//        } catch {
-//            debugPrint(error)
-//        }
-//    }
+    private func savePrivateRecord(_ record: CKRecord) async throws {
+        let _ = try await self.repository.database.modifyRecords(saving: [record], deleting: [])
+    }
     
     /// fetches from private container
     public func fetchPrivatePeople() async -> [CKRecord] {
@@ -125,7 +123,7 @@ class PersonService: ObservableObject {
         
         do {
             for query in queries {
-                let (results, _) = try await self.repository.database.records(matching: query, inZoneWith: repository.zone.zoneID,desiredKeys: nil, resultsLimit: 100)
+                let (results, _) = try await self.repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 100)
                 for (_, result) in results {
                     switch result {
                     case .success(let record):
@@ -189,13 +187,7 @@ class PersonService: ObservableObject {
         
         do {
             
-            var zones = try await repository.container.sharedCloudDatabase.allRecordZones()
-            if zones.count > 0 {
-                zones = [zones[0]]
-            } else if zones.count > 1 {
-                fatalError("more than 1 shared zone")
-            }
-            zones.append(CKRecordZone(zoneName: "PersonZone"))
+            let zones = Repository.shared.allZones
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
@@ -317,7 +309,6 @@ class PersonService: ObservableObject {
     }
     
     public func deleteAllUsers(_ relationships: [Relationships]) async throws {
-//        let zoneIDs = Repository.shared.allZones.map { $0.zoneID }
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
         let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
     }

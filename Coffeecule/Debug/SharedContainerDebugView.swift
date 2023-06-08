@@ -40,7 +40,11 @@ struct DebugView: View {
                     }
                     Button("create cule") {
                         Task {
-                            await vm.createCoffeecule()
+                            do {
+                                try await vm.createCoffeecule()
+                            } catch {
+                                print(error.localizedDescription)
+                            }
                         }
                     }
                     Button("share cule") {
@@ -51,8 +55,10 @@ struct DebugView: View {
                     }
                     Button("join as \(vm.participantName)") {
                         Task {
-                            guard let _ = try? await vm.joinCoffeecule() else {
-                                return
+                            do {
+                                let _ = try await vm.joinCoffeecule()
+                            } catch {
+                                print(error.localizedDescription)
                             }
                         }
                     }

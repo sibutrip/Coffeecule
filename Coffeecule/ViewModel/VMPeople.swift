@@ -10,7 +10,7 @@ import CloudKit
 
 extension ViewModel {
     
-    public func createCoffeecule() async {
+    public func createCoffeecule() async throws {
         self.state = .loading
         await self.populateData()
         if self.personService.rootShare != nil {
@@ -33,12 +33,13 @@ extension ViewModel {
         }
         
         let person = Person(name: self.participantName, participantType: .root)
-        Relationships.addPerson(person)
+        self.relationships = Relationships.addPerson(person)
+        self.hasShare = await personService.createRootShare()
+        try await personService.saveRecord(person.associatedRecord, participantType: .root)
+        
         self.state = .loaded
         self.createDisplayedDebts()
         self.calculateBuyer()
-        await personService.createRootShare()
-        self.hasShare = true
         self.state = .loaded
     }
     
@@ -61,7 +62,7 @@ extension ViewModel {
             return
         }
         let person = Person(name: self.participantName, participantType: .participant)
-        Relationships.addPerson(person)
+        self.relationships = Relationships.addPerson(person)
         self.state = .loaded
     }
     
@@ -78,7 +79,7 @@ extension ViewModel {
     
     private func populateData() async {
         let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-        fetchedPeople.forEach { Relationships.addPerson($0) }
+        self.relationships = Relationships.populatePeople(with: fetchedPeople)
         transactions.forEach { Relationships.populateRelationships(with: $0) }
         print("received \(transactions.count) transactions")
         print("received \(fetchedPeople.count) people")

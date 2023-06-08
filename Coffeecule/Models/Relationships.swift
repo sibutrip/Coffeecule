@@ -15,10 +15,18 @@ struct Relationships {
     var coffeesOwed: [Person:Int] = [:]
     var isPresent = false
     
-    static var all = [Relationships]()
+    private static var all = [Relationships]()
     
-    static public func addPerson(_ person: Person) {
-        Self.all = Self.updateRelationships(adding: person)
+    static public func populatePeople(with people: [Person]) -> [Relationships] {
+        Self.all.removeAll()
+        people.forEach {
+            _ = updateRelationships(adding: $0)
+        }
+        return Self.all
+    }
+    
+    static public func addPerson(_ person: Person) -> [Relationships] {
+        return Self.updateRelationships(adding: person)
     }
     
     static public func populateRelationships(with transaction: Transaction) {
@@ -36,6 +44,7 @@ struct Relationships {
             updatedRelationships.append(previousRelationship)
         }
         updatedRelationships.append(newRelationship)
+        Self.all = updatedRelationships
         return updatedRelationships
     }
     

@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 
-public struct Person: Identifiable {
+struct Person: Identifiable {
 
     /// Properties
     public let id = UUID()
@@ -21,11 +21,6 @@ public struct Person: Identifiable {
         case name, isPresent, coffeesOwed, userRecordName, associatedRecord
     }
     
-    func save() async throws {
-        let result = try await Repository.shared.database.modifyRecords(saving: [self.associatedRecord], deleting: [])
-        print(result.saveResults.debugDescription)
-    }
-    
     /// Initializer from cloudkit
     init(name: String, associatedRecord: CKRecord) {
         self.name = name
@@ -35,7 +30,7 @@ public struct Person: Identifiable {
     /// initializer from new name. creates a ckrecord
     init(name: String, participantType: ParticipantType) {
         self.name = name
-        let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: Repository.shared.zone.zoneID))
+        let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: Repository.shared.currentZone.zoneID))
         record["name"] = name
         self.associatedRecord = record
     }
@@ -43,7 +38,7 @@ public struct Person: Identifiable {
     /// empty person
     init() {
         self.name = "nobody"
-        let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: Repository.shared.zone.zoneID))
+        let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: "nobody", zoneID: Repository.shared.currentZone.zoneID))
         associatedRecord = record
     }
     
@@ -65,7 +60,7 @@ extension Person: Hashable {
         lhs.name == rhs.name
     }
     
-    public func hash(into hasher: inout Hasher) {
+    nonisolated public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
 }

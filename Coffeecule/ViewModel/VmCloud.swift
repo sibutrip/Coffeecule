@@ -1,38 +1,31 @@
-////
-////  VmCloud.swift
-////  CoffeeculeTest
-////
-////  Created by Cory Tripathy on 2/21/23.
-////
 //
-//import Foundation
-//import CloudKit
+//  VmCloud.swift
+//  CoffeeculeTest
 //
-//extension ViewModel {
+//  Created by Cory Tripathy on 2/21/23.
+//
+
+import Foundation
+import CloudKit
+
+extension ViewModel {
+    
+    /// Prepares container by creating custom zone if needed.
+    func initialize() async throws {
+        try await createZonesIfNeeded()
+    }
+    /// Creates the custom zone in use if needed.
+    private func createZonesIfNeeded() async throws {
+        try await Repository.shared.database.modifyRecordZones(saving: [Repository.shared.currentZone], deleting: [])
+    }
+}
+
+
+
+
+
 //    
-//    /// Prepares container by creating custom zone if needed.
-//    func initialize() async {
-//        do {
-//            try await createZonesIfNeeded()
-//        } catch {
-//            self.state = .error
-//        }
-//    }
-//    
-//    /// Creates the custom zone in use if needed.
-//    private func createZonesIfNeeded() async throws {
-//        if UserDefaults.standard.bool(forKey: "areZonesCreated") {
-//            return
-//        }
-//        
-//        do {
-//            print(try await Repository.shared.database.modifyRecordZones(saving: [RecordZones.Transactions(), RecordZones.People()], deleting: []))
-//            UserDefaults.standard.set(true, forKey: "areZonesCreated")
-//        } catch {
-//            print("ERROR: Failed to create custom zone: \(error.localizedDescription)")
-//            throw error
-//        }
-//    }
+
 //    
 //    func removePerson(for deletingPerson: Person) async throws {
 ////        for item in ["buyerName","receiverName"] {
