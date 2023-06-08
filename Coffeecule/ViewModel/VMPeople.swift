@@ -203,5 +203,8 @@ extension ViewModel {
         try await personService.deleteAllUsers(relationships)
         try await personService.deleteShare()
         self.hasShare = false
+        self.relationships.removeAll()
+        self.personService.rootShare = nil
+        self.personService.rootRecord = nil
     }
 }
