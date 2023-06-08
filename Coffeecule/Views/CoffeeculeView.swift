@@ -18,6 +18,7 @@ struct CoffeeculeView: View {
     var body: some View {
         Form {
             WhosGettingCoffee(vm: vm, isSharing: $isSharing)
+                .animation(.default, value: vm.relationships)
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
             relationshipWebChart
@@ -34,7 +35,9 @@ struct CoffeeculeView: View {
         .environment(\.editMode, editMode)
         .navigationTitle(Title.activeTitle)
         .refreshable {
-            Task { await vm.refreshData() }
+            Task {
+                await vm.refreshData()
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

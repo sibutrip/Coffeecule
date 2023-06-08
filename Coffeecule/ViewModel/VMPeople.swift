@@ -67,6 +67,10 @@ extension ViewModel {
     }
     
     public func refreshData() async {
+        await populateData()
+    }
+    
+    public func loadData() async {
         self.state = .loading
         await populateData()
         self.state = .loaded

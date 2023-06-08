@@ -11,5 +11,6 @@ class AppAccess: ObservableObject {
     @Published var accessedFromShare: Bool
     init(accessedFromShare: Bool) {
         self.accessedFromShare = accessedFromShare
+        print("ACCESSED FROM SHARE is \(accessedFromShare)")
     }
 }

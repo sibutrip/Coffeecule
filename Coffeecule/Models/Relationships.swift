@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Relationships {
+struct Relationships: Equatable {
     let person: Person
     var name: String {
         person.name
