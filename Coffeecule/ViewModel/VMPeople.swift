@@ -13,7 +13,7 @@ extension ViewModel {
     public func createCoffeecule() async throws {
         self.state = .loading
         await self.populateData()
-        if self.personService.rootShare != nil {
+        if self.repository.rootShare != nil {
             state = .culeAlreadyExists
             return
         }
@@ -27,7 +27,7 @@ extension ViewModel {
             state = .nameAlreadyExists
             return
         }
-        if personService.rootShare != nil {
+        if repository.rootShare != nil {
             state = .culeAlreadyExists
             return
         }
@@ -43,10 +43,10 @@ extension ViewModel {
         self.state = .loaded
     }
     
-    public func joinCoffeecule() async {
+    public func joinCoffeecule() async throws {
         self.state = .loading
         await self.populateData()
-        if self.personService.rootShare == nil {
+        if self.repository.rootShare == nil {
             state = .noShareFound
             return
         }
@@ -62,6 +62,7 @@ extension ViewModel {
             return
         }
         let person = Person(name: self.participantName, participantType: .participant)
+        try await personService.saveRecord(person.associatedRecord, participantType: .participant)
         self.relationships = Relationships.addPerson(person)
         self.state = .loaded
     }
@@ -77,18 +78,21 @@ extension ViewModel {
     }
     
     public func shareCoffeecule() async {
-        await personService.fetchOrCreateShare()
-        self.hasShare = true
+        self.hasShare = await personService.fetchOrCreateShare()
     }
     
     private func populateData() async {
-        let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-        self.relationships = Relationships.populatePeople(with: fetchedPeople)
-        transactions.forEach { Relationships.populateRelationships(with: $0) }
-        print("received \(transactions.count) transactions")
-        print("received \(fetchedPeople.count) people")
-        print("found a share: \(hasShare ? "yes" : "no")")
-        self.hasShare = hasShare
+        do {
+            let (fetchedPeople, transactions, hasShare) = try await personService.fetchRecords()
+            self.relationships = Relationships.populatePeople(with: fetchedPeople)
+            transactions.forEach { Relationships.populateRelationships(with: $0) }
+            print("received \(transactions.count) transactions")
+            print("received \(fetchedPeople.count) people")
+            print("found a share: \(hasShare ? "yes" : "no")")
+            self.hasShare = hasShare
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     public func calculateBuyer() {
@@ -159,7 +163,7 @@ extension ViewModel {
             updatedPeople.append(buyer)
             self.relationships = updatedPeople
             print(transactions.count)
-            if self.participantName == self.personService.rootRecord?.recordID.recordName {
+            if self.participantName == repository.rootRecord?.recordID.recordName {
                 try await self.transactionService.saveTransactions(transactions, in: repository.container.privateCloudDatabase)
             } else {
                 try await self.transactionService.saveTransactions(transactions, in: repository.container.sharedCloudDatabase)
@@ -208,7 +212,7 @@ extension ViewModel {
         try await personService.deleteShare()
         self.hasShare = false
         self.relationships.removeAll()
-        self.personService.rootShare = nil
-        self.personService.rootRecord = nil
+        self.repository.rootShare = nil
+        self.repository.rootRecord = nil
     }
 }

@@ -27,9 +27,9 @@ struct ContentView: View {
             .task {
                 await vm.loadData()
             }
-//            .sheet(isPresented: $appAccess.accessedFromShare) {
-//                JoinSheet(vm: vm)
-//            }
+            .sheet(isPresented: $appAccess.accessedFromShare) {
+                JoinSheet(vm: vm)
+            }
         }
     }
 }

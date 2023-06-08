@@ -25,12 +25,17 @@ class Repository {
         }
     }
     
+    // RECORDS
+    public var transactions: [Transaction]?
+    public var rootRecord: CKRecord? = nil
+    public var rootShare: CKShare? = nil
+        
     
-    
-    // PUBLIC
+    // USER
     public var userIdentity: CKUserIdentity?
     public var userName: String?
     
+    // CONTAINER
     public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     public lazy var database = container.privateCloudDatabase
     public var currentZone: CKRecordZone {
@@ -47,11 +52,7 @@ class Repository {
     
     public lazy var allZones = [privateZone,sharedZone].compactMap { $0 }
     
-    // APP PERMISSION
-    
-    public func fetchPrivateOrSharedZone() {
-        
-    }
+    // METHODS
     
     public func fetchSharedContainer() async throws {
         let sharedContainers = try await self.container.sharedCloudDatabase.allRecordZones()

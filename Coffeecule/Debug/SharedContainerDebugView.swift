@@ -78,7 +78,7 @@ struct DebugView: View {
             .padding(.horizontal)
         }
         .sheet(isPresented: $isSharing) {
-            CloudSharingView(repo: vm.personService)
+            CloudSharingView()
         }
     }
 }

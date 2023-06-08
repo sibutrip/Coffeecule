@@ -60,7 +60,7 @@ extension Person: Hashable {
         lhs.name == rhs.name
     }
     
-    nonisolated public func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
 }

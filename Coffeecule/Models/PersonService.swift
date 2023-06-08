@@ -9,16 +9,12 @@ import Foundation
 import SwiftUI
 import CloudKit
 
-class PersonService: ObservableObject {
+class PersonService {
     
-    // RECORDS AND SHARES
-    public var rootRecord: CKRecord? = nil
-    public var rootShare: CKShare? = nil
-        
+    // RECORD INFO
     private let rootRecordName = "rootRecord"
     private let participantRecordName = "participantRecord"
     private let repository = Repository.shared
-    private var transactions: [Transaction]?
     
     enum PeopleSource {
         case scratch, existing
@@ -34,30 +30,28 @@ class PersonService: ObservableObject {
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
-    public func fetchOrCreateShare() async {
-        if self.rootShare != nil { return }
-        var share: CKShare? = nil
+    public func fetchOrCreateShare() async -> Bool {
+        if repository.rootShare != nil { return true }
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
         
         guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
-            await createRootShare()
-            return
+            return await createRootShare()
         }
         for (_, result) in results {
             switch result {
             case .success(let record):
-                share = record as! CKShare?
+                repository.rootShare = record as! CKShare?
+                return true
             case .failure(let error):
                 print(error)
+                return false
             }
         }
         if results.count == 0 {
-            await createRootShare()
-            return
+            return await createRootShare()
         }
-        self.rootShare = share
-        return
+        return false
     }
     
     public func fetchShare() async throws {
@@ -71,7 +65,7 @@ class PersonService: ObservableObject {
         for (_, result) in results {
             switch result {
             case .success(let record):
-                self.rootShare = record as? CKShare
+                repository.rootShare = record as? CKShare
                 return
             case .failure(_):
                 throw FetchShareError.invalidShare
@@ -85,14 +79,14 @@ class PersonService: ObservableObject {
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
         let resultTest = try! await self.repository.database.modifyRecords(saving: [share], deleting: [])
-        self.rootShare = share
+        repository.rootShare = share
         return true
     }
     
     public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
         let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
         record["name"] = name
-        self.rootRecord = record
+        repository.rootRecord = record
         return record
     }
     
@@ -129,7 +123,7 @@ class PersonService: ObservableObject {
                     case .success(let record):
                         records.append(record)
                         if query.recordType == rootRecordName {
-                            self.rootRecord = record
+                            repository.rootRecord = record
                         }
                     case .failure(let error):
                         print(error)
@@ -143,7 +137,7 @@ class PersonService: ObservableObject {
     }
     
     /// fetches from shared container
-    public func fetchRecords() async -> ([Person], [Transaction], Bool) {
+    public func fetchRecords() async throws -> ([Person], [Transaction], Bool) {
         var people: [Person] = []
         var transactions: [Transaction] = []
         var hasShare: Bool = false
@@ -169,7 +163,7 @@ class PersonService: ObservableObject {
                         let name = record["name"] as! String
                         people.append(Person(name: name, associatedRecord: record))
                         print("found root record")
-                        self.rootRecord = record
+                        repository.rootRecord = record
                     } else if record.recordType == participantRecordName {
                         let name = record["name"] as! String
                         people.append(Person(name: name, associatedRecord: record))
@@ -177,7 +171,7 @@ class PersonService: ObservableObject {
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
-                        self.rootShare = record as? CKShare
+                        repository.rootShare = record as? CKShare
                         hasShare = true
                     }
                 }
@@ -185,125 +179,119 @@ class PersonService: ObservableObject {
             return (people, transactions, hasShare)
         }
         
-        do {
-            
-            let zones = Repository.shared.allZones
-            
-            // Using this task group, fetch each zone's contacts in parallel.
-            try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
-                for zone in zones {
-                    group.addTask {
-                        
-                        // if shared records are found return them and exit the function without fetching private records.
-                        if let results = try? await recordsInZone(zone, scope: .shared) {
-                            print("found shared zone records")
-                            return results
-                        }
-                        if let results = try? await recordsInZone(zone, scope: .private) {
-                            print("found private zone records")
-                            return results
-                        }
-                        print("found no zone records")
-                        return ([], [], false)
-                        
-                    }
+        try await Repository.shared.fetchSharedContainer()
+        let zones = Repository.shared.allZones
+        
+        // Using this task group, fetch each zone's contacts in parallel.
+        try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
+            for zone in zones {
+                group.addTask {
                     
-                    // As each result comes back, append it to a combined array to finally return.
-                    for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
-                        people.append(contentsOf: returnedPeople)
-                        transactions.append(contentsOf: returnedTransactions)
-                        if didReturnShare {
-                            hasShare = true
-                        }
+                    // if shared records are found return them and exit the function without fetching private records.
+                    if let results = try? await recordsInZone(zone, scope: .shared) {
+                        print("found shared zone records")
+                        return results
+                    }
+                    if let results = try? await recordsInZone(zone, scope: .private) {
+                        print("found private zone records")
+                        return results
+                    }
+                    print("found no zone records")
+                    return ([], [], false)
+                    
+                }
+                
+                // As each result comes back, append it to a combined array to finally return.
+                for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
+                    people.append(contentsOf: returnedPeople)
+                    transactions.append(contentsOf: returnedTransactions)
+                    if didReturnShare {
+                        hasShare = true
                     }
                 }
             }
-            self.transactions = transactions
-            return (people, transactions, hasShare)
-        } catch {
-            debugPrint(error.localizedDescription+"Aaaa")
-            return([], [], false)
         }
-        
+        self.repository.transactions = transactions
+        return (people, transactions, hasShare)
     }
     
-//    public func addPersonToCoffecule(_ name: String, to people: [Person]) -> [Person] {
-//        var newPeople = [Person]()
-//        for buyer in people {
-//            var buyer = buyer
-//            var coffeesOwed = buyer.coffeesOwed
-//            coffeesOwed[name] = 0
-//            buyer.coffeesOwed = coffeesOwed
-//            newPeople.append(buyer)
-//        }
-//        return newPeople.sorted()
-//    }
+    //    public func addPersonToCoffecule(_ name: String, to people: [Person]) -> [Person] {
+    //        var newPeople = [Person]()
+    //        for buyer in people {
+    //            var buyer = buyer
+    //            var coffeesOwed = buyer.coffeesOwed
+    //            coffeesOwed[name] = 0
+    //            buyer.coffeesOwed = coffeesOwed
+    //            newPeople.append(buyer)
+    //        }
+    //        return newPeople.sorted()
+    //    }
     
-//    func createPeopleFromScratch(from names: [String]) -> [Person] {
-//        //        let names = records.map {
-//        //            $0.recordID.recordName
-//        //        }
-//        var people = names
-//            .map { Person(name: $0) }
-//        for name in names {
-//            for index in 0..<people.count {
-//                if name != people[index].name {
-//                    people[index].coffeesOwed[name] = 0
-//                }
-//            }
-//        }
-//        return people
-//    }
+    //    func createPeopleFromScratch(from names: [String]) -> [Person] {
+    //        //        let names = records.map {
+    //        //            $0.recordID.recordName
+    //        //        }
+    //        var people = names
+    //            .map { Person(name: $0) }
+    //        for name in names {
+    //            for index in 0..<people.count {
+    //                if name != people[index].name {
+    //                    people[index].coffeesOwed[name] = 0
+    //                }
+    //            }
+    //        }
+    //        return people
+    //    }
     
-//    func createPeopleFromExisting(with transactions: [Transaction], and people: [Person]) -> [Person] {
-//
-//        var peopleToAdd = people
-//
-//        for transaction in transactions {
-//            let buyer = transaction.buyerName
-//            let receiver = transaction.receiverName
-//            peopleToAdd = incrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
-//            peopleToAdd = decrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
-//        }
-//        //        _ = people.map {
-//        //            print($0.coffeesOwed)
-//        //        }
-//        return peopleToAdd
-//    }
+    //    func createPeopleFromExisting(with transactions: [Transaction], and people: [Person]) -> [Person] {
+    //
+    //        var peopleToAdd = people
+    //
+    //        for transaction in transactions {
+    //            let buyer = transaction.buyerName
+    //            let receiver = transaction.receiverName
+    //            peopleToAdd = incrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
+    //            peopleToAdd = decrementDebt(buyer: buyer, receiver: receiver, in: peopleToAdd)
+    //        }
+    //        //        _ = people.map {
+    //        //            print($0.coffeesOwed)
+    //        //        }
+    //        return peopleToAdd
+    //    }
     
-//    private func incrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
-//        var people = people
-//        guard let buyerIndex = people.firstIndex(where: {
-//            $0.name == buyer
-//        }) else {
-//            debugPrint("transaction buyer: \(buyer) is not in the people array")
-//            return [Person]()
-//        }
-//
-//        var newBuyerDebt = people[buyerIndex].coffeesOwed[receiver] ?? 0
-//        newBuyerDebt += 1
-//        people[buyerIndex].coffeesOwed[receiver] = newBuyerDebt
-//        return people
-//    }
+    //    private func incrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
+    //        var people = people
+    //        guard let buyerIndex = people.firstIndex(where: {
+    //            $0.name == buyer
+    //        }) else {
+    //            debugPrint("transaction buyer: \(buyer) is not in the people array")
+    //            return [Person]()
+    //        }
+    //
+    //        var newBuyerDebt = people[buyerIndex].coffeesOwed[receiver] ?? 0
+    //        newBuyerDebt += 1
+    //        people[buyerIndex].coffeesOwed[receiver] = newBuyerDebt
+    //        return people
+    //    }
     
-//    private func decrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
-//        var people = people
-//        guard let receiverIndex = people.firstIndex(where: {
-//            $0.name == receiver
-//        }) else {
-//            debugPrint("transaction receiver: \(receiver) is not in the people array")
-//            return [Person]()
-//        }
-//
-//        var newReceiverDebt = people[receiverIndex].coffeesOwed[buyer] ?? 0
-//        newReceiverDebt -= 1
-//        people[receiverIndex].coffeesOwed[buyer] = newReceiverDebt
-//        return people
-//    }
+    //    private func decrementDebt(buyer: String, receiver: String, in people: [Person]) -> [Person] {
+    //        var people = people
+    //        guard let receiverIndex = people.firstIndex(where: {
+    //            $0.name == receiver
+    //        }) else {
+    //            debugPrint("transaction receiver: \(receiver) is not in the people array")
+    //            return [Person]()
+    //        }
+    //
+    //        var newReceiverDebt = people[receiverIndex].coffeesOwed[buyer] ?? 0
+    //        newReceiverDebt -= 1
+    //        people[receiverIndex].coffeesOwed[buyer] = newReceiverDebt
+    //        return people
+    //    }
     
     public func deleteAllTransactions() async throws {
-//        let zoneIDs = Repository.shared.allZones.map { $0.zoneID }
-        guard let transactions = transactions else { return }
+        //        let zoneIDs = Repository.shared.allZones.map { $0.zoneID }
+        guard let transactions = repository.transactions else { return }
         let recordIDs = transactions.map { $0.associatedRecord.recordID }
         let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: recordIDs)
     }
@@ -314,7 +302,7 @@ class PersonService: ObservableObject {
     }
     
     public func deleteShare() async throws {
-        if let share = rootShare {
+        if let share = repository.rootShare {
             let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: [share.recordID])
         }
     }
