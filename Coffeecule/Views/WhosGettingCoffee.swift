@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
 
 struct WhosGettingCoffee: View {
     @ObservedObject var vm: ViewModel
@@ -14,6 +15,8 @@ struct WhosGettingCoffee: View {
     @State private var deletingPerson = false
     @State private var personToDelete = Person()
     @State private var deleteError = false
+    @Binding var share: CKShare?
+    @Binding var container: CKContainer?
     @Binding var isSharing: Bool
     
     var body: some View {
@@ -49,7 +52,11 @@ struct WhosGettingCoffee: View {
                     Button {
                         Task {
                             await vm.shareCoffeecule()
-                            isSharing = true
+                            if let share = await vm.repository.rootShare {
+                                self.share = share
+                                self.container = Repository.container
+                                isSharing = true
+                            }
                         }
                     } label: {
                         HStack {

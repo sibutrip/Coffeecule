@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import Charts
+import CloudKit
 
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
@@ -13,11 +14,13 @@ struct CoffeeculeView: View {
     @State var isSharing = false
     @State var isDeletingCoffeecule = false
     @State var couldntGetPermission = false
+    @State var share: CKShare?
+    @State var container: CKContainer?
     @Environment(\.editMode) private var editMode
     
     var body: some View {
         Form {
-            WhosGettingCoffee(vm: vm, isSharing: $isSharing)
+            WhosGettingCoffee(vm: vm, share: $share, container: $container, isSharing: $isSharing)
                 .animation(.default, value: vm.relationships)
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
@@ -27,6 +30,7 @@ struct CoffeeculeView: View {
                     Button("Delete Coffeecule") {
                         isDeletingCoffeecule = true
                     }
+                    .environment(\.editMode, Binding.constant(EditMode.inactive))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -54,7 +58,7 @@ struct CoffeeculeView: View {
         //                }
         //            }
         .sheet(isPresented: $isSharing) {
-            CloudSharingView()
+            CloudSharingView(share: share!, container: container!)
         }
         .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
             Button("ok den", role: .cancel) { couldntGetPermission = false}

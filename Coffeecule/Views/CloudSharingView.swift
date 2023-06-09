@@ -16,11 +16,13 @@ struct CloudSharingView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     
     // MARK: - UIViewControllerRepresentable
+    let share: CKShare
+    let container: CKContainer
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        let sharingController = UICloudSharingController(share: Repository.shared.rootShare!, container: Repository.shared.container)
+        let sharingController = UICloudSharingController(share: share, container: container)
             sharingController.availablePermissions = [.allowReadWrite, .allowPrivate]
             sharingController.delegate = context.coordinator
             sharingController.modalPresentationStyle = .formSheet

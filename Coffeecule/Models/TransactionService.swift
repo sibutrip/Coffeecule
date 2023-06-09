@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 
 class TransactionService {
-    private let repository = Repository.shared
+//    private let repository = Repository.shared
     
     public func saveTransactions(_ transactions: [Transaction], in database: CKDatabase) async throws {
         let records: [CKRecord] = transactions.map { $0.associatedRecord }

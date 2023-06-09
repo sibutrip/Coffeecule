@@ -11,10 +11,11 @@ import CloudKit
 
 class PersonService {
     
+    let repository: Repository
+    
     // RECORD INFO
     private let rootRecordName = "rootRecord"
     private let participantRecordName = "participantRecord"
-    private let repository = Repository.shared
     
     enum PeopleSource {
         case scratch, existing
@@ -25,23 +26,26 @@ class PersonService {
     }
     
     // INITIALIZER
-    init() { }
+    init(with repo: Repository) {
+        self.repository = repo
+    }
     
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
     public func fetchOrCreateShare() async -> Bool {
-        if repository.rootShare != nil { return true }
+        if await repository.rootShare != nil { return true }
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
         
-        guard let (results, _) = try? await repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
+        guard let (results, _) = try? await Repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
             return await createRootShare()
         }
         for (_, result) in results {
             switch result {
             case .success(let record):
-                repository.rootShare = record as! CKShare?
+                let share = record as! CKShare
+                await repository.share(share)
                 return true
             case .failure(let error):
                 print(error)
@@ -61,11 +65,12 @@ class PersonService {
         
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
-        let (results, _) = try await repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10)
+        let (results, _) = try await Repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10)
         for (_, result) in results {
             switch result {
             case .success(let record):
-                repository.rootShare = record as? CKShare
+                let share = record as! CKShare
+                await repository.share(share)
                 return
             case .failure(_):
                 throw FetchShareError.invalidShare
@@ -75,11 +80,11 @@ class PersonService {
     }
     
     public func createRootShare() async -> Bool {
-        let share = CKShare(recordZoneID: repository.currentZone.zoneID)
+        let share = CKShare(recordZoneID: await repository.currentZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
-        let resultTest = try! await self.repository.database.modifyRecords(saving: [share], deleting: [])
-        repository.rootShare = share
+        let resultTest = try! await Repository.database.modifyRecords(saving: [share], deleting: [])
+        await repository.share(share)
         return true
     }
     
@@ -94,17 +99,17 @@ class PersonService {
         switch participantType {
         case .root:
             try await savePrivateRecord(record)
-            repository.rootRecord = record
+            await repository.rootRecord(record)
         case .participant:
             try await saveSharedRecord(record)
         }
     }
     private func saveSharedRecord(_ record: CKRecord) async throws {
-        let _ = try await Repository.shared.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+        let _ = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
     }
     
     private func savePrivateRecord(_ record: CKRecord) async throws {
-        let _ = try await self.repository.database.modifyRecords(saving: [record], deleting: [])
+        let _ = try await Repository.database.modifyRecords(saving: [record], deleting: [])
     }
     
     /// fetches from private container
@@ -118,13 +123,13 @@ class PersonService {
         
         do {
             for query in queries {
-                let (results, _) = try await self.repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 100)
+                let (results, _) = try await Repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 100)
                 for (_, result) in results {
                     switch result {
                     case .success(let record):
                         records.append(record)
                         if query.recordType == rootRecordName {
-                            repository.rootRecord = record
+                            await repository.rootRecord(record)
                         }
                     case .failure(let error):
                         print(error)
@@ -154,7 +159,7 @@ class PersonService {
             var hasShare: Bool = false
             
             while awaitingChanges {
-                let zoneChanges = try await Repository.shared.container.database(with: scope).recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
+                let zoneChanges = try await Repository.container.database(with: scope).recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
                 let receivedRecords = zoneChanges.modificationResultsByID.values
                     .compactMap { try? $0.get().record }
                 awaitingChanges = zoneChanges.moreComing
@@ -164,7 +169,7 @@ class PersonService {
                         let name = record["name"] as! String
                         people.append(Person(name: name, associatedRecord: record))
                         print("found root record")
-                        repository.rootRecord = record
+                        await repository.rootRecord(record)
                     } else if record.recordType == participantRecordName {
                         let name = record["name"] as! String
                         people.append(Person(name: name, associatedRecord: record))
@@ -172,7 +177,8 @@ class PersonService {
                     } else if record.recordType == "transaction" {
                         transactions.append(Transaction(record: record)!)
                     } else if record.recordType == "cloudkit.share" {
-                        repository.rootShare = record as? CKShare
+                        let share = record as! CKShare
+                        await repository.share(share)
                         hasShare = true
                     }
                 }
@@ -180,8 +186,7 @@ class PersonService {
             return (people, transactions, hasShare)
         }
         do {
-            try await Repository.shared.fetchSharedContainer()
-            let zones = Repository.shared.allZones
+            let zones = await repository.allZones
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
@@ -213,7 +218,7 @@ class PersonService {
                 }
             }
         } catch { print(error.localizedDescription) }
-        self.repository.transactions = transactions
+        await repository.transactions(transactions)
         return (people, transactions, hasShare)
     }
     
@@ -292,20 +297,19 @@ class PersonService {
     //    }
     
     public func deleteAllTransactions() async throws {
-        //        let zoneIDs = Repository.shared.allZones.map { $0.zoneID }
-        guard let transactions = repository.transactions else { return }
+        guard let transactions = await repository.transactions else { return }
         let recordIDs = transactions.map { $0.associatedRecord.recordID }
-        let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: recordIDs)
+        let _ = try await Repository.database.modifyRecords(saving: [], deleting: recordIDs)
     }
     
     public func deleteAllUsers(_ relationships: [Relationships]) async throws {
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
-        let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
+        let _ = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
     }
     
     public func deleteShare() async throws {
-        if let share = repository.rootShare {
-            let _ = try await Repository.shared.database.modifyRecords(saving: [], deleting: [share.recordID])
+        if let share = await repository.rootShare {
+            let _ = try await Repository.database.modifyRecords(saving: [], deleting: [share.recordID])
         }
     }
     

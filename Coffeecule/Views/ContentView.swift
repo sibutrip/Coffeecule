@@ -24,12 +24,12 @@ struct ContentView: View {
                     }
                 }
             }
-            .task {
-                await vm.loadData()
-            }
             .sheet(isPresented: $appAccess.accessedFromShare) {
                 JoinSheet(vm: vm)
             }
+        }
+        .task {
+
         }
     }
 }

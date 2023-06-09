@@ -24,13 +24,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
         
-        guard cloudKitShareMetadata.containerIdentifier == Repository.shared.container.containerIdentifier else {
+        guard cloudKitShareMetadata.containerIdentifier == Repository.container.containerIdentifier else {
             print("Shared container identifier \(cloudKitShareMetadata.containerIdentifier) did not match known identifier.")
             return
         }
         
         // Create an operation to accept the share, running in the app's CKContainer.
-        let container = CKContainer(identifier: Repository.shared.container.containerIdentifier!)
+        let container = CKContainer(identifier: Repository.container.containerIdentifier!)
         let operation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
         
         debugPrint("Accepting CloudKit Share with metadata: \(cloudKitShareMetadata)")

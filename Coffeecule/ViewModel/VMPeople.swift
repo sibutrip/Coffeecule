@@ -12,8 +12,9 @@ extension ViewModel {
     
     public func createCoffeecule() async throws {
         self.state = .loading
+        try await getAppPermissions()
         await self.populateData()
-        if self.repository.rootShare != nil {
+        if await self.repository.rootShare != nil {
             state = .culeAlreadyExists
             return
         }
@@ -27,7 +28,7 @@ extension ViewModel {
             state = .nameAlreadyExists
             return
         }
-        if repository.rootShare != nil {
+        if await repository.rootShare != nil {
             state = .culeAlreadyExists
             return
         }
@@ -35,7 +36,7 @@ extension ViewModel {
             state = .noPermission
             return
         }
-        let person = Person(name: self.participantName, participantType: .root, userID: userID)
+        let person = await Person(name: self.participantName, participantType: .root, userID: userID, in: repository)
         self.relationships = Relationships.addPerson(person)
         self.hasShare = await personService.createRootShare()
         try await personService.saveRecord(person.associatedRecord, participantType: .root)
@@ -48,8 +49,9 @@ extension ViewModel {
     
     public func joinCoffeecule() async throws {
         self.state = .loading
+        try await getAppPermissions()
         await self.populateData()
-        if self.repository.rootShare == nil {
+        if await repository.rootShare == nil {
             state = .noShareFound
             return
         }
@@ -67,7 +69,7 @@ extension ViewModel {
             state = .noPermission
             return
         }
-        let person = Person(name: self.participantName, participantType: .participant, userID: userID)
+        let person = await Person(name: self.participantName, participantType: .participant, userID: userID, in: repository)
         try await personService.saveRecord(person.associatedRecord, participantType: .participant)
         self.relationships = Relationships.addPerson(person)
         self.state = .loaded
@@ -79,9 +81,14 @@ extension ViewModel {
     }
     
     public func loadData() async {
-        self.state = .loading
-        await populateData()
-        self.state = .loaded
+        do {
+            self.state = .loading
+            try await getAppPermissions()
+            await populateData()
+            self.state = .loaded
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     public func shareCoffeecule() async {
@@ -89,25 +96,22 @@ extension ViewModel {
     }
     
     private func populateData() async {
-        do {
-            let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-            self.relationships = Relationships.populatePeople(with: fetchedPeople)
-            transactions.forEach { Relationships.populateRelationships(with: $0) }
-            print("received \(transactions.count) transactions")
-            print("received \(fetchedPeople.count) people")
-            print("found a share: \(hasShare ? "yes" : "no")")
-            self.hasShare = hasShare
-            
-            // determine if user is root user or shared user
-            if relationships.contains(where: { relationship in
-                relationship.person.userID == self.userID
-            }) && self.userID == repository.rootRecord?.recordID.recordName {
-                participantType = .root
-            } else {
-                participantType = .participant
-            }
-        } catch {
-            print(error.localizedDescription)
+        let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
+        self.relationships = Relationships.populatePeople(with: fetchedPeople)
+        transactions.forEach { Relationships.populateRelationships(with: $0) }
+        print("received \(transactions.count) transactions")
+        print("received \(fetchedPeople.count) people")
+        print("found a share: \(hasShare ? "yes" : "no")")
+        self.hasShare = hasShare
+        
+        // determine if user is root user or shared user
+        let rootRecordName = await repository.rootRecord?.recordID.recordName
+        if relationships.contains(where: { relationship in
+            relationship.person.userID == self.userID
+        }) && self.userID == rootRecordName {
+            participantType = .root
+        } else {
+            participantType = .participant
         }
     }
     
@@ -155,9 +159,8 @@ extension ViewModel {
                         throw BuyCoffeeError.missingMember
                     }
                     if receiver.isPresent {
-                        if let transaction = Transaction(buyer: buyer.name, receiver: receiver.name) {
-                            transactions.append(transaction)
-                        }
+                        let transaction = await Transaction(buyer: buyer.name, receiver: receiver.name, in: repository)
+                        transactions.append(transaction)
                         newBuyerDebt += 1
                         print("\(buyer.name) bought coffee for \(receiver.name)")
                     }
@@ -179,10 +182,12 @@ extension ViewModel {
             updatedPeople.append(buyer)
             self.relationships = updatedPeople
             print(transactions.count)
-            if self.participantName == repository.rootRecord?.recordID.recordName {
-                try await self.transactionService.saveTransactions(transactions, in: repository.container.privateCloudDatabase)
+            let rootRecordName = await repository.rootRecord?.recordID.recordName
+            //TODO: use repo.zone to see the user's current zone: private or shared
+            if self.userID == rootRecordName {
+                try await self.transactionService.saveTransactions(transactions, in: Repository.container.privateCloudDatabase)
             } else {
-                try await self.transactionService.saveTransactions(transactions, in: repository.container.sharedCloudDatabase)
+                try await self.transactionService.saveTransactions(transactions, in: Repository.container.sharedCloudDatabase)
             }
         } catch {
             debugPrint(error)
@@ -196,7 +201,7 @@ extension ViewModel {
         var debts = [Person:Int]()
         let presentPeople: [Relationships] = people
             .filter { $0.isPresent }
-//            .map { $0.person }
+        //            .map { $0.person }
         let presentNames: [String] = presentPeople.map {
             $0.name
         }
@@ -228,7 +233,7 @@ extension ViewModel {
         try await personService.deleteShare()
         self.hasShare = false
         self.relationships.removeAll()
-        self.repository.rootShare = nil
-        self.repository.rootRecord = nil
+        await self.repository.share(nil)
+        await self.repository.rootRecord(nil)
     }
 }

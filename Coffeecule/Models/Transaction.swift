@@ -28,8 +28,8 @@ struct Transaction: Identifiable {
     
     static let transactionRecordName = "transaction"
     
-    init?(buyer: String, receiver: String) {
-        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: Repository.shared.currentZone.zoneID))
+    init(buyer: String, receiver: String, in repository: Repository) async {
+        let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: await repository.currentZone.zoneID))
         transactionRecord["buyer"] = buyer.capitalized
         transactionRecord["receiver"] = receiver.capitalized
         
@@ -37,9 +37,5 @@ struct Transaction: Identifiable {
         self.buyerName = buyer.capitalized
         self.receiverName = buyer.capitalized
         self.associatedRecord = transactionRecord
-        //        } else {
-        //            print("init failed")
-        //            return nil
-        //        }
     }
 }

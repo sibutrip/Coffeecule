@@ -29,9 +29,9 @@ struct Person: Identifiable {
     }
     
     /// initializer from new name. creates a ckrecord
-    init(name: String, participantType: ParticipantType, userID: String) {
+    init(name: String, participantType: ParticipantType, userID: String, in repository: Repository) async {
         self.name = name
-        let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: Repository.shared.currentZone.zoneID))
+        let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: await repository.currentZone.zoneID))
         record["name"] = name
         record["userID"] = userID
         self.userID = userID
@@ -41,7 +41,7 @@ struct Person: Identifiable {
     /// empty person
     init() {
         self.name = "nobody"
-        let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: "nobody", zoneID: Repository.shared.currentZone.zoneID))
+        let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: "nobody", zoneID: CKRecordZone(zoneID: CKRecordZone.ID.default).zoneID))
         associatedRecord = record
         self.userID = record.recordID.recordName
     }

@@ -7,14 +7,13 @@
 
 import Foundation
 import CloudKit
-//import UIKit
 import SwiftUI
 
 @MainActor
 class ViewModel: ObservableObject {
     
-    let repository = Repository.shared
-    let personService = PersonService()
+    var repository: Repository
+    var personService: PersonService
     let transactionService = TransactionService()
     var participantType: ParticipantType?
     var userID: String?
@@ -45,40 +44,44 @@ class ViewModel: ObservableObject {
         }
     }
     
-    init() {
-        Task {
-            do {
-                let accountStatus = try await repository.container.accountStatus()
-                let appPermissionStatus = try await repository.container.requestApplicationPermission(.userDiscoverability)
-                switch appPermissionStatus {
-                case .initialState:
-                    state = .noPermission
-                case .couldNotComplete:
-                    state = .noPermission
-                case .denied:
-                    state = .noPermission
-                case .granted:
-                    switch accountStatus {
-                    case .couldNotDetermine:
-                        state = .noPermission
-                    case .available:
-                        self.userID = try await repository.container.userRecordID().recordName
-                    case .restricted:
-                        state = .noPermission
-                    case .noAccount:
-                        state = .noPermission
-                    case .temporarilyUnavailable:
-                        state = .noPermission
-                    @unknown default:
-                        fatalError()
-                    }
-                @unknown default:
-                    fatalError()
-                }
-                try await self.initialize()
-            } catch {
-                print(error)
+    func getAppPermissions() async throws {
+        let permission = await repository.appPermission
+        switch permission {
+        case .initialState:
+            state = .noPermission
+        case .couldNotComplete:
+            state = .noPermission
+        case .denied:
+            state = .noPermission
+        case .granted:
+            let accountStatus = await repository.accountStatus
+            switch accountStatus {
+            case .couldNotDetermine:
+                state = .noPermission
+            case .available:
+                self.userID = try await Repository.container.userRecordID().recordName
+            case .restricted:
+                state = .noPermission
+            case .noAccount:
+                state = .noPermission
+            case .temporarilyUnavailable:
+                state = .noPermission
+            @unknown default:
+                fatalError()
             }
+        @unknown default:
+            fatalError()
+        }
+        try await self.initialize()
+    }
+    
+    init() {
+        self.state = .loading
+        repository = Repository()
+        self.personService = PersonService(with: self.repository)
+        Task {
+            await self.repository.prepareRepo()
+            self.state = .loaded
         }
     }
 }
