@@ -30,7 +30,6 @@ struct CoffeeculeView: View {
                     Button("Delete Coffeecule") {
                         isDeletingCoffeecule = true
                     }
-                    .environment(\.editMode, Binding.constant(EditMode.inactive))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
