@@ -13,8 +13,8 @@ struct Person: Identifiable {
     /// Properties
     public let id = UUID()
     let name: String
-//    var coffeesOwed: [String: Int] = [:]
     var associatedRecord: CKRecord
+    let userID: String // CKRecord.ID.recordName from userIdentity
     
     /// Coding Key
     private enum CodingKeys: String, CodingKey {
@@ -25,13 +25,16 @@ struct Person: Identifiable {
     init(name: String, associatedRecord: CKRecord) {
         self.name = name
         self.associatedRecord = associatedRecord
+        self.userID = associatedRecord["userID"] as! String
     }
     
     /// initializer from new name. creates a ckrecord
-    init(name: String, participantType: ParticipantType) {
+    init(name: String, participantType: ParticipantType, userID: String) {
         self.name = name
         let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: Repository.shared.currentZone.zoneID))
         record["name"] = name
+        record["userID"] = userID
+        self.userID = userID
         self.associatedRecord = record
     }
     
@@ -40,6 +43,7 @@ struct Person: Identifiable {
         self.name = "nobody"
         let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: "nobody", zoneID: Repository.shared.currentZone.zoneID))
         associatedRecord = record
+        self.userID = record.recordID.recordName
     }
     
     /// Initializer when decoding from JSON

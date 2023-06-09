@@ -31,8 +31,11 @@ extension ViewModel {
             state = .culeAlreadyExists
             return
         }
-        
-        let person = Person(name: self.participantName, participantType: .root)
+        guard let userID = userID else {
+            state = .noPermission
+            return
+        }
+        let person = Person(name: self.participantName, participantType: .root, userID: userID)
         self.relationships = Relationships.addPerson(person)
         self.hasShare = await personService.createRootShare()
         try await personService.saveRecord(person.associatedRecord, participantType: .root)
@@ -51,7 +54,6 @@ extension ViewModel {
             return
         }
         if self.participantName.isEmpty {
-            print("name is empty")
             state = .nameFieldEmpty
             return
         }
@@ -61,10 +63,15 @@ extension ViewModel {
             state = .nameAlreadyExists
             return
         }
-        let person = Person(name: self.participantName, participantType: .participant)
+        guard let userID = userID else {
+            state = .noPermission
+            return
+        }
+        let person = Person(name: self.participantName, participantType: .participant, userID: userID)
         try await personService.saveRecord(person.associatedRecord, participantType: .participant)
         self.relationships = Relationships.addPerson(person)
         self.state = .loaded
+        self.hasShare = true
     }
     
     public func refreshData() async {
@@ -83,13 +90,22 @@ extension ViewModel {
     
     private func populateData() async {
         do {
-            let (fetchedPeople, transactions, hasShare) = try await personService.fetchRecords()
+            let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
             self.relationships = Relationships.populatePeople(with: fetchedPeople)
             transactions.forEach { Relationships.populateRelationships(with: $0) }
             print("received \(transactions.count) transactions")
             print("received \(fetchedPeople.count) people")
             print("found a share: \(hasShare ? "yes" : "no")")
             self.hasShare = hasShare
+            
+            // determine if user is root user or shared user
+            if relationships.contains(where: { relationship in
+                relationship.person.userID == self.userID
+            }) && self.userID == repository.rootRecord?.recordID.recordName {
+                participantType = .root
+            } else {
+                participantType = .participant
+            }
         } catch {
             print(error.localizedDescription)
         }

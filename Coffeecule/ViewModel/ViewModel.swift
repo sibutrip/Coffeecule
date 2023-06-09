@@ -16,6 +16,8 @@ class ViewModel: ObservableObject {
     let repository = Repository.shared
     let personService = PersonService()
     let transactionService = TransactionService()
+    var participantType: ParticipantType?
+    var userID: String?
     
     enum State: String, Equatable, LocalizedError {
         case loading
@@ -46,6 +48,33 @@ class ViewModel: ObservableObject {
     init() {
         Task {
             do {
+                let accountStatus = try await repository.container.accountStatus()
+                let appPermissionStatus = try await repository.container.requestApplicationPermission(.userDiscoverability)
+                switch appPermissionStatus {
+                case .initialState:
+                    state = .noPermission
+                case .couldNotComplete:
+                    state = .noPermission
+                case .denied:
+                    state = .noPermission
+                case .granted:
+                    switch accountStatus {
+                    case .couldNotDetermine:
+                        state = .noPermission
+                    case .available:
+                        self.userID = try await repository.container.userRecordID().recordName
+                    case .restricted:
+                        state = .noPermission
+                    case .noAccount:
+                        state = .noPermission
+                    case .temporarilyUnavailable:
+                        state = .noPermission
+                    @unknown default:
+                        fatalError()
+                    }
+                @unknown default:
+                    fatalError()
+                }
                 try await self.initialize()
             } catch {
                 print(error)

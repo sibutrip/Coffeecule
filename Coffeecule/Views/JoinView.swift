@@ -13,6 +13,7 @@ struct JoinView: View {
     @Binding var couldNotJoinCule: Bool
     @Binding var couldntCreateCule: Bool
     @State private var isLoading = false
+    var parentDismiss: DismissAction? = nil
     
     @Environment(\.dismiss) var dismiss
     
@@ -47,13 +48,15 @@ struct JoinView: View {
                         print(error.localizedDescription)
                     }
                     isLoading = false
-                    dismiss()
+                    vm.participantName.removeAll()
+                    guard let parentDismiss = parentDismiss else {
+                        dismiss()
+                        return
+                    }
+                    parentDismiss()
                 }
             }
             .disabled(isLoading)
-        }
-        .onDisappear {
-            vm.participantName.removeAll()
         }
         .navigationTitle(Title.activeTitle)
         .overlay {

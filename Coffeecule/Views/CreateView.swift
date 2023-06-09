@@ -46,13 +46,11 @@ struct CreateView: View {
                             print(error.localizedDescription)
                         }
                         isLoading = false
+                        vm.participantName.removeAll()
                         dismiss()
                     }
                 }
                 .disabled(isLoading)
-        }
-        .onDisappear {
-            vm.participantName.removeAll()
         }
         .navigationTitle(Title.activeTitle)
         .overlay {

@@ -37,7 +37,7 @@ struct JoinSheet: View {
                     }
                 }
                 NavigationLink("join as new member") {
-                    JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule)
+                    JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule, parentDismiss: dismiss)
                 }
                 Button("I'm already in this coffeecule") {
                     dismiss()

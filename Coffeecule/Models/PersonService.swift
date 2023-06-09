@@ -83,17 +83,18 @@ class PersonService {
         return true
     }
     
-    public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
-        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
-        record["name"] = name
-        repository.rootRecord = record
-        return record
-    }
+//    public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
+//        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
+//        record["name"] = name
+//        repository.rootRecord = record
+//        return record
+//    }
     
     public func saveRecord(_ record: CKRecord, participantType: ParticipantType) async throws {
         switch participantType {
         case .root:
             try await savePrivateRecord(record)
+            repository.rootRecord = record
         case .participant:
             try await saveSharedRecord(record)
         }
@@ -137,7 +138,7 @@ class PersonService {
     }
     
     /// fetches from shared container
-    public func fetchRecords() async throws -> ([Person], [Transaction], Bool) {
+    public func fetchRecords() async -> ([Person], [Transaction], Bool) {
         var people: [Person] = []
         var transactions: [Transaction] = []
         var hasShare: Bool = false
@@ -178,39 +179,40 @@ class PersonService {
             }
             return (people, transactions, hasShare)
         }
-        
-        try await Repository.shared.fetchSharedContainer()
-        let zones = Repository.shared.allZones
-        
-        // Using this task group, fetch each zone's contacts in parallel.
-        try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
-            for zone in zones {
-                group.addTask {
-                    
-                    // if shared records are found return them and exit the function without fetching private records.
-                    if let results = try? await recordsInZone(zone, scope: .shared) {
-                        print("found shared zone records")
-                        return results
+        do {
+            try await Repository.shared.fetchSharedContainer()
+            let zones = Repository.shared.allZones
+            
+            // Using this task group, fetch each zone's contacts in parallel.
+            try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
+                for zone in zones {
+                    group.addTask {
+                        
+                        // if shared records are found return them and exit the function without fetching private records.
+                        if let results = try? await recordsInZone(zone, scope: .shared) {
+                            print("found shared zone records")
+                            return results
+                        }
+                        if let results = try? await recordsInZone(zone, scope: .private) {
+                            print("found private zone records")
+                            return results
+                        }
+                        print("found no zone records")
+                        return ([], [], false)
+                        
                     }
-                    if let results = try? await recordsInZone(zone, scope: .private) {
-                        print("found private zone records")
-                        return results
-                    }
-                    print("found no zone records")
-                    return ([], [], false)
                     
-                }
-                
-                // As each result comes back, append it to a combined array to finally return.
-                for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
-                    people.append(contentsOf: returnedPeople)
-                    transactions.append(contentsOf: returnedTransactions)
-                    if didReturnShare {
-                        hasShare = true
+                    // As each result comes back, append it to a combined array to finally return.
+                    for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
+                        people.append(contentsOf: returnedPeople)
+                        transactions.append(contentsOf: returnedTransactions)
+                        if didReturnShare {
+                            hasShare = true
+                        }
                     }
                 }
             }
-        }
+        } catch { print(error.localizedDescription) }
         self.repository.transactions = transactions
         return (people, transactions, hasShare)
     }
