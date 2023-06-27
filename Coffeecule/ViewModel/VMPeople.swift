@@ -37,8 +37,8 @@ extension ViewModel {
             return
         }
         let person = await Person(name: self.participantName, participantType: .root, userID: userID, in: repository)
-        self.relationships = Relationships.addPerson(person)
-        self.hasShare = await personService.createRootShare()
+        self.relationships = relationshipService.add(person, to: relationships)
+        self.hasShare = try await personService.createRootShare()
         try await personService.saveRecord(person.associatedRecord, participantType: .root)
         
         self.state = .loaded
@@ -71,7 +71,7 @@ extension ViewModel {
         }
         let person = await Person(name: self.participantName, participantType: .participant, userID: userID, in: repository)
         try await personService.saveRecord(person.associatedRecord, participantType: .participant)
-        self.relationships = Relationships.addPerson(person)
+        self.relationships = relationshipService.add(person, to: relationships)
         self.state = .loaded
         self.hasShare = true
     }
@@ -91,14 +91,13 @@ extension ViewModel {
         }
     }
     
-    public func shareCoffeecule() async {
-        self.hasShare = await personService.fetchOrCreateShare()
+    public func shareCoffeecule() async throws {
+        self.hasShare = try await personService.fetchOrCreateShare()
     }
     
     private func populateData() async {
         let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-        self.relationships = Relationships.populatePeople(with: fetchedPeople)
-        transactions.forEach { Relationships.populateRelationships(with: $0) }
+        self.relationships = relationshipService.add(transactions: transactions, to: fe)
         print("received \(transactions.count) transactions")
         print("received \(fetchedPeople.count) people")
         print("found a share: \(hasShare ? "yes" : "no")")
@@ -143,7 +142,7 @@ extension ViewModel {
         if self.currentBuyer.name == "nobody" {
             return
         }
-        var updatedPeople = [Relationships]()
+        var updatedPeople = [Relationship]()
         do {
             let relationships = self.relationships
             let currentBuyer = self.currentBuyer
@@ -199,7 +198,7 @@ extension ViewModel {
     public func createDisplayedDebts() {
         let people = self.relationships
         var debts = [Person:Int]()
-        let presentPeople: [Relationships] = people
+        let presentPeople: [Relationship] = people
             .filter { $0.isPresent }
         //            .map { $0.person }
         let presentNames: [String] = presentPeople.map {

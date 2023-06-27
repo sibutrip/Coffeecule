@@ -15,6 +15,7 @@ class ViewModel: ObservableObject {
     var repository: Repository
     var personService: PersonService
     let transactionService = TransactionService()
+    let relationshipService = RelationshipService()
     var participantType: ParticipantType?
     var userID: String?
     
@@ -35,7 +36,7 @@ class ViewModel: ObservableObject {
             print(self.state)
         }
     }
-    @Published var relationships: [Relationships] = []
+    @Published var relationships: [Relationship] = []
     @Published var currentBuyer = Person()
     @Published var displayedDebts: [Person:Int] = [:]
     @Published var hasShare = false {
@@ -81,6 +82,7 @@ class ViewModel: ObservableObject {
         self.personService = PersonService(with: self.repository)
         Task {
             await self.repository.prepareRepo()
+            await self.loadData()
             self.state = .loaded
         }
     }

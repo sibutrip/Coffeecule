@@ -8,6 +8,9 @@
 import Foundation
 import CloudKit
 
+extension CKRecord: @unchecked Sendable { }
+extension CKRecordZone: @unchecked Sendable { }
+
 actor Repository {
     
     init() { }
@@ -39,8 +42,10 @@ actor Repository {
     static public var database = container.privateCloudDatabase
     public var currentZone: CKRecordZone {
         if let sharedZone = sharedZone {
+            print("using shared zone")
             return sharedZone
         } else {
+            print("using private zone")
             return privateZone
         }
     }

@@ -51,7 +51,7 @@ struct WhosGettingCoffee: View {
                 if self.editMode?.wrappedValue != .inactive || vm.relationships.count == 0 {
                     Button {
                         Task {
-                            await vm.shareCoffeecule()
+                            try await vm.shareCoffeecule()
                             if let share = await vm.repository.rootShare {
                                 self.share = share
                                 self.container = Repository.container

@@ -33,13 +33,13 @@ class PersonService {
     // MARK: - PRIVATE METHODS
     
     // RECORDS METHODS
-    public func fetchOrCreateShare() async -> Bool {
+    public func fetchOrCreateShare() async throws -> Bool {
         if await repository.rootShare != nil { return true }
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "cloudkit.share", predicate: predicate)
         
         guard let (results, _) = try? await Repository.database.records(matching: query, inZoneWith: repository.currentZone.zoneID,desiredKeys: nil, resultsLimit: 10) else {
-            return await createRootShare()
+            return try await createRootShare()
         }
         for (_, result) in results {
             switch result {
@@ -53,7 +53,7 @@ class PersonService {
             }
         }
         if results.count == 0 {
-            return await createRootShare()
+            return try await createRootShare()
         }
         return false
     }
@@ -79,11 +79,11 @@ class PersonService {
         throw FetchShareError.noShareFound
     }
     
-    public func createRootShare() async -> Bool {
+    public func createRootShare() async throws -> Bool {
         let share = CKShare(recordZoneID: await repository.currentZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
-        let resultTest = try! await Repository.database.modifyRecords(saving: [share], deleting: [])
+        _ = try await Repository.database.modifyRecords(saving: [share], deleting: [])
         await repository.share(share)
         return true
     }
@@ -187,6 +187,7 @@ class PersonService {
         }
         do {
             let zones = await repository.allZones
+            print("fetching records from \(zones.count) zone(s)")
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
@@ -302,7 +303,7 @@ class PersonService {
         let _ = try await Repository.database.modifyRecords(saving: [], deleting: recordIDs)
     }
     
-    public func deleteAllUsers(_ relationships: [Relationships]) async throws {
+    public func deleteAllUsers(_ relationships: [Relationship]) async throws {
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
         let _ = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
     }
@@ -312,5 +313,4 @@ class PersonService {
             let _ = try await Repository.database.modifyRecords(saving: [], deleting: [share.recordID])
         }
     }
-    
 }
