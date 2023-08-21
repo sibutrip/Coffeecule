@@ -83,7 +83,8 @@ class PersonService {
         let share = CKShare(recordZoneID: await repository.currentZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
-        _ = try await Repository.database.modifyRecords(saving: [share], deleting: [])
+        let (result,_) = try await Repository.database.modifyRecords(saving: [share], deleting: [])
+//        result.forEach { print($0.value)}
         await repository.share(share)
         return true
     }
@@ -187,7 +188,7 @@ class PersonService {
         }
         do {
             let zones = await repository.allZones
-            print("fetching records from \(zones.count) zone(s)")
+            print("fetching records from \(zones.count) zone(s):")
             
             // Using this task group, fetch each zone's contacts in parallel.
             try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
@@ -305,12 +306,14 @@ class PersonService {
     
     public func deleteAllUsers(_ relationships: [Relationship]) async throws {
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
-        let _ = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
+        let results = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs).1
+//        results.forEach {print($0.value)}
     }
     
     public func deleteShare() async throws {
         if let share = await repository.rootShare {
             let _ = try await Repository.database.modifyRecords(saving: [], deleting: [share.recordID])
         }
+        await repository.share(nil)
     }
 }

@@ -57,7 +57,11 @@ struct CoffeeculeView: View {
         //                }
         //            }
         .sheet(isPresented: $isSharing) {
-            CloudSharingView(share: share!, container: container!)
+            if let share = share {
+                CloudSharingView(share: share, container: container!)
+            } else {
+                EmptyView()
+            }
         }
         .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
             Button("ok den", role: .cancel) { couldntGetPermission = false}

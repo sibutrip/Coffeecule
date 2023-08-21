@@ -32,29 +32,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create an operation to accept the share, running in the app's CKContainer.
         let container = CKContainer(identifier: Repository.container.containerIdentifier!)
         let operation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
+        Repository.shareMetaData = cloudKitShareMetadata
         
         debugPrint("Accepting CloudKit Share with metadata: \(cloudKitShareMetadata)")
-        
-        operation.perShareResultBlock = { metadata, result in
-            let shareRecordType = metadata.share.recordType
-            
-            switch result {
-            case .failure(let error):
-                debugPrint("Error accepting share: \(error)")
-                
-            case .success:
-                debugPrint("Accepted CloudKit share with type: \(shareRecordType)")
-            }
-        }
-        
-        operation.acceptSharesResultBlock = { result in
-            if case .failure(let error) = result {
-                debugPrint("Error accepting CloudKit Share: \(error)")
-            }
-        }
-        operation.qualityOfService = .utility
-        container.add(operation)
-        
         
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = UIHostingController(rootView: ContentView().environmentObject(AppAccess(accessedFromShare: true)))

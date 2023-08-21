@@ -84,6 +84,13 @@ actor Repository {
         self.accountStatus = try await Self.container.accountStatus()
     }
     
+    public static var shareMetaData: CKShare.Metadata?
+    
+    public func acceptSharedContainer(with shareMetaData: CKShare.Metadata) async throws {
+        try await Self.container.accept(shareMetaData)
+        try await fetchSharedContainer()
+    }
+    
     
     // PERSON DATABASE METHODS
     private func createZonesIfNeeded() async {

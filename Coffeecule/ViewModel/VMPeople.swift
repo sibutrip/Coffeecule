@@ -96,8 +96,19 @@ extension ViewModel {
     }
     
     private func populateData() async {
+        if let shareMetadata = Repository.shareMetaData {
+            do {
+                try await repository.acceptSharedContainer(with: shareMetadata)
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
         let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-        self.relationships = relationshipService.add(transactions: transactions, to: fe)
+        do {
+            self.relationships = try relationshipService.add(transactions: transactions, to: fetchedPeople)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
         print("received \(transactions.count) transactions")
         print("received \(fetchedPeople.count) people")
         print("found a share: \(hasShare ? "yes" : "no")")

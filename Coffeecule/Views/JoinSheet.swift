@@ -32,31 +32,22 @@ struct JoinSheet: View {
     }
     var body: some View {
         NavigationStack {
-            List {
-                Section("members") {
-                    Text("ah")
-//                    if viewState == .loading { ProgressView() } else {
-//                        ForEach(0..<sortedPeople.count, id: \.self) { index in
-//                            if index == 0 {
-//                                HStack {
-//                                    Text(sortedPeople[index].name)
-//                                    Text("owner")
-//                                        .foregroundColor(.secondary)
-//                                }
-//                            } else {
-//                                Text(sortedPeople[index].name)
-//                            }
-//                        }
-//                    }
+            if vm.state == .loading { ProgressView() } else {
+                List {
+                    Section("members") {
+                        ForEach(sortedPeople) { person in
+                            Text(person.name)
+                        }
+                    }
+                    NavigationLink("join as new member") {
+                        JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule, parentDismiss: dismiss)
+                    }
+                    Button("I'm already in this coffeecule") {
+                        dismiss()
+                    }
                 }
-                NavigationLink("join as new member") {
-                    JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule, parentDismiss: dismiss)
-                }
-                Button("I'm already in this coffeecule") {
-                    dismiss()
-                }
+                .navigationTitle("Join coffeecule")
             }
-            .navigationTitle("Join coffeecule")
         }
         .task {
             viewState = .loading

@@ -18,8 +18,6 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             Spacer()
-            Button("join") { joining = true }
-            Spacer()
             Button("create") { creating = true }
             Spacer()
         }

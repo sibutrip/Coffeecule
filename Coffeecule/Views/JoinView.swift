@@ -28,9 +28,9 @@ struct JoinView: View {
                         try await vm.joinCoffeecule()
                         switch vm.state {
                         case .loading:
-                            return
+                            fallthrough
                         case .loaded:
-                            return
+                            fallthrough
                         case .noPermission:
                             couldNotJoinCule = true
                         case .nameFieldEmpty:
