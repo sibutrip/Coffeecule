@@ -53,19 +53,19 @@ class RelationshipService {
         try transactions.forEach { transaction in
             let buyerName = transaction.buyerName
             let receiverName = transaction.receiverName
-            guard var buyer = relationships.first( where: { $0.name == buyerName }) else {
-                throw RelationshipError.noBuyer
-            }
-            guard let receiver = people.first(where: { $0.name == receiverName}) else {
+            guard var receiver = relationships.first( where: { $0.name == receiverName }) else {
                 throw RelationshipError.noReceiver
             }
-            var coffeesOwed = buyer.coffeesOwed[receiver] ?? 0
+            guard let buyer = people.first(where: { $0.name == buyerName}) else {
+                throw RelationshipError.noBuyer
+            }
+            var coffeesOwed = receiver.coffeesOwed[buyer] ?? 0
             coffeesOwed += 1
-            buyer.coffeesOwed[receiver] = coffeesOwed
+            receiver.coffeesOwed[buyer] = coffeesOwed
             
             // remove the old person, add the new one
-            relationships.removeAll { $0.person == buyer.person }
-            relationships.append(buyer)
+            relationships.removeAll { $0.person == receiver.person }
+            relationships.append(receiver)
         }
         return relationships
     }

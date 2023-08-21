@@ -60,7 +60,8 @@ class ViewModel: ObservableObject {
             case .couldNotDetermine:
                 state = .noPermission
             case .available:
-                self.userID = try await Repository.container.userRecordID().recordName
+                let id = try await Repository.container.userRecordID().recordName
+                self.userID = id
             case .restricted:
                 state = .noPermission
             case .noAccount:

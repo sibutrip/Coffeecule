@@ -13,7 +13,8 @@ class TransactionService {
     
     public func saveTransactions(_ transactions: [Transaction], in database: CKDatabase) async throws {
         let records: [CKRecord] = transactions.map { $0.associatedRecord }
-        let result = try await database.modifyRecords(saving: records, deleting: [])
+        let (result,_) = try await database.modifyRecords(saving: records, deleting: [])
+        result.forEach {print($0.value)}
 //        let result = try await Repository.shared.container.privateCloudDatabase.modifyRecords(saving: records, deleting: [])
     }
 }

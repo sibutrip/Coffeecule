@@ -5,237 +5,338 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.SwiftErrorBreakpoint">
          <BreakpointContent
-            uuid = "08316B6B-4571-407D-A147-E0F116872071"
+            uuid = "59719995-178C-40AE-80EB-B2607E69EE35"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            uuid = "82163026-B503-4351-8A82-534E32D442FB"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Coffeecule/Views/WhosGettingCoffee.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "body"
-            landmarkType = "24">
+            breakpointStackSelectionBehavior = "1"
+            scope = "1"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E16752B8-0D85-44F7-AFEC-975DC4EDEC93"
+            uuid = "B2566976-88BF-495F-8494-D02F40E59A7E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Coffeecule/Views/JoinSheet.swift"
+            filePath = "Coffeecule/Models/Relationships.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "add(transactions:to:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0E94592D-C15C-446E-BBF7-052CF5CF5310"
+            uuid = "EAE5B536-165E-4120-BE2D-CFCB5E8A863E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/ViewModel/VMTransactions.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "buyCoffee()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EAE5B536-165E-4120-BE2D-CFCB5E8A863E - 5d22910f31e0e9bc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "EAE5B536-165E-4120-BE2D-CFCB5E8A863E - 512a174eebce35be"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(9) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "192">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Coffeecule/Views/JoinView.swift"
+            filePath = "Coffeecule/ViewModel/VMTransactions.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "buyCoffee()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA - 495d13c17c158a42"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "836">
+               </Location>
+               <Location
+                  uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA - ab849fd046e75a57"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA - 5d22910f31e0ee44"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA - 160d3b11a23c6071"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(10) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "5A76E198-A6AC-46AB-806B-808DA6C3CECA - 495d13c17c158a42"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "1000">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/ViewModel/VMTransactions.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "buyCoffee()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701 - 495d13c17c158a84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "1064">
+               </Location>
+               <Location
+                  uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701 - bc221c27fe2cba9f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(8) await resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701 - 512a174eebce3280"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(9) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701 - b6e88e5610516b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(11) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "CEB3CD3A-3D90-4E65-866C-EB1A536E1701 - 495d13c17c158a84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Coffeecule.ViewModel.buyCoffee() async -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMTransactions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "1228">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B716E770-9C7E-4DE3-A421-56019F013220"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/ViewModel/ViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "getAppPermissions()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B716E770-9C7E-4DE3-A421-56019F013220 - 48e0625d289accc9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Coffeecule.ViewModel.getAppPermissions() async throws -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/ViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "452">
+               </Location>
+               <Location
+                  uuid = "B716E770-9C7E-4DE3-A421-56019F013220 - f6535f1efd3e28da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Coffeecule.ViewModel.getAppPermissions() async throws -&gt; ()"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/ViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "180">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "753EF82E-E20C-43F2-B435-B6F4678F53F1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/ViewModel/ViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "50"
             endingLineNumber = "50"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "0E94592D-C15C-446E-BBF7-052CF5CF5310 - 40e7aab16fe33b11"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.TextField&lt;SwiftUI.Text&gt;, &lt;&lt;opaque return type of SwiftUI.View.disabled(Swift.Bool) -&gt; some&gt;&gt;.0)&gt; in Coffeecule.JoinView.body.getter : some"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/JoinView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "608">
-               </Location>
-               <Location
-                  uuid = "0E94592D-C15C-446E-BBF7-052CF5CF5310 - 71e9e6a32a8f9910"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for closure #1 @Sendable () async -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.TextField&lt;SwiftUI.Text&gt;, &lt;&lt;opaque return type of SwiftUI.View.disabled(Swift.Bool) -&gt; some&gt;&gt;.0)&gt; in Coffeecule.JoinView.body.getter : some"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/JoinView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "512">
-               </Location>
-               <Location
-                  uuid = "0E94592D-C15C-446E-BBF7-052CF5CF5310 - 40e7aab16fe33b11"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.TextField&lt;SwiftUI.Text&gt;, &lt;&lt;opaque return type of SwiftUI.View.disabled(Swift.Bool) -&gt; some&gt;&gt;.0)&gt; in Coffeecule.JoinView.body.getter : some"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/JoinView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "50"
-                  endingLineNumber = "50"
-                  offsetFromSymbolStart = "624">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "63BC646B-65D1-4708-924B-1E0FE6263FEC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Coffeecule/ViewModel/VMPeople.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "populateData()"
+            landmarkName = "getAppPermissions()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Coffeecule/ViewModel/VMPeople.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "populateData()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - 6099c749041cb80e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "176">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - 4989913b328a2d21"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - f926c97a4501ee52"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "99"
-                  endingLineNumber = "99"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - f926c97a4501ee10"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - 71f196eb5b3c1515"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(8) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "76">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - 6099c749041cb80e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "164">
-               </Location>
-               <Location
-                  uuid = "6A36FB53-6B96-4A88-8E70-0323F65BA05D - f926c97a4501ee10"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Coffeecule.ViewModel.populateData() async -&gt; ()"
-                  moduleName = "Coffeecule"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/ViewModel/VMPeople.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

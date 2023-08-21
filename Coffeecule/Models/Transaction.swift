@@ -21,8 +21,8 @@ struct Transaction: Identifiable {
         }
         
         self.id = record.recordID.recordName
-        self.buyerName = buyerName.capitalized
-        self.receiverName = receiverName.capitalized
+        self.buyerName = buyerName
+        self.receiverName = receiverName
         self.associatedRecord = record
     }
     
@@ -30,12 +30,12 @@ struct Transaction: Identifiable {
     
     init(buyer: String, receiver: String, in repository: Repository) async {
         let transactionRecord = CKRecord(recordType: Self.transactionRecordName, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: await repository.currentZone.zoneID))
-        transactionRecord["buyer"] = buyer.capitalized
-        transactionRecord["receiver"] = receiver.capitalized
+        transactionRecord["buyer"] = buyer
+        transactionRecord["receiver"] = receiver
         
         self.id = transactionRecord.recordID.recordName
-        self.buyerName = buyer.capitalized
-        self.receiverName = buyer.capitalized
+        self.buyerName = buyer
+        self.receiverName = buyer
         self.associatedRecord = transactionRecord
     }
 }

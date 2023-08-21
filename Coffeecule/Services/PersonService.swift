@@ -106,11 +106,27 @@ class PersonService {
         }
     }
     private func saveSharedRecord(_ record: CKRecord) async throws {
-        let _ = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+        let (result,_) = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+        result.forEach {
+            switch $0.value {
+            case .failure(let error):
+                print(error.localizedDescription)
+            default:
+                _ = 1
+            }
+        }
     }
     
     private func savePrivateRecord(_ record: CKRecord) async throws {
-        let _ = try await Repository.database.modifyRecords(saving: [record], deleting: [])
+        let (result,_) = try await Repository.database.modifyRecords(saving: [record], deleting: [])
+        result.forEach {
+            switch $0.value {
+            case .failure(let error):
+                print(error.localizedDescription)
+            default:
+                _ = 1
+            }
+        }
     }
     
     /// fetches from private container

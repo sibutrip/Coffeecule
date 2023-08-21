@@ -133,7 +133,7 @@ extension CoffeeculeView {
                 HStack {
                     Button("Yes", role: .destructive) {
                         Task(priority: .userInitiated) {
-//                            await vm.buyCoffee()
+                            await vm.buyCoffee()
                             vm.createDisplayedDebts()
                             vm.calculateBuyer()
                         }
