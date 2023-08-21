@@ -56,16 +56,20 @@ class RelationshipService {
             guard var receiver = relationships.first( where: { $0.name == receiverName }) else {
                 throw RelationshipError.noReceiver
             }
-            guard let buyer = people.first(where: { $0.name == buyerName}) else {
+            guard var buyer = relationships.first(where: { $0.name == buyerName}) else {
                 throw RelationshipError.noBuyer
             }
-            var coffeesOwed = receiver.coffeesOwed[buyer] ?? 0
-            coffeesOwed += 1
-            receiver.coffeesOwed[buyer] = coffeesOwed
+            var coffeesOwed = receiver.coffeesOwed[buyer.person] ?? 0
+            var coffeesInDebt = buyer.coffeesOwed[receiver.person] ?? 0
+            coffeesOwed -= 1
+            coffeesInDebt += 1
+            receiver.coffeesOwed[buyer.person] = coffeesOwed
+            buyer.coffeesOwed[receiver.person] = coffeesInDebt
             
             // remove the old person, add the new one
-            relationships.removeAll { $0.person == receiver.person }
+            relationships.removeAll { $0.person == receiver.person || $0.person == buyer.person }
             relationships.append(receiver)
+            relationships.append(buyer)
         }
         return relationships
     }
