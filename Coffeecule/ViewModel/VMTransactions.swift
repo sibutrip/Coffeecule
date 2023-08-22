@@ -41,16 +41,10 @@ extension ViewModel {
             let currentBuyer = self.currentBuyer
             var transactions = [Transaction]()
             var buyer = relationships.first(where: { $0.person == currentBuyer })!
-            //            let sharedZone = try await Repository.shared.container.sharedCloudDatabase.allRecordZones()[0]
             for receiver in relationships {
                 var receiver = receiver
                 if receiver.name != buyer.name {
                     var newBuyerDebt = buyer.coffeesOwed[receiver.person] ?? 0
-//                    guard var newBuyerDebt = buyer.coffeesOwed[receiver.person] else {
-//                        debugPrint("something is wrong...")
-//                        debugPrint("could not find \(buyer.name) coffees owed for \(receiver.name)")
-//                        throw BuyCoffeeError.missingMember
-//                    }
                     if receiver.isPresent {
                         let transaction = await Transaction(buyer: buyer.name, receiver: receiver.name, in: repository)
                         transactions.append(transaction)
@@ -60,11 +54,6 @@ extension ViewModel {
                     buyer.coffeesOwed[receiver.person] = newBuyerDebt
                     
                     var newReceiverDebt = receiver.coffeesOwed[buyer.person] ?? 0
-//                    guard var newReceiverDebt = receiver.coffeesOwed[buyer.person] else {
-//                        debugPrint("something is wrong...")
-//                        debugPrint("could not find \(receiver.name) coffees owed for \(buyer.name)")
-//                        throw BuyCoffeeError.missingMember
-//                    }
                     if receiver.isPresent {
                         newReceiverDebt -= 1
                     }
@@ -73,10 +62,9 @@ extension ViewModel {
                 }
             }
             updatedPeople.append(buyer)
-            self.relationships = updatedPeople
+            self.relationships = updatedPeople.sorted()
             print(transactions.count)
             let rootRecordName = await repository.rootRecord?["userID"] as? String
-            //TODO: use repo.zone to see the user's current zone: private or shared
             if self.userID == rootRecordName {
                 try await self.transactionService.saveTransactions(transactions, in: Repository.container.privateCloudDatabase)
             } else {
@@ -92,7 +80,6 @@ extension ViewModel {
         var debts = [Person:Int]()
         let presentPeople: [Relationship] = people
             .filter { $0.isPresent }
-        //            .map { $0.person }
         let presentNames: [String] = presentPeople.map {
             $0.name
         }
@@ -106,7 +93,6 @@ extension ViewModel {
             debts[relationship.person] = debt
         }
         self.displayedDebts = debts
-//        print(debts)
     }
 }
 

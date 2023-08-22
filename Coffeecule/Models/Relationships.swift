@@ -21,6 +21,14 @@ struct Relationship: Equatable {
     }
 }
 
+extension Relationship: Comparable {
+    static func < (lhs: Relationship, rhs: Relationship) -> Bool {
+        lhs.name < rhs.name
+    }
+    
+    
+}
+
 class RelationshipService {
     enum RelationshipError: Error {
         case noBuyer, noReceiver
@@ -71,6 +79,6 @@ class RelationshipService {
             relationships.append(receiver)
             relationships.append(buyer)
         }
-        return relationships
+        return relationships.sorted()
     }
 }
