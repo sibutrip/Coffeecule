@@ -83,26 +83,44 @@ class PersonService {
         let share = CKShare(recordZoneID: await repository.currentZone.zoneID)
         share.publicPermission = .readWrite
         share[CKShare.SystemFieldKey.title] = "Coffeecule"
-        let (result,_) = try await Repository.database.modifyRecords(saving: [share], deleting: [])
-//        result.forEach { print($0.value)}
+        do {
+            let (result,_) = try await Repository.database.modifyRecords(saving: [share], deleting: [])
+            let errors: [Error] = result.compactMap { result in
+                switch result.value {
+                case .success(_):
+                    return nil
+                case .failure(let error):
+                    return error
+                }
+            }
+            if errors.count > 0 {
+                throw PersonError.couldntCreateRootShare
+            }
+        } catch {
+            throw PersonError.couldntCreateRootShare
+        }
         await repository.share(share)
         return true
     }
     
-//    public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
-//        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
-//        record["name"] = name
-//        repository.rootRecord = record
-//        return record
-//    }
+    //    public func createRecord(for name: String, type: ParticipantType) -> CKRecord {
+    //        let record = CKRecord(recordType: type.rawValue, recordID: CKRecord.ID(recordName: Repository.shared.userName!, zoneID: repository.currentZone.zoneID))
+    //        record["name"] = name
+    //        repository.rootRecord = record
+    //        return record
+    //    }
     
     public func saveRecord(_ record: CKRecord, participantType: ParticipantType) async throws {
+        do {
         switch participantType {
-        case .root:
-            try await savePrivateRecord(record)
-            await repository.rootRecord(record)
-        case .participant:
-            try await saveSharedRecord(record)
+            case .root:
+                try await savePrivateRecord(record)
+                await repository.rootRecord(record)
+            case .participant:
+                try await saveSharedRecord(record)
+            }
+        } catch {
+            throw PersonError.couldntCreateRootRecord
         }
     }
     private func saveSharedRecord(_ record: CKRecord) async throws {
@@ -323,7 +341,7 @@ class PersonService {
     public func deleteAllUsers(_ relationships: [Relationship]) async throws {
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
         let results = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs).1
-//        results.forEach {print($0.value)}
+        //        results.forEach {print($0.value)}
     }
     
     public func deleteShare() async throws {

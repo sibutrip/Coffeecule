@@ -20,6 +20,9 @@ class ViewModel: ObservableObject {
     var userID: String?
     @Published var cloudError: CloudError?
     @Published var cloudAuthenticationDidFail = false
+    
+    @Published var personError: PersonError?
+    @Published var personRecordCreationDidFail = false
 
     
     enum State: String, Equatable, LocalizedError {

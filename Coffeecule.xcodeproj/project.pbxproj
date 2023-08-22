@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
-		74059E632A9504220080D2B9 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74059E622A9504220080D2B9 /* NotificationService.swift */; };
 		74059E652A9509270080D2B9 /* CloudError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74059E642A9509270080D2B9 /* CloudError.swift */; };
+		74059E672A952BD70080D2B9 /* PersonError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74059E662A952BD70080D2B9 /* PersonError.swift */; };
 		7412BA542A30F3EA0003579A /* JoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7412BA532A30F3EA0003579A /* JoinView.swift */; };
 		7412BA562A30F48E0003579A /* CreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7412BA552A30F48E0003579A /* CreateView.swift */; };
 		7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */; };
@@ -46,8 +46,8 @@
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		74059E622A9504220080D2B9 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		74059E642A9509270080D2B9 /* CloudError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudError.swift; sourceTree = "<group>"; };
+		74059E662A952BD70080D2B9 /* PersonError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonError.swift; sourceTree = "<group>"; };
 		7412BA532A30F3EA0003579A /* JoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinView.swift; sourceTree = "<group>"; };
 		7412BA552A30F48E0003579A /* CreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateView.swift; sourceTree = "<group>"; };
 		7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantType.swift; sourceTree = "<group>"; };
@@ -164,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				74059E642A9509270080D2B9 /* CloudError.swift */,
+				74059E662A952BD70080D2B9 /* PersonError.swift */,
 				7467995329B0DC9100339D5C /* Repository.swift */,
 				7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */,
 				7467994929B0DC9100339D5C /* Person.swift */,
@@ -220,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				74BA5F5429E5902400C28F2F /* PersonService.swift */,
-				74059E622A9504220080D2B9 /* NotificationService.swift */,
 				74BA5F5629E59A6A00C28F2F /* TransactionService.swift */,
 			);
 			path = Services;
@@ -305,6 +305,7 @@
 				7467996729B0DC9100339D5C /* ViewModel.swift in Sources */,
 				7467995D29B0DC9100339D5C /* AppDelegate.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,
+				74059E672A952BD70080D2B9 /* PersonError.swift in Sources */,
 				7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */,
 				74D0E6282A30B8B100338009 /* VmCloud.swift in Sources */,
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
@@ -326,7 +327,6 @@
 				744C450A29FC53500062B47C /* AppAccess.swift in Sources */,
 				7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */,
 				7467996529B0DC9100339D5C /* Transaction.swift in Sources */,
-				74059E632A9504220080D2B9 /* NotificationService.swift in Sources */,
 				74B0AB3729C35021002DA7BD /* Titles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

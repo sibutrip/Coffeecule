@@ -32,7 +32,12 @@ struct ContentView: View {
             } message: { error in
                 Text(error.recoverySuggestion ?? "")
             }
-
+            
+            .alert(isPresented: $vm.personRecordCreationDidFail, error: vm.personError) { _ in
+                Button("okay") { }
+            } message: { error in
+                Text(error.recoverySuggestion ?? "")
+            }
         }
     }
 }
