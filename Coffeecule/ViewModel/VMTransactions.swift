@@ -24,6 +24,11 @@ extension ViewModel {
             }
             return false
         }
+        let presentPeopleCount = relationships.filter { $0.isPresent }.count
+        guard presentPeopleCount > 1 else {
+            self.currentBuyer = Person()
+            return
+        }
         self.currentBuyer = mostDebted?.key ?? Person()
     }
     
