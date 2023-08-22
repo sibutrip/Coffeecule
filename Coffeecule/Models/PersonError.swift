@@ -6,7 +6,6 @@
 //
 
 import Foundation
-<<<<<<< HEAD
 
 enum PersonError: LocalizedError {
     case couldntCreateRootRecord, couldntCreateParticipantRecord, couldntCreateRootShare
@@ -31,5 +30,3 @@ enum PersonError: LocalizedError {
         }
     }
 }
-=======
->>>>>>> PersonService
