@@ -15,16 +15,11 @@ actor Repository {
     
     init() { }
     
-    public func prepareRepo() async {
-        do {
-            await self.createZonesIfNeeded()
-            try await self.fetchUserIdentity()
-            try await self.fetchSharedContainer()
-            try await self.requestAppPermission()
-            try await self.accountStatus()
-        } catch {
-            debugPrint(error)
-        }
+    public func prepareRepo() async throws {
+        await self.createZonesIfNeeded()
+        try await self.accountStatus()
+        try await self.fetchUserIdentity()
+        try await self.fetchSharedContainer()
     }
     
     
@@ -52,36 +47,61 @@ actor Repository {
     private var privateZone = CKRecordZone(zoneName: "Coffeecule") // private zone
     private var sharedZone: CKRecordZone?
     public var appPermission: CKContainer.ApplicationPermissionStatus = .initialState
-    public var accountStatus: CKAccountStatus = .couldNotDetermine
+    //    public var accountStatus: CKAccountStatus = .couldNotDetermine
     
     public lazy var allZones = [privateZone,sharedZone].compactMap { $0 }
     
     // METHODS
     
     private func fetchSharedContainer() async throws {
-        let sharedContainers = try await Self.container.sharedCloudDatabase.allRecordZones()
+        guard let sharedContainers = try? await Self.container.sharedCloudDatabase.allRecordZones() else {
+            return
+        }
         if sharedContainers.count > 1 {
-            print("ERROR: more than 1 shared container")
+            throw CloudError.multipleSharedContainers
         } else if sharedContainers.count == 1 {
             self.sharedZone = sharedContainers[0]
         }
     }
     
-    private func requestAppPermission() async throws {
-        self.appPermission = try await Self.container.requestApplicationPermission(.userDiscoverability)
-    }
+    //    private func requestAppPermission() async throws {
+    //        self.appPermission = try await Self.container.requestApplicationPermission(.userDiscoverability)
+    //    }
     
     private func fetchUserIdentity() async throws {
-        let id = try await Self.container.userRecordID()
-        let returnedIdentity = try await Self.container.userIdentity(forUserRecordID: id)
-        self.userIdentity = returnedIdentity
-        if let returnedIdentity = returnedIdentity {
+        do {
+            let id = try await Self.container.userRecordID()
+            let returnedIdentity = try await Self.container
+                .shareParticipant(forUserRecordID: id)
+                .userIdentity
+            self.userIdentity = returnedIdentity
             self.userName = returnedIdentity.nameComponents!.formatted()
+        }
+        catch {
+            throw CloudError.userIdentity
         }
     }
     
     private func accountStatus() async throws {
-        self.accountStatus = try await Self.container.accountStatus()
+        do {
+            let accountStatus = try await Self.container.accountStatus()
+            switch accountStatus {
+            case .couldNotDetermine:
+                throw CloudError.couldNotDetermine
+            case .noAccount:
+                throw CloudError.noAccount
+            case .restricted:
+                throw CloudError.restricted
+            case .temporarilyUnavailable:
+                throw CloudError.temporarilyUnavailable
+            case .available:
+                break
+            @unknown default:
+                break
+            }
+        } catch {
+            throw CloudError.accountStatus
+        }
     }
     
     public static var shareMetaData: CKShare.Metadata?

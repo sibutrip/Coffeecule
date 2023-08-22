@@ -18,6 +18,9 @@ class ViewModel: ObservableObject {
     let relationshipService = RelationshipService()
     var participantType: ParticipantType?
     var userID: String?
+    @Published var cloudError: CloudError?
+    @Published var cloudAuthenticationDidFail = false
+
     
     enum State: String, Equatable, LocalizedError {
         case loading
@@ -44,36 +47,54 @@ class ViewModel: ObservableObject {
             print("has share is \(hasShare)")
         }
     }
-    
+    #warning("rename this if it works")
     func getAppPermissions() async throws {
-        let permission = await repository.appPermission
-        switch permission {
-        case .initialState:
-            state = .noPermission
-        case .couldNotComplete:
-            state = .noPermission
-        case .denied:
-            state = .noPermission
-        case .granted:
-            let accountStatus = await repository.accountStatus
-            switch accountStatus {
-            case .couldNotDetermine:
-                state = .noPermission
-            case .available:
-                let id = try await Repository.container.userRecordID().recordName
-                self.userID = id
-            case .restricted:
-                state = .noPermission
-            case .noAccount:
-                state = .noPermission
-            case .temporarilyUnavailable:
-                state = .noPermission
-            @unknown default:
-                fatalError()
-            }
-        @unknown default:
-            fatalError()
-        }
+        let id = try await Repository.container.userRecordID().recordName
+        self.userID = id
+//        let permission = await repository.appPermission
+//        let accountStatus = await repository.accountStatus
+//        switch accountStatus {
+//        case .couldNotDetermine:
+//            state = .noPermission
+//        case .available:
+//            let id = try await Repository.container.userRecordID().recordName
+//            self.userID = id
+//        case .restricted:
+//            state = .noPermission
+//        case .noAccount:
+//            state = .noPermission
+//        case .temporarilyUnavailable:
+//            state = .noPermission
+//        @unknown default:
+//            fatalError()
+//        }
+//        switch permission {
+//        case .initialState:
+//            state = .noPermission
+//        case .couldNotComplete:
+//            state = .noPermission
+//        case .denied:
+//            state = .noPermission
+//        case .granted:
+//            let accountStatus = await repository.accountStatus
+//            switch accountStatus {
+//            case .couldNotDetermine:
+//                state = .noPermission
+//            case .available:
+//                let id = try await Repository.container.userRecordID().recordName
+//                self.userID = id
+//            case .restricted:
+//                state = .noPermission
+//            case .noAccount:
+//                state = .noPermission
+//            case .temporarilyUnavailable:
+//                state = .noPermission
+//            @unknown default:
+//                fatalError()
+//            }
+//        @unknown default:
+//            fatalError()
+//        }
         try await self.initialize()
     }
     
@@ -82,8 +103,14 @@ class ViewModel: ObservableObject {
         repository = Repository()
         self.personService = PersonService(with: self.repository)
         Task {
-            await self.repository.prepareRepo()
-            await self.loadData()
+            do {
+                try await self.repository.prepareRepo()
+                await self.loadData()
+            } catch (let cloudError) {
+                self.cloudError = cloudError as? CloudError
+                cloudAuthenticationDidFail = true
+                print(cloudError.localizedDescription)
+            }
             self.state = .loaded
         }
     }

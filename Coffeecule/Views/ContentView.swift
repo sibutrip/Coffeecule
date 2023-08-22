@@ -27,8 +27,11 @@ struct ContentView: View {
             .sheet(isPresented: $appAccess.accessedFromShare) {
                 JoinSheet(vm: vm)
             }
-        }
-        .task {
+            .alert(isPresented: $vm.cloudAuthenticationDidFail, error: vm.cloudError) { _ in
+                Button("okay") { }
+            } message: { error in
+                Text(error.recoverySuggestion ?? "")
+            }
 
         }
     }
