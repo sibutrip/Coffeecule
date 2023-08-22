@@ -11,6 +11,7 @@ import CloudKit
 struct CoffeeculeView: View {
     @ObservedObject var vm: ViewModel
     @State var isBuying = false
+    @State var processingTransaction = false
     @State var isSharing = false
     @State var isDeletingCoffeecule = false
     @State var couldntGetPermission = false
@@ -132,10 +133,12 @@ extension CoffeeculeView {
             .alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
                 HStack {
                     Button("Yes", role: .destructive) {
+                        processingTransaction = true
                         Task(priority: .userInitiated) {
                             await vm.buyCoffee()
                             vm.createDisplayedDebts()
                             vm.calculateBuyer()
+                            processingTransaction = false
                         }
                     }
                     Button("No", role: .cancel) {
@@ -143,7 +146,7 @@ extension CoffeeculeView {
                     }
                 }
             }
-            .disabled(vm.currentBuyer.name == "nobody" || vm.state != .loaded )
+            .disabled(vm.currentBuyer.name == "nobody" || processingTransaction == true)
         }
     }
     
@@ -153,6 +156,14 @@ extension CoffeeculeView {
         }
         .frame(height: 100)
         .animation(.default, value: vm.displayedDebts)
+        .overlay {
+            if processingTransaction {
+                ZStack {
+                    Color.gray.opacity(0.2)
+                    ProgressView()
+                }
+            }
+        }
     }
     
     // MARK: - Toolbars

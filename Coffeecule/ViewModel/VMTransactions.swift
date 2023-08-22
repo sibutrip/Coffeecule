@@ -31,9 +31,7 @@ extension ViewModel {
         enum BuyCoffeeError: Error {
             case missingMember
         }
-        
-        self.state = .loading
-        
+                
         if self.currentBuyer.name == "nobody" {
             return
         }
@@ -87,9 +85,7 @@ extension ViewModel {
         } catch {
             debugPrint(error)
             fatalError()
-        }
-        self.state = .loaded
-    }
+        }    }
     
     public func createDisplayedDebts() {
         let people = self.relationships
