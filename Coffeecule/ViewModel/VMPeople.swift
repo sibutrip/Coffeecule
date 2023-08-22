@@ -78,6 +78,8 @@ extension ViewModel {
     
     public func refreshData() async {
         await populateData()
+        createDisplayedDebts()
+        calculateBuyer()
     }
     
     public func loadData() async {
@@ -105,7 +107,19 @@ extension ViewModel {
         }
         let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
         do {
-            self.relationships = try relationshipService.add(transactions: transactions, to: fetchedPeople)
+            let presentPeople = relationships
+                .filter { $0.isPresent }
+                .map { $0.name }
+            
+            var relationships = try relationshipService.add(transactions: transactions, to: fetchedPeople)
+            relationships = relationships.map { relationship in
+                var relationship = relationship
+                if presentPeople.contains(where: { $0 == relationship.name }) {
+                    relationship.isPresent = true
+                }
+                return relationship
+            }
+            self.relationships = relationships
         } catch {
             fatalError(error.localizedDescription)
         }
