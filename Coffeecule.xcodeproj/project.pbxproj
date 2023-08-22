@@ -165,7 +165,6 @@
 			children = (
 				74059E642A9509270080D2B9 /* CloudError.swift */,
 				74059E662A952BD70080D2B9 /* PersonError.swift */,
-				7467995329B0DC9100339D5C /* Repository.swift */,
 				7413E41F2A2A1CA900EFA01E /* ParticipantType.swift */,
 				7467994929B0DC9100339D5C /* Person.swift */,
 				7413E4272A2A3A3A00EFA01E /* Relationships.swift */,
@@ -222,6 +221,7 @@
 			children = (
 				74BA5F5429E5902400C28F2F /* PersonService.swift */,
 				74BA5F5629E59A6A00C28F2F /* TransactionService.swift */,
+				7467995329B0DC9100339D5C /* Repository.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
