@@ -8,7 +8,7 @@
 import Foundation
 
 enum CloudError: LocalizedError {
-    case userIdentity, multipleSharedContainers, accountStatus, couldNotDetermine, noAccount, restricted, temporarilyUnavailable
+    case userIdentity, multipleSharedContainers, accountStatus, couldNotDetermine, noAccount, restricted, temporarilyUnavailable, couldNotRetrieveRecords
     var errorDescription: String? {
         switch self {
         case .userIdentity:
@@ -25,6 +25,8 @@ enum CloudError: LocalizedError {
             "The system denies access to the user’s iCloud account."
         case .temporarilyUnavailable:
             "The user’s iCloud account is temporarily unavailable."
+        case .couldNotRetrieveRecords:
+            "could not retreive records"
         }
     }
     var recoverySuggestion: String? {
@@ -46,6 +48,8 @@ enum CloudError: LocalizedError {
             "an iCloud account is needed to join a 'cule"
         case .restricted:
             "enable system permissions to your iCloud account"
+        case .couldNotRetrieveRecords:
+            "make sure you're connected to the internet"
         case .temporarilyUnavailable:
             "make sure you're connected to the internet???"
         }

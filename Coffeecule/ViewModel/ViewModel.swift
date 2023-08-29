@@ -50,54 +50,10 @@ class ViewModel: ObservableObject {
             print("has share is \(hasShare)")
         }
     }
-    #warning("rename this if it works")
-    func getAppPermissions() async throws {
+    
+    func assignUserID() async throws {
         let id = try await Repository.container.userRecordID().recordName
         self.userID = id
-//        let permission = await repository.appPermission
-//        let accountStatus = await repository.accountStatus
-//        switch accountStatus {
-//        case .couldNotDetermine:
-//            state = .noPermission
-//        case .available:
-//            let id = try await Repository.container.userRecordID().recordName
-//            self.userID = id
-//        case .restricted:
-//            state = .noPermission
-//        case .noAccount:
-//            state = .noPermission
-//        case .temporarilyUnavailable:
-//            state = .noPermission
-//        @unknown default:
-//            fatalError()
-//        }
-//        switch permission {
-//        case .initialState:
-//            state = .noPermission
-//        case .couldNotComplete:
-//            state = .noPermission
-//        case .denied:
-//            state = .noPermission
-//        case .granted:
-//            let accountStatus = await repository.accountStatus
-//            switch accountStatus {
-//            case .couldNotDetermine:
-//                state = .noPermission
-//            case .available:
-//                let id = try await Repository.container.userRecordID().recordName
-//                self.userID = id
-//            case .restricted:
-//                state = .noPermission
-//            case .noAccount:
-//                state = .noPermission
-//            case .temporarilyUnavailable:
-//                state = .noPermission
-//            @unknown default:
-//                fatalError()
-//            }
-//        @unknown default:
-//            fatalError()
-//        }
         try await self.initialize()
     }
     
@@ -108,7 +64,7 @@ class ViewModel: ObservableObject {
         Task {
             do {
                 try await self.repository.prepareRepo()
-                await self.loadData()
+                try await self.loadData()
             } catch (let cloudError) {
                 self.cloudError = cloudError as? CloudError
                 cloudAuthenticationDidFail = true

@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum PersonError: LocalizedError {
-    case couldntCreateRootRecord, couldntCreateParticipantRecord, couldntCreateRootShare
+enum PersonError: Error, LocalizedError {
+    case couldntCreateRootRecord, couldntCreateParticipantRecord, couldntCreateRootShare, alreadyOwnsCoffeecule, multipleCoffeeculesExist
     var errorDescription: String? {
         switch self {
         case .couldntCreateRootRecord:
@@ -17,6 +17,10 @@ enum PersonError: LocalizedError {
             "failed to join coffeecule"
         case .couldntCreateRootShare:
             "failed to share coffeecule"
+        case .alreadyOwnsCoffeecule:
+            "failed to ?? coffeecule"
+        case .multipleCoffeeculesExist:
+            "failed to ?? coffeecule"
         }
     }
     var recoverySuggestion: String? {
@@ -25,6 +29,10 @@ enum PersonError: LocalizedError {
             "tell cory to switch the beta to the production environment lmao"
         case .couldntCreateParticipantRecord:
             "tell cory to switch the beta to the production environment lmao"
+        case .alreadyOwnsCoffeecule:
+            "delete your current coffeecule before joining another"
+        case .multipleCoffeeculesExist:
+            "contact your local dev, you're in multiple coffeecules"
         case .couldntCreateRootShare:
             "tell cory to switch the beta to the production environment lmao"
         }

@@ -112,7 +112,7 @@ class PersonService {
     
     public func saveRecord(_ record: CKRecord, participantType: ParticipantType) async throws {
         do {
-        switch participantType {
+            switch participantType {
             case .root:
                 try await savePrivateRecord(record)
                 await repository.rootRecord(record)
@@ -183,7 +183,7 @@ class PersonService {
         var transactions: [Transaction] = []
         var hasShare: Bool = false
         
-        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async throws -> ([Person], [Transaction], Bool) {
+        @Sendable func recordsInZone(_ zone: CKRecordZone, scope: CKDatabase.Scope) async -> FetchTask {
             /// `recordZoneChanges` can return multiple consecutive changesets before completing, so
             /// we use a loop to process multiple results if needed, indicated by the `moreComing` flag.
             var awaitingChanges = true
@@ -194,16 +194,29 @@ class PersonService {
             var hasShare: Bool = false
             
             while awaitingChanges {
-                let zoneChanges = try await Repository.container.database(with: scope).recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
-                let receivedRecords = zoneChanges.modificationResultsByID.values
-                    .compactMap { try? $0.get().record }
-                awaitingChanges = zoneChanges.moreComing
-                nextChangeToken = zoneChanges.changeToken
+                let receivedRecords: [CKRecord]
+                do {
+                    let zoneChanges = try await Repository.container.database(with: scope).recordZoneChanges(inZoneWith: zone.zoneID, since: nextChangeToken)
+                    receivedRecords = zoneChanges.modificationResultsByID.values
+                        .compactMap { try? $0.get().record }
+                    awaitingChanges = zoneChanges.moreComing
+                    nextChangeToken = zoneChanges.changeToken
+                } catch {
+                    receivedRecords = []
+                    awaitingChanges = false
+                }
                 for record in receivedRecords {
                     if record.recordType == rootRecordName {
                         let name = record["name"] as! String
+                        let existingRootRecord = await repository.rootRecord?["userID"] as? String
+//                        if let existingRootRecord {
+//                            if existingRootRecord != record["userID"] as String? {
+//                                foundMultipleRootRecords = true
+//                            }
+//                        }
                         people.append(Person(name: name, associatedRecord: record))
                         print("found root record")
+                        
                         await repository.rootRecord(record)
                     } else if record.recordType == participantRecordName {
                         let name = record["name"] as! String
@@ -218,36 +231,35 @@ class PersonService {
                     }
                 }
             }
-            return (people, transactions, hasShare)
+            return FetchTask(
+                people: people,
+                transactions: transactions,
+                foundShare: hasShare)
         }
         do {
             let zones = await repository.allZones
             print("fetching records from \(zones.count) zone(s):")
             
             // Using this task group, fetch each zone's contacts in parallel.
-            try await withThrowingTaskGroup(of: ([Person], [Transaction], Bool).self) { group in
+            try await withThrowingTaskGroup(of: FetchTask.self) { group in
                 for zone in zones {
                     group.addTask {
-                        
-                        // if shared records are found return them and exit the function without fetching private records.
-                        if let results = try? await recordsInZone(zone, scope: .shared) {
-                            print("found shared zone records")
-                            return results
+                        do {
+                            var allResults = FetchTask()
+                            let sharedResults = await recordsInZone(zone, scope: .shared)
+                            let privateResults = await recordsInZone(zone, scope: .private)
+                            allResults.people = sharedResults.people + privateResults.people
+                            allResults.transactions = sharedResults.transactions + privateResults.transactions
+                            allResults.foundShare = (sharedResults.foundShare || privateResults.foundShare)
+                            return allResults
                         }
-                        if let results = try? await recordsInZone(zone, scope: .private) {
-                            print("found private zone records")
-                            return results
-                        }
-                        print("found no zone records")
-                        return ([], [], false)
-                        
                     }
                     
                     // As each result comes back, append it to a combined array to finally return.
-                    for try await (returnedPeople, returnedTransactions, didReturnShare) in group {
-                        people.append(contentsOf: returnedPeople)
-                        transactions.append(contentsOf: returnedTransactions)
-                        if didReturnShare {
+                    for try await results in group {
+                        people.append(contentsOf: results.people)
+                        transactions.append(contentsOf: results.transactions)
+                        if results.foundShare {
                             hasShare = true
                         }
                     }
@@ -335,18 +347,45 @@ class PersonService {
     public func deleteAllTransactions() async throws {
         guard let transactions = await repository.transactions else { return }
         let recordIDs = transactions.map { $0.associatedRecord.recordID }
-        let _ = try await Repository.database.modifyRecords(saving: [], deleting: recordIDs)
+        let (_, deleteResults) = try await Repository.database.modifyRecords(saving: [], deleting: recordIDs)
+        let errors: [String] = deleteResults.compactMap { deleteResult in
+            switch deleteResult.1 {
+            case .success():
+                return nil
+            case .failure(let failure):
+                return failure.localizedDescription
+            }
+        }
+        print(errors)
     }
     
     public func deleteAllUsers(_ relationships: [Relationship]) async throws {
         let peopleRecordIDs = relationships.map { $0.person.associatedRecord.recordID }
-        let results = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs).1
+        let (_, deleteResults) = try await Repository.database.modifyRecords(saving: [], deleting: peopleRecordIDs)
         //        results.forEach {print($0.value)}
+        let errors: [String] = deleteResults.compactMap { deleteResult in
+            switch deleteResult.1 {
+            case .success():
+                return nil
+            case .failure(let failure):
+                return failure.localizedDescription
+            }
+        }
+        print(errors)
     }
     
     public func deleteShare() async throws {
         if let share = await repository.rootShare {
-            let _ = try await Repository.database.modifyRecords(saving: [], deleting: [share.recordID])
+            let (_, deleteResults) = try await Repository.database.modifyRecords(saving: [], deleting: [share.recordID])
+            let errors: [String] = deleteResults.compactMap { deleteResult in
+                switch deleteResult.1 {
+                case .success():
+                    return nil
+                case .failure(let failure):
+                    return failure.localizedDescription
+                }
+            }
+            print(errors)
         }
         await repository.share(nil)
     }

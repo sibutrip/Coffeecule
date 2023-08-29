@@ -49,6 +49,13 @@ struct JoinSheet: View {
                 .navigationTitle("Join coffeecule")
             }
         }
+        .alert(isPresented: $vm.personRecordCreationDidFail, error: vm.personError) { _ in
+            Button("okay") { 
+                dismiss()
+            }
+        } message: { error in
+            Text(error.recoverySuggestion ?? "")
+        }
         .task {
             viewState = .loading
             await rootUserID = rootUserID()

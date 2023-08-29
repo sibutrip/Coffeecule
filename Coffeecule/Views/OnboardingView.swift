@@ -13,7 +13,6 @@ struct OnboardingView: View {
     @State private var couldNotJoinCule = false
     @State private var couldntCreateCule = false
     @State private var creating = false
-    @State private var joining = false
     
     var body: some View {
         VStack {
@@ -21,12 +20,8 @@ struct OnboardingView: View {
             Button("create") { creating = true }
             Spacer()
         }
-        .sheet(isPresented: $joining) {
-            JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule)
-        }
         .sheet(isPresented: $creating) {
             CreateView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule)
-            
         }
         .alert(vm.state.rawValue, isPresented: $couldNotJoinCule) {
             Button("ok den", role: .cancel) {

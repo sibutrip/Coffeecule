@@ -17,7 +17,10 @@ struct CoffeeculeView: View {
     @State var couldntGetPermission = false
     @State var share: CKShare?
     @State var container: CKContainer?
+    @State var viewingHistory = false
+    @State var addingTransaction = false
     @Environment(\.editMode) private var editMode
+    @State var chartScale: CGFloat = 0
     
     var body: some View {
         Form {
@@ -25,7 +28,9 @@ struct CoffeeculeView: View {
                 .animation(.default, value: vm.relationships)
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
-            relationshipWebChart
+            if vm.presentPeopleCount > 1 {
+                relationshipWebChart
+            }
             if self.editMode?.wrappedValue != .inactive {
                 Section {
                     Button("Delete Coffeecule") {
@@ -44,25 +49,40 @@ struct CoffeeculeView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .topBarLeading) {
                 EditButton()
             }
-            //                ToolbarItem(placement: .navigationBarTrailing) {
-            //                    selectAllToolbar
-            //                }
         }
-        //            .task {
-        //                guard let _ = try? await vm.onLoad() else {
-        //                    couldntGetPermission = true
-        //                    return
-        //                }
-        //            }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    addingTransaction = true
+                } label: {
+                    Label("add transaction", systemImage: "mug")
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    viewingHistory = true
+                } label: {
+                    Label("buying history", systemImage: "clock")
+                }
+            }
+        }
         .sheet(isPresented: $isSharing) {
             if let share = share {
                 CloudSharingView(share: share, container: container!)
             } else {
                 EmptyView()
             }
+        }
+        .sheet(isPresented: $viewingHistory) {
+            HistoryView(vm: vm)
+        }
+        .sheet(isPresented: $addingTransaction) {
+            AddTransactionView(vm: vm)
         }
         .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
             Button("ok den", role: .cancel) { couldntGetPermission = false}
@@ -135,7 +155,7 @@ extension CoffeeculeView {
                     Button("Yes", role: .destructive) {
                         processingTransaction = true
                         Task(priority: .userInitiated) {
-                            await vm.buyCoffee()
+                            await vm.buyCoffee(receivers:vm.presentPeople)
                             vm.createDisplayedDebts()
                             vm.calculateBuyer()
                             processingTransaction = false
@@ -151,18 +171,20 @@ extension CoffeeculeView {
     }
     
     var relationshipWebChart: some View {
-        VStack {
+        Section {
             chart(vm.displayedDebts)
-        }
-        .frame(height: 100)
-        .animation(.default, value: vm.displayedDebts)
-        .overlay {
-            if processingTransaction {
-                ZStack {
-                    Color.gray.opacity(0.2)
-                    ProgressView()
+                .frame(height: 100)
+                .animation(.default, value: vm.presentPeopleCount)
+                .onAppear { withAnimation { chartScale = 1 } }
+                .onDisappear { withAnimation { chartScale = 0 } }
+                .overlay {
+                    if processingTransaction {
+                        ZStack {
+                            Color.gray.opacity(0.2)
+                            ProgressView()
+                        }
+                    }
                 }
-            }
         }
     }
     

@@ -11,7 +11,7 @@ import CloudKit
 extension CKRecord: @unchecked Sendable { }
 extension CKRecordZone: @unchecked Sendable { }
 
-actor Repository {
+actor Repository: ObservableObject {
     
     init() { }
     
@@ -24,15 +24,17 @@ actor Repository {
     
     
     // RECORDS
-    public var transactions: [Transaction]?
+    @Published public var transactions: [Transaction]?
     public var rootRecord: CKRecord? = nil
     public var rootShare: CKShare? = nil
+    public static var shareMetaData: CKShare.Metadata?
     
     // USER
     public var userIdentity: CKUserIdentity?
     public var userName: String?
     
     // CONTAINER
+    
     nonisolated static public let container = CKContainer(identifier: "iCloud.com.CoryTripathy.Tryouts")
     static public var database = container.privateCloudDatabase
     public var currentZone: CKRecordZone {
@@ -44,7 +46,7 @@ actor Repository {
             return privateZone
         }
     }
-    private var privateZone = CKRecordZone(zoneName: "Coffeecule") // private zone
+    public var privateZone = CKRecordZone(zoneName: "Coffeecule") // private zone
     private var sharedZone: CKRecordZone?
     public var appPermission: CKContainer.ApplicationPermissionStatus = .initialState
     //    public var accountStatus: CKAccountStatus = .couldNotDetermine
@@ -103,9 +105,7 @@ actor Repository {
             throw CloudError.accountStatus
         }
     }
-    
-    public static var shareMetaData: CKShare.Metadata?
-    
+        
     public func acceptSharedContainer(with shareMetaData: CKShare.Metadata) async throws {
         try await Self.container.accept(shareMetaData)
         try await fetchSharedContainer()

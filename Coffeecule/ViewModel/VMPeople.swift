@@ -10,10 +10,19 @@ import CloudKit
 
 extension ViewModel {
     
+    var presentPeopleCount: Int {
+        return relationships.filter { $0.isPresent }.count
+    }
+    
+    var presentPeople: Set<Person> {
+        let people = relationships.filter { $0.isPresent }.map { $0.person }
+        return Set(people)
+    }
+    
     public func createCoffeecule() async throws {
         self.state = .loading
-        try await getAppPermissions()
-        await self.populateData()
+        try await assignUserID()
+        try await self.populateData()
         if await self.repository.rootShare != nil {
             state = .culeAlreadyExists
             return
@@ -47,10 +56,37 @@ extension ViewModel {
         self.state = .loaded
     }
     
+    private func ownsCoffeecule() async -> Bool {
+        let returnedRecords: [CKRecord]
+        do {
+            try await assignUserID()
+            let predicate = NSPredicate(value: true)
+            let query = CKQuery(recordType: "rootRecord", predicate: predicate)
+            let privateZone = await repository.privateZone
+            let (results, _) = try await Repository.container.privateCloudDatabase.records(matching: query, inZoneWith: privateZone.zoneID,desiredKeys: nil, resultsLimit: 10)
+            returnedRecords = results.compactMap { result in
+                switch result.1 {
+                case .success(let record):
+                    return record
+                case .failure(_):
+                    return nil
+                }
+            }
+        } catch {
+            returnedRecords = []
+            print(CloudError.couldNotRetrieveRecords.errorDescription ?? "")
+        }
+        if returnedRecords.count > 1 {
+            print(PersonError.multipleCoffeeculesExist.errorDescription ?? "")
+        }
+        if returnedRecords.count == 0 { return false }
+        let returnedRecordName = returnedRecords[0]["userID"] as? String
+        return userID == returnedRecordName
+    }
+    
     public func joinCoffeecule() async throws {
         self.state = .loading
-        try await getAppPermissions()
-        await self.populateData()
+        try await self.populateData()
         if await repository.rootShare == nil {
             state = .noShareFound
             return
@@ -77,52 +113,54 @@ extension ViewModel {
     }
     
     public func refreshData() async {
-        await populateData()
+        do {
+            try await populateData()
+        } catch { }
         createDisplayedDebts()
         calculateBuyer()
     }
     
-    public func loadData() async {
+    public func loadData() async throws {
         do {
             self.state = .loading
-            try await getAppPermissions()
-            await populateData()
-            self.state = .loaded
+            try await assignUserID()
+            try await populateData()
         } catch {
             print(error.localizedDescription)
         }
+        self.state = .loaded
     }
     
     public func shareCoffeecule() async throws {
         self.hasShare = try await personService.fetchOrCreateShare()
     }
     
-    private func populateData() async {
+    private func populateData() async throws {
         if let shareMetadata = Repository.shareMetaData {
-            do {
+            if await ownsCoffeecule() {
+                self.personError = .alreadyOwnsCoffeecule
+                personRecordCreationDidFail = true
+                Repository.shareMetaData = nil
+            } else {
                 try await repository.acceptSharedContainer(with: shareMetadata)
-            } catch {
-                fatalError(error.localizedDescription)
+                Repository.shareMetaData = nil
             }
         }
         let (fetchedPeople, transactions, hasShare) = await personService.fetchRecords()
-        do {
-            let presentPeople = relationships
-                .filter { $0.isPresent }
-                .map { $0.name }
-            
-            var relationships = try relationshipService.add(transactions: transactions, to: fetchedPeople)
-            relationships = relationships.map { relationship in
-                var relationship = relationship
-                if presentPeople.contains(where: { $0 == relationship.name }) {
-                    relationship.isPresent = true
-                }
-                return relationship
+        let presentPeople = relationships
+            .filter { $0.isPresent }
+            .map { $0.name }
+        
+        var relationships = try relationshipService.add(transactions: transactions, to: fetchedPeople)
+        relationships = relationships.map { relationship in
+            var relationship = relationship
+            if presentPeople.contains(where: { $0 == relationship.name }) {
+                relationship.isPresent = true
             }
-            self.relationships = relationships
-        } catch {
-            fatalError(error.localizedDescription)
+            return relationship
         }
+        self.relationships = relationships
+        
         print("received \(transactions.count) transactions")
         print("received \(fetchedPeople.count) people")
         print("found a share: \(hasShare ? "yes" : "no")")

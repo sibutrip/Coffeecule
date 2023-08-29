@@ -9,6 +9,10 @@ import Foundation
 import CloudKit
 
 extension ViewModel {
+    
+    public func buyCoffee(buyer: Person, receivers: [Person]) {
+        
+    }
     public func calculateBuyer() {
         let relationships = self.relationships
         let debts = self.displayedDebts
@@ -32,25 +36,22 @@ extension ViewModel {
         self.currentBuyer = mostDebted?.key ?? Person()
     }
     
-    public func buyCoffee() async {
-        enum BuyCoffeeError: Error {
-            case missingMember
-        }
-                
+    public func buyCoffee(buyer: Person? = nil, receivers: Set<Person>) async {
         if self.currentBuyer.name == "nobody" {
             return
         }
         var updatedPeople = [Relationship]()
         do {
             let relationships = self.relationships
-            let currentBuyer = self.currentBuyer
+            let currentBuyer = buyer ?? self.currentBuyer
             var transactions = [Transaction]()
             var buyer = relationships.first(where: { $0.person == currentBuyer })!
             for receiver in relationships {
                 var receiver = receiver
                 if receiver.name != buyer.name {
+                    let receiverIsSelected = receivers.contains(where: {$0 == receiver.person} )
                     var newBuyerDebt = buyer.coffeesOwed[receiver.person] ?? 0
-                    if receiver.isPresent {
+                    if receiverIsSelected {
                         let transaction = await Transaction(buyer: buyer.name, receiver: receiver.name, in: repository)
                         transactions.append(transaction)
                         newBuyerDebt += 1
@@ -59,7 +60,7 @@ extension ViewModel {
                     buyer.coffeesOwed[receiver.person] = newBuyerDebt
                     
                     var newReceiverDebt = receiver.coffeesOwed[buyer.person] ?? 0
-                    if receiver.isPresent {
+                    if receiverIsSelected {
                         newReceiverDebt -= 1
                     }
                     receiver.coffeesOwed[buyer.person] = newReceiverDebt
@@ -68,7 +69,6 @@ extension ViewModel {
             }
             updatedPeople.append(buyer)
             self.relationships = updatedPeople.sorted()
-            print(transactions.count)
             let rootRecordName = await repository.rootRecord?["userID"] as? String
             if self.userID == rootRecordName {
                 try await self.transactionService.saveTransactions(transactions, in: Repository.container.privateCloudDatabase)
@@ -78,7 +78,8 @@ extension ViewModel {
         } catch {
             debugPrint(error)
             fatalError()
-        }    }
+        }
+    }
     
     public func createDisplayedDebts() {
         let people = self.relationships
