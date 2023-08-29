@@ -82,7 +82,7 @@ struct CoffeeculeView: View {
             HistoryView(vm: vm)
         }
         .sheet(isPresented: $addingTransaction) {
-            AddTransactionView(vm: vm)
+            AddTransactionView(vm: vm, processingTransaction: $processingTransaction)
         }
         .alert("da app needz da permissionz", isPresented: $couldntGetPermission) {
             Button("ok den", role: .cancel) { couldntGetPermission = false}

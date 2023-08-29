@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 struct AddTransactionView: View {
+    @Binding var processingTransaction: Bool
     @ObservedObject var vm: ViewModel
     var allPeople: [Person] = []
     @State var buyer: Person
-    //    @State var receiver: Person = Person()
-    @State var processingTransaction = false
+//    @State var processingTransaction = false
     @State var receivers: Set<Person> = []
     @Environment(\.dismiss) var dismiss
     var peopleRemovingBuyer: [Person] {
@@ -52,20 +52,24 @@ struct AddTransactionView: View {
                             vm.createDisplayedDebts()
                             vm.calculateBuyer()
                             processingTransaction = false
-                            dismiss()
                         }
+                        dismiss()
                     }
                     .frame(maxWidth: .infinity)
                     .disabled(receivers.isEmpty)
                 }
             }
+            .onChange(of: buyer) { _ in
+                receivers.removeAll()
+            }
             .navigationTitle("Add Transaction")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
-    init(vm: ViewModel) {
+    init(vm: ViewModel, processingTransaction: Binding<Bool>) {
         self.vm = vm
         allPeople = vm.relationships.map { $0.person }
         _buyer = .init(initialValue: vm.relationships.first?.person ?? Person())
+        _processingTransaction = processingTransaction
     }
 }
