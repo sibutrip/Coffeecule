@@ -67,6 +67,7 @@ extension ViewModel {
                     updatedPeople.append(receiver)
                 }
             }
+            await repository.addTransactions(transactions)
             updatedPeople.append(buyer)
             self.relationships = updatedPeople.sorted()
             let rootRecordName = await repository.rootRecord?["userID"] as? String

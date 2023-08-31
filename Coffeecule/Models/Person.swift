@@ -25,7 +25,7 @@ struct Person: Identifiable {
     init(name: String, associatedRecord: CKRecord) {
         self.name = name
         self.associatedRecord = associatedRecord
-        self.userID = associatedRecord["userID"] as! String
+        self.userID = associatedRecord["userID"] as? String ?? ""
     }
     
     /// initializer from new name. creates a ckrecord

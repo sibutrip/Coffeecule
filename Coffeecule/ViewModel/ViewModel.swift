@@ -42,7 +42,12 @@ class ViewModel: ObservableObject {
             print(self.state)
         }
     }
-    @Published var relationships: [Relationship] = []
+    @Published var relationships: [Relationship] = [] {
+        didSet {
+            createDisplayedDebts()
+            calculateBuyer()
+        }
+    }
     @Published var currentBuyer = Person()
     @Published var displayedDebts: [Person:Int] = [:]
     @Published var hasShare = false {
@@ -70,6 +75,13 @@ class ViewModel: ObservableObject {
                 cloudAuthenticationDidFail = true
                 print(cloudError.localizedDescription)
             }
+//            relationships = [
+//            Relationship(Person(name: "Cory", associatedRecord: CKRecord(recordType: "test"))),
+//            Relationship(Person(name: "Tom", associatedRecord: CKRecord(recordType: "test"))),
+//            Relationship(Person(name: "Ty", associatedRecord: CKRecord(recordType: "test")))
+//            ]
+//            relationships[0].coffeesOwed[relationships[1].person] = 1
+//            relationships[1].coffeesOwed[relationships[0].person] = -1
             self.state = .loaded
         }
     }

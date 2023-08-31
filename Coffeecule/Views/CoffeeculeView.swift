@@ -19,18 +19,19 @@ struct CoffeeculeView: View {
     @State var container: CKContainer?
     @State var viewingHistory = false
     @State var addingTransaction = false
+    @State var selectedBuyer: Person = Person()
     @Environment(\.editMode) private var editMode
     @State var chartScale: CGFloat = 0
     
     var body: some View {
         Form {
-            WhosGettingCoffee(vm: vm, share: $share, container: $container, isSharing: $isSharing)
+            WhosGettingCoffee(vm: vm, share: $share, container: $container, isSharing: $isSharing, isBuying: $isBuying)
                 .animation(.default, value: vm.relationships)
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
-            if vm.presentPeopleCount > 1 {
-                relationshipWebChart
-            }
+//            if vm.presentPeopleCount > 1 {
+//                relationshipWebChart
+//            }
             if self.editMode?.wrappedValue != .inactive {
                 Section {
                     Button("Delete Coffeecule") {
@@ -56,18 +57,9 @@ struct CoffeeculeView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    addingTransaction = true
-                } label: {
-                    Label("add transaction", systemImage: "mug")
-                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
                     viewingHistory = true
                 } label: {
-                    Label("buying history", systemImage: "clock")
+                    Label("Transaction History", systemImage: "clock")
                 }
             }
         }
@@ -128,6 +120,7 @@ extension CoffeeculeView {
             VStack(alignment: .center) {
                 Spacer()
                 Text("it's time for")
+
                 Text("\(vm.currentBuyer.name)").font(.largeTitle)
                     .animation(.default.speed(3.0), value: vm.currentBuyer)
                 Text("to buy coffee")
@@ -152,16 +145,20 @@ extension CoffeeculeView {
             .frame(maxWidth: .infinity)
             .alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
                 HStack {
-                    Button("Yes", role: .destructive) {
+                    Button("Yes") {
                         processingTransaction = true
                         Task(priority: .userInitiated) {
                             await vm.buyCoffee(receivers:vm.presentPeople)
-                            vm.createDisplayedDebts()
-                            vm.calculateBuyer()
+//                            vm.createDisplayedDebts()
+//                            vm.calculateBuyer()
                             processingTransaction = false
                         }
                     }
-                    Button("No", role: .cancel) {
+                    Button("No, someone else") {
+                        isBuying = false
+                        addingTransaction = true
+                    }
+                    Button("Cancel", role: .cancel) {
                         isBuying = false
                     }
                 }

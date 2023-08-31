@@ -14,6 +14,7 @@ struct Transaction: Identifiable {
     var receiverName: String
     var associatedRecord: CKRecord
     var creationDate: Date?
+    var roundedDate: Date?
     
     init?(record: CKRecord) {
         guard let buyerName = record["buyer"] as? String,
@@ -25,7 +26,9 @@ struct Transaction: Identifiable {
         self.buyerName = buyerName
         self.receiverName = receiverName
         self.associatedRecord = record
-        self.creationDate = record.creationDate?.roundedToNearestDay
+        let creationDate = record.creationDate ?? Date.now
+        self.creationDate = creationDate
+        self.roundedDate = creationDate.roundedToNearestDay
     }
     
     static let transactionRecordName = "transaction"
@@ -37,8 +40,10 @@ struct Transaction: Identifiable {
         
         self.id = transactionRecord.recordID.recordName
         self.buyerName = buyer
-        self.receiverName = buyer
+        self.receiverName = receiver
         self.associatedRecord = transactionRecord
-        self.creationDate = transactionRecord.creationDate?.roundedToNearestDay
+        let creationDate = transactionRecord.creationDate ?? Date.now
+        self.creationDate = creationDate
+        self.roundedDate = creationDate.roundedToNearestDay
     }
 }

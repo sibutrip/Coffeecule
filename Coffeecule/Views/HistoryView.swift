@@ -19,14 +19,19 @@ struct HistoryView: View {
                     ProgressView()
                 } else {
                     VStack(spacing: 0) {
-                        HStack {
-                            Text("Receiver")
-                                .foregroundStyle(Color.blue)
-                            Spacer()
-                            Text("Buyer")
-                                .foregroundStyle(Color.red)
+                        VStack {
+                            Text("Transaction History")
+                                .font(.headline)
+                                .padding(.bottom)
+                            HStack {
+                                Text("Receiver")
+                                    .foregroundStyle(Color.blue)
+                                Spacer()
+                                Text("Buyer")
+                                    .foregroundStyle(Color.red)
+                            }
+                            .overlay { Image(systemName: "arrow.left") }
                         }
-                        .overlay { Image(systemName: "arrow.left") }
                         .frame(maxWidth: .infinity)
                         .padding()
                         .padding(.horizontal, 50)
@@ -53,9 +58,8 @@ struct HistoryView: View {
         }
         .task {
             isLoading = true
-            let transactions = await vm.repository.transactions ?? []
-            let datesAndTransactions = Dictionary(grouping: transactions) { $0.creationDate ?? Date.now
-            }
+            let transactions = await vm.repository.transactions?.sorted { $0.creationDate! > $1.roundedDate! } ?? []
+            let datesAndTransactions = Dictionary(grouping: transactions) { $0.roundedDate! }
             self.datesAndTransactions = datesAndTransactions
 //            transactions.forEach { print($0.buyerName) }
             isLoading = false

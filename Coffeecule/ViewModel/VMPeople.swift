@@ -10,7 +10,7 @@ import CloudKit
 
 extension ViewModel {
     
-    var presentPeopleCount: Int {
+    public var presentPeopleCount: Int {
         return relationships.filter { $0.isPresent }.count
     }
     
@@ -51,8 +51,8 @@ extension ViewModel {
         try await personService.saveRecord(person.associatedRecord, participantType: .root)
         
         self.state = .loaded
-        self.createDisplayedDebts()
-        self.calculateBuyer()
+//        self.createDisplayedDebts()
+//        self.calculateBuyer()
         self.state = .loaded
     }
     
@@ -116,8 +116,8 @@ extension ViewModel {
         do {
             try await populateData()
         } catch { }
-        createDisplayedDebts()
-        calculateBuyer()
+//        createDisplayedDebts()
+//        calculateBuyer()
     }
     
     public func loadData() async throws {

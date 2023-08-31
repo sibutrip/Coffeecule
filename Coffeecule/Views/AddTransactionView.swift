@@ -17,7 +17,8 @@ struct AddTransactionView: View {
     @State var receivers: Set<Person> = []
     @Environment(\.dismiss) var dismiss
     var peopleRemovingBuyer: [Person] {
-        vm.relationships.map { $0.person } .filter { $0 != buyer }
+        allPeople
+            .filter { $0 != buyer }
     }
     var body: some View {
         NavigationView {
@@ -30,17 +31,10 @@ struct AddTransactionView: View {
                 Section("Receivers") {
                     ForEach(peopleRemovingBuyer) { person in
                         Button {
-                            let (alreadySelected,_) = receivers.insert(person)
-                            if !alreadySelected {
-                                receivers.remove(person)
-                            }
+                            buyer = person
                         } label: {
-                            HStack {
-                                Image(systemName: "checkmark")
-                                    .opacity(receivers.contains { $0 == person} ? 1 : 0)
-                                Text("\(person.name)")
-                                    .foregroundColor(Color.primary)
-                            }
+                            Text("\(person.name)")
+                                .foregroundColor(Color.primary)
                         }
                     }
                 }
@@ -48,28 +42,29 @@ struct AddTransactionView: View {
                     Button("Buy Coffee") {
                         processingTransaction = true
                         Task {
-                            await vm.buyCoffee(buyer: buyer, receivers: receivers)
-                            vm.createDisplayedDebts()
-                            vm.calculateBuyer()
+                            await vm.buyCoffee(buyer: buyer, receivers: vm.presentPeople)
+//                            vm.createDisplayedDebts()
+//                            vm.calculateBuyer()
                             processingTransaction = false
                         }
                         dismiss()
                     }
                     .frame(maxWidth: .infinity)
-                    .disabled(receivers.isEmpty)
                 }
             }
             .onChange(of: buyer) { _ in
                 receivers.removeAll()
             }
-            .navigationTitle("Add Transaction")
+            .navigationTitle("Select Buyer")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
     init(vm: ViewModel, processingTransaction: Binding<Bool>) {
         self.vm = vm
-        allPeople = vm.relationships.map { $0.person }
-        _buyer = .init(initialValue: vm.relationships.first?.person ?? Person())
+        allPeople = vm.relationships
+            .filter {$0.isPresent}
+            .map { $0.person }
+        _buyer = .init(initialValue: vm.currentBuyer)
         _processingTransaction = processingTransaction
     }
 }

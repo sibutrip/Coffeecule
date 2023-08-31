@@ -266,7 +266,7 @@ class PersonService {
                 }
             }
         } catch { print(error.localizedDescription) }
-        await repository.transactions(transactions)
+        await repository.setTransactions(transactions)
         return (people, transactions, hasShare)
     }
     

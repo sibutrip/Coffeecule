@@ -134,8 +134,16 @@ actor Repository: ObservableObject {
         self.rootRecord = record
     }
     
-    public func transactions(_ transactions: [Transaction]) {
+    public func setTransactions(_ transactions: [Transaction]) {
         self.transactions = transactions
+    }
+    
+    public func addTransactions(_ transactions: [Transaction]) {
+        if let existingTransactions = self.transactions {
+            self.transactions = existingTransactions + transactions
+        } else {
+            self.transactions = transactions
+        }
     }
     
 }
