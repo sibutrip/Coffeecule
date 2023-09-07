@@ -116,8 +116,6 @@ extension ViewModel {
         do {
             try await populateData()
         } catch { }
-//        createDisplayedDebts()
-//        calculateBuyer()
     }
     
     public func loadData() async throws {
