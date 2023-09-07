@@ -36,6 +36,8 @@
 		7467996729B0DC9100339D5C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467995529B0DC9100339D5C /* ViewModel.swift */; };
 		7478C72829E5FCC8006ED737 /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478C72729E5FCC8006ED737 /* CloudSharingView.swift */; };
 		7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478C72929E5FCE0006ED737 /* SharedContainerDebugView.swift */; };
+		748BE4E82AAA0A4600FCA6AE /* RDCoffeeculeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */; };
+		748BE4EA2AAA4D8B00FCA6AE /* EqualWidthVStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */; };
 		74B0AB3729C35021002DA7BD /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B0AB3629C35021002DA7BD /* Titles.swift */; };
 		74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */; };
 		74BA5F5529E5902400C28F2F /* PersonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA5F5429E5902400C28F2F /* PersonService.swift */; };
@@ -82,6 +84,8 @@
 		7478C72729E5FCC8006ED737 /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		7478C72929E5FCE0006ED737 /* SharedContainerDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainerDebugView.swift; sourceTree = "<group>"; };
 		7478C72B29E5FD1B006ED737 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDCoffeeculeView.swift; sourceTree = "<group>"; };
+		748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualWidthVStack.swift; sourceTree = "<group>"; };
 		74B0AB3629C35021002DA7BD /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
 		74BA5F5229E58FEA00C28F2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		74BA5F5429E5902400C28F2F /* PersonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonService.swift; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 			children = (
 				7467994229B0DC9100339D5C /* ContentView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
+				748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */,
+				748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				744356662A97E65D0027A58D /* HistoryView.swift */,
 				744356682A97EBA30027A58D /* AddTransactionView.swift */,
@@ -331,6 +337,7 @@
 				7412BA562A30F48E0003579A /* CreateView.swift in Sources */,
 				7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */,
 				7467996629B0DC9100339D5C /* Repository.swift in Sources */,
+				748BE4EA2AAA4D8B00FCA6AE /* EqualWidthVStack.swift in Sources */,
 				74BA5F5529E5902400C28F2F /* PersonService.swift in Sources */,
 				7467996229B0DC9100339D5C /* DummyReadWrite.swift in Sources */,
 				74BA5F5E29E5B98D00C28F2F /* VMTransactions.swift in Sources */,
@@ -340,6 +347,7 @@
 				7478C72A29E5FCE0006ED737 /* SharedContainerDebugView.swift in Sources */,
 				74BA5F5329E58FEA00C28F2F /* SceneDelegate.swift in Sources */,
 				744C450A29FC53500062B47C /* AppAccess.swift in Sources */,
+				748BE4E82AAA0A4600FCA6AE /* RDCoffeeculeView.swift in Sources */,
 				744356692A97EBA30027A58D /* AddTransactionView.swift in Sources */,
 				7467996329B0DC9100339D5C /* DiskReadWrite.swift in Sources */,
 				7467996529B0DC9100339D5C /* Transaction.swift in Sources */,

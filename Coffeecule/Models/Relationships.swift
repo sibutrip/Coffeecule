@@ -25,8 +25,12 @@ extension Relationship: Comparable {
     static func < (lhs: Relationship, rhs: Relationship) -> Bool {
         lhs.name < rhs.name
     }
-    
-    
+}
+
+extension Relationship: Identifiable {
+    var id: UUID {
+        person.id
+    }
 }
 
 class RelationshipService {

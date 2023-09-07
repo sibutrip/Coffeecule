@@ -13,14 +13,16 @@ struct ContentView: View {
     @State private var couldNotGetPermission = false
     var body: some View {
         NavigationStack {
-            VStack {
-                if vm.state == .loading {
-                    ProgressView()
-                } else {
-                    if vm.hasShare == true {
-                        CoffeeculeView(vm: vm)
+            GeometryReader { geo in
+                VStack {
+                    if vm.state == .loading {
+                        ProgressView()
                     } else {
-                        OnboardingView(vm: vm)
+                        if vm.hasShare == true {
+                            RDCoffeeculeView(vm: vm, geo: geo)
+                        } else {
+                            OnboardingView(vm: vm)
+                        }
                     }
                 }
             }
