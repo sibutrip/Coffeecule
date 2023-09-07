@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D45F6CC2AAA546900F55F32 /* MemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D45F6CB2AAA546900F55F32 /* MemberView.swift */; };
+		5D45F6CE2AAA6EDF00F55F32 /* ChildSizeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D45F6CD2AAA6EDF00F55F32 /* ChildSizeReader.swift */; };
 		7402CB8B296A099C000BC882 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8A296A099C000BC882 /* Assets.xcassets */; };
 		7402CB8E296A099C000BC882 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7402CB8D296A099C000BC882 /* Preview Assets.xcassets */; };
 		74059E652A9509270080D2B9 /* CloudError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74059E642A9509270080D2B9 /* CloudError.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D45F6CB2AAA546900F55F32 /* MemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberView.swift; sourceTree = "<group>"; };
+		5D45F6CD2AAA6EDF00F55F32 /* ChildSizeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildSizeReader.swift; sourceTree = "<group>"; };
 		7402CB83296A099A000BC882 /* Coffeecule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffeecule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7402CB8A296A099C000BC882 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7402CB8D296A099C000BC882 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 			children = (
 				7467994229B0DC9100339D5C /* ContentView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
+				5D45F6CB2AAA546900F55F32 /* MemberView.swift */,
 				748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */,
 				748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
@@ -162,6 +167,7 @@
 				744C450F29FC63D80062B47C /* OnboardingView.swift */,
 				7412BA552A30F48E0003579A /* CreateView.swift */,
 				7412BA532A30F3EA0003579A /* JoinView.swift */,
+				5D45F6CD2AAA6EDF00F55F32 /* ChildSizeReader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -324,6 +330,7 @@
 				7467995D29B0DC9100339D5C /* AppDelegate.swift in Sources */,
 				744356652A969BE70027A58D /* FetchTask.swift in Sources */,
 				74BA5F5729E59A6A00C28F2F /* TransactionService.swift in Sources */,
+				5D45F6CE2AAA6EDF00F55F32 /* ChildSizeReader.swift in Sources */,
 				74059E672A952BD70080D2B9 /* PersonError.swift in Sources */,
 				7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */,
 				74D0E6282A30B8B100338009 /* VmCloud.swift in Sources */,
@@ -333,6 +340,7 @@
 				74059E652A9509270080D2B9 /* CloudError.swift in Sources */,
 				744356672A97E65D0027A58D /* HistoryView.swift in Sources */,
 				7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */,
+				5D45F6CC2AAA546900F55F32 /* MemberView.swift in Sources */,
 				7467995F29B0DC9100339D5C /* Person.swift in Sources */,
 				7412BA562A30F48E0003579A /* CreateView.swift in Sources */,
 				7467995829B0DC9100339D5C /* WhosGettingCoffee.swift in Sources */,

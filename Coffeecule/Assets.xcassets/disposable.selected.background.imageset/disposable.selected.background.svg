@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="540px" height="540px" viewBox="0 0 540 540" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>disposable.selected.background</title>
+    <g id="disposable.selected.background" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M90.5,145.269286 C90.5,164.074745 173.015249,182.880204 270,182.880204 C366.984751,182.880204 449.5,164.074745 449.5,145.269286 C449.5,126.463827 373.254174,107.658368 270,107.658368 C166.745826,107.658368 90.5,126.463827 90.5,145.269286 Z" id="Path-3" fill="#F9E9DE"></path>
+        <path d="M98.5941645,155.888839 L154.421001,446.717199 C184.233443,463.344645 222.759776,471.658368 270,471.658368 C317.240224,471.658368 355.623186,463.344645 385.148886,446.717199 L441.405836,155.888839 L98.5941645,155.888839 Z" id="Path-4" fill="#F9E9DE"></path>
+    </g>
+</svg>
