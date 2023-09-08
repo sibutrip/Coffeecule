@@ -179,5 +179,147 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7B03F175-D6A0-46F8-8499-FED2EF5D7DBC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/Views/CustomizeCupView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "7B03F175-D6A0-46F8-8499-FED2EF5D7DBC - adf2507d8ce54dbd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #2 @Sendable () async throws -&gt; () in closure #3 () -&gt; () in Coffeecule.CustomizeCupView.body.getter : some"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/CustomizeCupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "7B03F175-D6A0-46F8-8499-FED2EF5D7DBC - ecb83595243d4fd8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for closure #2 @Sendable () async throws -&gt; () in closure #3 () -&gt; () in Coffeecule.CustomizeCupView.body.getter : some"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/CustomizeCupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "7B03F175-D6A0-46F8-8499-FED2EF5D7DBC - f298267816de89bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #2 @Sendable () async throws -&gt; () in closure #3 () -&gt; () in Coffeecule.CustomizeCupView.body.getter : some"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/CustomizeCupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "68">
+               </Location>
+               <Location
+                  uuid = "7B03F175-D6A0-46F8-8499-FED2EF5D7DBC - 90150f666da32bb8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #2 @Sendable () async throws -&gt; () in closure #3 () -&gt; () in Coffeecule.CustomizeCupView.body.getter : some"
+                  moduleName = "Coffeecule"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sibutrip/Documents/XCode%20Projects/Coffeecule/Coffeecule/Views/CustomizeCupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "751E452F-5545-481B-B7AD-FB7CCA41DC42"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/Views/CustomizeCupView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "init(vm:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F933C72-4790-4568-8B44-A32A58A3A62C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/Models/Person.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "init(name:associatedRecord:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0A76413C-62A6-4926-83DD-45134E9CAA10"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/Models/Person.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "setUserColor(to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A5B7F8B-34D5-4B13-B829-59616A401D28"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Coffeecule/Views/CustomizeCupView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

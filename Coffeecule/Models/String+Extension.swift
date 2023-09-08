@@ -14,7 +14,7 @@ extension String {
         } else if self == "teal" {
             return .teal
         } else if self == "orange" {
-            return .teal
+            return .orange
         } else if self == "pink" {
             return .teal
         } else {

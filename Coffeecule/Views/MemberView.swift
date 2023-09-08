@@ -29,44 +29,46 @@ struct MemberView: View {
     var body: some View {
         Button {
             relationship.isPresent.toggle()
-        } label: { ChildSizeReader(size: $zstackSize) {
-            ZStack {
-                if relationship.isPresent {
-                    Image(icon.selectedImageBackground)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(Color("user.background"))
-                    Image(icon.selectedImage)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(Color(color.colorName))
-                    
-                    if isBuying {
-                        Image(icon.isBuyingBadgeImage)
+        } label: {
+            ChildSizeReader(size: $zstackSize) {
+                ZStack {
+                    if relationship.isPresent {
+                        Image(icon.selectedImageBackground)
                             .resizable()
                             .scaledToFit()
+                            .foregroundColor(Color("user.background"))
+                        Image(icon.selectedImage)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color(color.colorName))
+                        
+                        if isBuying {
+                            Image(icon.isBuyingBadgeImage)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                    } else {
+                        Image(icon.imageBackground)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color("user.background"))
+                        Image(icon.image)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color(color.colorName))
                     }
-                } else {
-                    Image(icon.imageBackground)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(Color("user.background"))
-                    Image(icon.image)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(Color(color.colorName))
+                    
+                    Text(name)
+                        .multilineTextAlignment(.center)
+                        .font(.title.weight(.semibold))
+                        .foregroundColor(relationship.isPresent ? Color("background") : Color(color.colorName))
+                        .minimumScaleFactor(0.4)
+                        .lineLimit(1)
+                        .offset(x: icon.offsetPercentage.0 * zstackSize.width / 2, y: icon.offsetPercentage.1 * zstackSize.height / 2)
+                        .frame(maxWidth: icon.maxWidthPercentage * zstackSize.width)
                 }
-                
-                Text(name)
-                    .multilineTextAlignment(.center)
-                    .font(.title.weight(.semibold))
-                    .foregroundColor(relationship.isPresent ? Color("background") : Color(color.colorName))
-                    .minimumScaleFactor(0.4)
-                    .lineLimit(1)
-                    .offset(x: icon.offsetPercentage.0 * zstackSize.width / 2, y: icon.offsetPercentage.1 * zstackSize.height / 2)
-                    .frame(maxWidth: icon.maxWidthPercentage * zstackSize.width)
+                .animation(.default, value: vm.currentBuyer)
             }
-        }
         }
     }
     init(vm: ViewModel, relationship: Binding<Relationship>) {

@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum MugIcon: String {
-    case espresso, latte, mug, disposable
+enum MugIcon: String, CaseIterable {
+    case mug, espresso, latte, disposable
     
     var image: String {
         self.rawValue

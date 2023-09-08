@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Relationship: Equatable {
-    let person: Person
+    var person: Person
     var name: String {
         person.name
     }

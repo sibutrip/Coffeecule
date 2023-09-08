@@ -10,6 +10,8 @@ import SwiftUI
 
 struct RDCoffeeculeView: View {
     @ObservedObject var vm: ViewModel
+    @State var viewingHistory = false
+    @State var customizingCup = false
     let columns: [GridItem]
     var hasBuyer: Bool {
         vm.currentBuyer != Person()
@@ -50,14 +52,30 @@ struct RDCoffeeculeView: View {
                 }
                 .animation(.default, value: hasBuyer)
                 .navigationTitle("Who's Here?")
-                .toolbar {
-                    ToolbarItem {
-                        Button{
-                            //
-                        } label: {
-                            Label("Transaction History", systemImage: "dollarsign.arrow.circlepath")
-                        }
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        customizingCup = true
+                    } label: {
+                        Label("Customize Your Cup", systemImage: "cup.and.saucer")
                     }
+                }
+                
+                ToolbarItem {
+                    Button{
+                        viewingHistory = true
+                    } label: {
+                        Label("Transaction History", systemImage: "dollarsign.arrow.circlepath")
+                    }
+                }
+            }
+            .sheet(isPresented: $viewingHistory) {
+                HistoryView(vm: vm)
+            }
+            .sheet(isPresented: $customizingCup) {
+                GeometryReader { geo in
+                    CustomizeCupView(vm: vm)
                 }
             }
         }

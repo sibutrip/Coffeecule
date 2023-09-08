@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum UserColor: String {
+enum UserColor: String, CaseIterable {
     case purple, teal, orange, pink
     
     var colorName: String {

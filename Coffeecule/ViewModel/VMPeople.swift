@@ -198,9 +198,27 @@ extension ViewModel {
         let rootRecordName = await repository.rootRecord?["userID"] as? String
         let record = person.associatedRecord
         if self.userID == rootRecordName {
-            _ = try await Repository.container.privateCloudDatabase.modifyRecords(saving: [record], deleting: [])
+            let result = try await Repository.container.privateCloudDatabase.modifyRecords(saving: [record], deleting: [])
+            let results = result.saveResults.map { $0.value }
+            results.forEach { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         } else {
-            _ = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+            let result = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+            let results = result.saveResults.map { $0.value }
+            results.forEach { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 }
