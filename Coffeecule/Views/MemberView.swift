@@ -7,69 +7,9 @@
 
 import SwiftUI
 
-#warning("Move to user model or wherever")
-enum Icon: String {
-    case espresso, latte, mug, disposable
-    
-    var image: String {
-        self.rawValue
-    }
-    
-    var imageBackground: String {
-        self.rawValue + ".background"
-    }
-    
-    var selectedImage: String {
-        self.rawValue + ".selected"
-    }
-    
-    var selectedImageBackground: String {
-        self.rawValue + ".selected.background"
-    }
-    
-    var isBuyingBadgeImage: String {
-        self.rawValue + ".moneybadge"
-    }
-    
-    var offsetPercentage: (Double, Double) {
-        switch self {
-        case .espresso:
-            return (-0.07, 0.1)
-        case .latte:
-            return (-0.06, 0.2)
-        case .mug:
-            return (-0.06, 0.25)
-        case .disposable:
-            return (0, 0.2)
-        }
-    }
-    
-    var maxWidthPercentage: CGFloat {
-        switch self {
-        case .espresso:
-            return 0.406
-        case .latte:
-            return 0.611
-        case .mug:
-            return 0.576
-        case .disposable:
-            return 0.481
-        }
-    }
-}
-
-#warning("Move to user model or wherever")
-enum UserColor: String {
-    case purple, teal, orange, pink
-    
-    var colorName: String {
-        "user." + self.rawValue
-    }
-}
-
 struct MemberView: View {
     var name: String
-    var icon: Icon
+    var icon: MugIcon
     var color: UserColor
     var isSelected: Bool
     var isBuying: Bool
