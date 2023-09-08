@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Relationship: Equatable {
     let person: Person
     var name: String {
         person.name
+    }
+    
+    var mugIcon: MugIcon {
+        person.mugIcon
+    }
+    var userColor: UserColor {
+        person.userColor
     }
     
     var coffeesOwed: [Person:Int] = [:]

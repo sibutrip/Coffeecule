@@ -6,20 +6,32 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct MemberView: View {
-    var name: String
-    var icon: MugIcon
-    var color: UserColor
-    var isSelected: Bool
-    var isBuying: Bool
+    @ObservedObject var vm: ViewModel
+    @Binding var relationship: Relationship
+    var name: String {
+        relationship.name
+    }
+    var icon: MugIcon {
+        relationship.mugIcon
+    }
+    var color: UserColor {
+        relationship.userColor
+    }
+    var isBuying: Bool {
+        vm.currentBuyer == relationship.person
+    }
     
     @State private var zstackSize = CGSize.zero
     
     var body: some View {
-        ChildSizeReader(size: $zstackSize) {
+        Button {
+            relationship.isPresent.toggle()
+        } label: { ChildSizeReader(size: $zstackSize) {
             ZStack {
-                if isSelected {
+                if relationship.isPresent {
                     Image(icon.selectedImageBackground)
                         .resizable()
                         .scaledToFit()
@@ -48,25 +60,32 @@ struct MemberView: View {
                 Text(name)
                     .multilineTextAlignment(.center)
                     .font(.title.weight(.semibold))
-                    .foregroundColor(isSelected ? Color("background") : Color(color.colorName))
+                    .foregroundColor(relationship.isPresent ? Color("background") : Color(color.colorName))
                     .minimumScaleFactor(0.4)
                     .lineLimit(1)
                     .offset(x: icon.offsetPercentage.0 * zstackSize.width / 2, y: icon.offsetPercentage.1 * zstackSize.height / 2)
                     .frame(maxWidth: icon.maxWidthPercentage * zstackSize.width)
             }
         }
+        }
+    }
+    init(vm: ViewModel, relationship: Binding<Relationship>) {
+        _relationship = relationship
+        self.vm = vm
     }
 }
 
 struct MemberView_Previews: PreviewProvider {
     static var previews: some View {
         LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
-            MemberView(name: "Zoe", icon: .latte, color: .purple, isSelected: false, isBuying: false)
-            MemberView(name: "Tomothy Barbados", icon: .espresso, color: .orange, isSelected: true, isBuying: false)
-            MemberView(name: "Cory", icon: .disposable, color: .teal, isSelected: true, isBuying: true)
-            MemberView(name: "Kiana", icon: .mug, color: .pink, isSelected: false, isBuying: false)
-            MemberView(name: "Telayne3334", icon: .disposable, color: .purple, isSelected: false, isBuying: false)
-            MemberView(name: "Nick", icon: .espresso, color: .teal, isSelected: false, isBuying: false)
+            MemberView(vm: ViewModel(), relationship: .constant(Relationship(Person(name: "Zoe", associatedRecord: CKRecord(recordType: "test")))))
+            MemberView(vm: ViewModel(), relationship: .constant(Relationship(Person(name: "Cory", associatedRecord: CKRecord(recordType: "test")))))
+            //            MemberView(name: "Zoe", icon: .latte, color: .purple, isSelected: false, isBuying: false)
+            //            MemberView(name: "Tomothy Barbados", icon: .espresso, color: .orange, isSelected: true, isBuying: false)
+            //            MemberView(name: "Cory", icon: .disposable, color: .teal, isSelected: true, isBuying: true)
+            //            MemberView(name: "Kiana", icon: .mug, color: .pink, isSelected: false, isBuying: false)
+            //            MemberView(name: "Telayne3334", icon: .disposable, color: .purple, isSelected: false, isBuying: false)
+            //            MemberView(name: "Nick", icon: .espresso, color: .teal, isSelected: false, isBuying: false)
         }
     }
 }

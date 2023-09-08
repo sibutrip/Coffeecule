@@ -193,4 +193,14 @@ extension ViewModel {
         await self.repository.share(nil)
         await self.repository.rootRecord(nil)
     }
+    
+    func updateInCloud(person: Person) async throws {
+        let rootRecordName = await repository.rootRecord?["userID"] as? String
+        let record = person.associatedRecord
+        if self.userID == rootRecordName {
+            _ = try await Repository.container.privateCloudDatabase.modifyRecords(saving: [record], deleting: [])
+        } else {
+            _ = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [record], deleting: [])
+        }
+    }
 }

@@ -15,20 +15,29 @@ struct Person: Identifiable {
     let name: String
     var associatedRecord: CKRecord
     let userID: String // CKRecord.ID.recordName from userIdentity
+    private(set) var mugIcon: MugIcon = .mug
+    private(set) var userColor: UserColor = .purple
     
     /// Coding Key
     private enum CodingKeys: String, CodingKey {
         case name, isPresent, coffeesOwed, userRecordName, associatedRecord
     }
     
-    /// Initializer from cloudkit
+    /// Initializer from existing cloudkit record
     init(name: String, associatedRecord: CKRecord) {
         self.name = name
         self.associatedRecord = associatedRecord
         self.userID = associatedRecord["userID"] as? String ?? ""
+        
+        let mugIconString = associatedRecord["mugIcon"] as? String ?? "mug"
+        self.mugIcon = mugIconString.mugIcon
+        
+        let userColorString = associatedRecord["userColor"] as? String ?? "purple"
+        self.userColor = userColorString.userColor
     }
     
     /// initializer from new name. creates a ckrecord
+    /// only use when creating a person from scratch.
     init(name: String, participantType: ParticipantType, userID: String, in repository: Repository) async {
         self.name = name
         let record = CKRecord(recordType: participantType.rawValue, recordID: CKRecord.ID(recordName: UUID().uuidString, zoneID: await repository.currentZone.zoneID))
@@ -44,6 +53,16 @@ struct Person: Identifiable {
         let record = CKRecord(recordType: ParticipantType.root.rawValue, recordID: CKRecord.ID(recordName: "nobody", zoneID: CKRecordZone(zoneID: CKRecordZone.ID.default).zoneID))
         associatedRecord = record
         self.userID = record.recordID.recordName
+    }
+    
+    mutating public func setMugIcon(to mugIcon: MugIcon) {
+        self.mugIcon = mugIcon
+        associatedRecord["mugIcon"] = mugIcon.rawValue
+    }
+    
+    mutating public func setUserColor(to userColor: UserColor) {
+        self.userColor = userColor
+        associatedRecord["userColor"] = userColor.rawValue
     }
     
     /// Initializer when decoding from JSON
