@@ -34,16 +34,17 @@ enum CloudError: LocalizedError {
         case .userIdentity:
             """
             One of three issues are possible:
-            1. The device has an iCloud account but the user disables iCloud Drive.
-            2. The device has an iCloud account with restricted access.
-            3. The device doesn’t have an iCloud account.
+            1. The device has an iCloud account but has iCloud Drive disabled.
+            2. You're not connected to the internet
+            3. The device has an iCloud account with restricted access.
+            4. The device doesn’t have an iCloud account.
             """
         case .multipleSharedContainers:
             "make sure you're only in 1 coffeecule!"
         case .accountStatus:
             "could not verify account status. make sure you're logged into icloud"
         case .couldNotDetermine:
-            "???"
+            "please quit and reopen the app"
         case .noAccount:
             "an iCloud account is needed to join a 'cule"
         case .restricted:
