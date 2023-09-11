@@ -12,29 +12,29 @@ enum PersonError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .couldntCreateRootRecord:
-            "failed to create coffeecule"
+            return "failed to create coffeecule"
         case .couldntCreateParticipantRecord:
-            "failed to join coffeecule"
+            return "failed to join coffeecule"
         case .couldntCreateRootShare:
-            "failed to share coffeecule"
+            return "failed to share coffeecule"
         case .alreadyOwnsCoffeecule:
-            "failed to ?? coffeecule"
+            return "failed to ?? coffeecule"
         case .multipleCoffeeculesExist:
-            "failed to ?? coffeecule"
+            return "failed to ?? coffeecule"
         }
     }
     var recoverySuggestion: String? {
         switch self {
         case .couldntCreateRootRecord:
-            "tell cory to switch the beta to the production environment lmao"
+            return "tell cory to switch the beta to the production environment lmao"
         case .couldntCreateParticipantRecord:
-            "tell cory to switch the beta to the production environment lmao"
+            return "tell cory to switch the beta to the production environment lmao"
         case .alreadyOwnsCoffeecule:
-            "delete your current coffeecule before joining another"
+            return "delete your current coffeecule before joining another"
         case .multipleCoffeeculesExist:
-            "contact your local dev, you're in multiple coffeecules"
+            return "contact your local dev, you're in multiple coffeecules"
         case .couldntCreateRootShare:
-            "tell cory to switch the beta to the production environment lmao"
+            return "tell cory to switch the beta to the production environment lmao"
         }
     }
 }
