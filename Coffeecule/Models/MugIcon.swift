@@ -30,6 +30,23 @@ enum MugIcon: String, CaseIterable {
         self.rawValue + ".moneybadge"
     }
     
+    var emptyBadgeImage: String {
+        self.rawValue + ".emptybadge"
+    }
+    
+    var imageDescription: String {
+        switch self {
+        case .mug:
+            return "Coffee mug."
+        case .espresso:
+            return "Espresso cup."
+        case .latte:
+            return "Latte mug."
+        case .disposable:
+            return "Paper cup."
+        }
+    }
+    
     var offsetPercentage: (Double, Double) {
         switch self {
         case .espresso:
