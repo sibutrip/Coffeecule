@@ -55,6 +55,7 @@
 		74D360652A9D27F50024AC03 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D360642A9D27F50024AC03 /* Date+Extension.swift */; };
 		74D9F46B2AAB479900D651B8 /* MugIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9F46A2AAB479900D651B8 /* MugIcon.swift */; };
 		74D9F46D2AAB47CD00D651B8 /* UserColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9F46C2AAB47CD00D651B8 /* UserColor.swift */; };
+		74EE27632AAF423500A8D894 /* SomeoneElseBuying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,6 +112,7 @@
 		74D360642A9D27F50024AC03 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		74D9F46A2AAB479900D651B8 /* MugIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MugIcon.swift; sourceTree = "<group>"; };
 		74D9F46C2AAB47CD00D651B8 /* UserColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserColor.swift; sourceTree = "<group>"; };
+		74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomeoneElseBuying.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,21 +173,16 @@
 				7467994229B0DC9100339D5C /* ContentView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
 				5D45F6CB2AAA546900F55F32 /* MemberView.swift */,
-				74845B082AAB8C3B00E58E11 /* CupView.swift */,
-				74845B0A2AAB94EE00E58E11 /* CupPickerDetail.swift */,
 				748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */,
+				74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */,
 				74845B0C2AABA0D600E58E11 /* ColorPickerDetail.swift */,
-				74845B062AAB6B8200E58E11 /* CustomizeCupView.swift */,
-				748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				744356662A97E65D0027A58D /* HistoryView.swift */,
 				744356682A97EBA30027A58D /* AddTransactionView.swift */,
 				7478C72729E5FCC8006ED737 /* CloudSharingView.swift */,
-				744C450B29FC5DCE0062B47C /* JoinSheet.swift */,
-				744C450F29FC63D80062B47C /* OnboardingView.swift */,
-				7412BA552A30F48E0003579A /* CreateView.swift */,
-				7412BA532A30F3EA0003579A /* JoinView.swift */,
-				5D45F6CD2AAA6EDF00F55F32 /* ChildSizeReader.swift */,
+				74EE27662AAF434800A8D894 /* Cups */,
+				74EE27642AAF430A00A8D894 /* Onboarding */,
+				74EE27652AAF432800A8D894 /* Utilities */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -269,6 +266,36 @@
 				7467995329B0DC9100339D5C /* Repository.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		74EE27642AAF430A00A8D894 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				744C450F29FC63D80062B47C /* OnboardingView.swift */,
+				744C450B29FC5DCE0062B47C /* JoinSheet.swift */,
+				7412BA552A30F48E0003579A /* CreateView.swift */,
+				7412BA532A30F3EA0003579A /* JoinView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		74EE27652AAF432800A8D894 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				748BE4E92AAA4D8B00FCA6AE /* EqualWidthVStack.swift */,
+				5D45F6CD2AAA6EDF00F55F32 /* ChildSizeReader.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		74EE27662AAF434800A8D894 /* Cups */ = {
+			isa = PBXGroup;
+			children = (
+				74845B0A2AAB94EE00E58E11 /* CupPickerDetail.swift */,
+				74845B082AAB8C3B00E58E11 /* CupView.swift */,
+				74845B062AAB6B8200E58E11 /* CustomizeCupView.swift */,
+			);
+			path = Cups;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -365,6 +392,7 @@
 				7467996129B0DC9100339D5C /* CloudReadWrite.swift in Sources */,
 				5D45F6CC2AAA546900F55F32 /* MemberView.swift in Sources */,
 				74D9F46D2AAB47CD00D651B8 /* UserColor.swift in Sources */,
+				74EE27632AAF423500A8D894 /* SomeoneElseBuying.swift in Sources */,
 				74845B052AAB552B00E58E11 /* String+Extension.swift in Sources */,
 				7467995F29B0DC9100339D5C /* Person.swift in Sources */,
 				7412BA562A30F48E0003579A /* CreateView.swift in Sources */,

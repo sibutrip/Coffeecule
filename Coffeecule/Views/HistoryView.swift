@@ -61,7 +61,7 @@ struct HistoryView: View {
             let transactions = await vm.repository.transactions?.sorted { $0.creationDate! > $1.roundedDate! } ?? []
             let datesAndTransactions = Dictionary(grouping: transactions) { $0.roundedDate! }
             self.datesAndTransactions = datesAndTransactions
-//            transactions.forEach { print($0.buyerName) }
+            //            transactions.forEach { print($0.buyerName) }
             isLoading = false
         }
     }

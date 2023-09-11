@@ -63,7 +63,7 @@ struct RDCoffeeculeView: View {
                 }
                 
                 ToolbarItem {
-                    Button{
+                    Button {
                         viewingHistory = true
                     } label: {
                         Label("Transaction History", systemImage: "dollarsign.arrow.circlepath")
