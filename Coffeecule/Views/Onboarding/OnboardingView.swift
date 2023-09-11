@@ -18,11 +18,25 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             Spacer()
-            Button("Create a new Coffecule") { creating = true }
-            Spacer()
-            Button("Join an existing Coffecule") { joining = true }
+            EqualWidthVStackLayout(spacing: 200) {
+                Button { creating = true } label: {
+                    Text("Create a new Coffecule")
+                        .font(.title)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button { joining = true } label: {
+                    Text("Join an existing Coffecule")
+                        .font(.title)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                
+            }
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
         .sheet(isPresented: $creating) {
             CreateView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule)

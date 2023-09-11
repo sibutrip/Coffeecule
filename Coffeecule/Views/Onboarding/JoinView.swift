@@ -12,6 +12,7 @@ struct JoinView: View {
     
     @Binding var couldNotJoinCule: Bool
     @Binding var couldntCreateCule: Bool
+    @Binding var customizingCup: Bool
     @State private var isLoading = false
     var parentDismiss: DismissAction? = nil
     
@@ -54,6 +55,7 @@ struct JoinView: View {
                         return
                     }
                     parentDismiss()
+                    customizingCup = true
                 }
             }
             .disabled(isLoading)

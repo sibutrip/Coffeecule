@@ -13,7 +13,7 @@ import SwiftUI
 struct EqualWidthVStackLayout: Layout {
     
     /// The spacing between views
-    var spacing: Double
+    var spacing: Double = 0
     
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         return subviews.reduce(CGSize(width: 0, height: 0)) { partialResult, subview in
@@ -25,7 +25,7 @@ struct EqualWidthVStackLayout: Layout {
         let elementSize = elementSize(proposal: .unspecified, subviews: subviews)
         var point = bounds.origin
         point.x += elementSize.width / 2
-        point.y += elementSize.height / 2
+        point.y += elementSize.height / 2 - spacing / 2
         let placementProposal = ProposedViewSize(width: elementSize.width, height: elementSize.height)
         for view in subviews {
             view.place(at: point, anchor: .center, proposal: placementProposal)

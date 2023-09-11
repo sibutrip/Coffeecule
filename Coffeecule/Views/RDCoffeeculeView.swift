@@ -14,6 +14,7 @@ struct RDCoffeeculeView: View {
     let columns: [GridItem]
     @State var someoneElseBuying = false
     @State var isBuying = false
+    @State var isDeletingCoffeecule = false
     var hasBuyer: Bool {
         vm.currentBuyer != Person()
     }
@@ -24,6 +25,11 @@ struct RDCoffeeculeView: View {
                     AllMembersView(vm: vm, someoneElseBuying: $someoneElseBuying, isBuying: $isBuying)
                 } else {
                     SomeoneElseBuying(vm: vm, someoneElseBuying: $someoneElseBuying, isBuying: $isBuying)
+                }
+            }
+            .refreshable {
+                Task {
+                    await vm.refreshData()
                 }
             }
         }

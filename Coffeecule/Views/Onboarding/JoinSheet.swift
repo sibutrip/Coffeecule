@@ -20,6 +20,8 @@ struct JoinSheet: View {
     @State var rootUserID: String?
     @State var viewState = ViewState.loading
     
+    @Binding var customizingCup: Bool
+    
     func rootUserID() async -> String? {
         return await vm.repository.rootRecord?.recordID.recordName
     }
@@ -40,7 +42,7 @@ struct JoinSheet: View {
                         }
                     }
                     NavigationLink("join as new member") {
-                        JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule, parentDismiss: dismiss)
+                        JoinView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule, customizingCup: $customizingCup, parentDismiss: dismiss)
                     }
                     Button("I'm already in this coffeecule") {
                         dismiss()

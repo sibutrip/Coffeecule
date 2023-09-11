@@ -14,6 +14,13 @@ extension ViewModel {
         return relationships.filter { $0.isPresent }.count
     }
     
+    var viewerIsOwner: Bool {
+        get async {
+            let rootRecordName = await repository.rootRecord?["userID"] as? String
+            return self.userID == rootRecordName
+        }
+    }
+    
     var presentPeople: Set<Person> {
         let people = relationships.filter { $0.isPresent }.map { $0.person }
         return Set(people)

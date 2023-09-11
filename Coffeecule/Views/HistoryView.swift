@@ -19,7 +19,7 @@ struct HistoryView: View {
                     ProgressView()
                 } else {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             Text("Transaction History")
                                 .font(.headline)
                                 .padding(.bottom)
@@ -38,33 +38,53 @@ struct HistoryView: View {
                         .background {
                             Color("ListBackground")
                         }
-                        List {
-                            ForEach(datesAndTransactions.keys.sorted(by: { $0 > $1 }), id: \.self) { date in
-                                let transactions = datesAndTransactions[date] ?? []
-                                if !transactions.isEmpty {
-                                    Section(date.formatted(date: .abbreviated, time: .omitted)) {
-                                        ForEach(transactions) { transaction in
-                                            HStack {
-                                                Text(transaction.receiverName)
-                                                Spacer()
-                                                Text(transaction.buyerName)
-                                            }
-                                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                                Button {
-                                                    withAnimation {
-                                                        datesAndTransactions[date] = datesAndTransactions[date]?
-                                                            .filter { $0.id != transaction.id }
-                                                    }
-                                                    Task {
-                                                        try await vm.remove(transaction: transaction)
-                                                    }
-                                                } label: {
-                                                    Label("Trash", systemImage: "trash")
+                        if datesAndTransactions.isEmpty {
+                            Text("No previous transactions. Try to buy a coffee first!")
+                                .padding(.horizontal)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .ignoresSafeArea()
+                                .background {
+                                    Color("ListBackground")
+                                }
+                        } else {
+                            List {
+                                ForEach(datesAndTransactions.keys.sorted(by: { $0 > $1 }), id: \.self) { date in
+                                    let transactions = datesAndTransactions[date] ?? []
+                                    if !transactions.isEmpty {
+                                        Section(date.formatted(date: .abbreviated, time: .omitted)) {
+                                            ForEach(transactions) { transaction in
+                                                HStack {
+                                                    Text(transaction.receiverName)
+                                                    Spacer()
+                                                    Text(transaction.buyerName)
                                                 }
-                                                .tint(.red)
+                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                    Button {
+                                                        withAnimation {
+                                                            datesAndTransactions[date] = datesAndTransactions[date]?
+                                                                .filter { $0.id != transaction.id }
+                                                        }
+                                                        Task {
+                                                            try await vm.remove(transaction: transaction)
+                                                        }
+                                                    } label: {
+                                                        Label("Trash", systemImage: "trash")
+                                                    }
+                                                    .tint(.red)
+                                                }
                                             }
                                         }
                                     }
+                                }
+                            }
+                            .refreshable {
+                                Task {
+                                    #warning("put need at least 2 fo buy")
+                                    await vm.refreshData()
+                                    let transactions = await vm.repository.transactions?.sorted { $0.creationDate! > $1.roundedDate! } ?? []
+                                    let datesAndTransactions = Dictionary(grouping: transactions) { $0.roundedDate! }
+                                    self.datesAndTransactions = datesAndTransactions
+                                    //            transactions.forEach { print($0.buyerName) }
                                 }
                             }
                         }

@@ -64,8 +64,8 @@ struct CoffeeculeView: View {
             }
         }
         .sheet(isPresented: $isSharing) {
-            if let share = share {
-                CloudSharingView(share: share, container: container!)
+            if let share, let container {
+                CloudSharingView(share: share, container: container)
             } else {
                 EmptyView()
             }

@@ -6,17 +6,23 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct AllMembersView: View {
+    @State var share: CKShare?
+    @State var container: CKContainer?
     @Environment(\.editMode) var editMode
     @ObservedObject var vm: ViewModel
+    @State private var userIsOwner = false
     @State private var viewingHistory = false
     @State private var customizingCup = false
+    @State private var isDeletingCoffeecule = false
+    @State private var isSharing = false
     @Binding var someoneElseBuying: Bool
     @Binding var isBuying: Bool
     private let columns = [
-        GridItem(.flexible(minimum: 10, maximum: .infinity)),
-        GridItem(.flexible(minimum: 10, maximum: .infinity))
+        GridItem(.flexible(minimum: 10, maximum: .infinity),spacing: 0),
+        GridItem(.flexible(minimum: 10, maximum: .infinity),spacing: 0)
     ]
     var hasBuyer: Bool {
         vm.currentBuyer != Person()
@@ -32,6 +38,7 @@ struct AllMembersView: View {
                             } label: {
                                 MemberView(vm: vm, relationship: $relationship)
                             }
+                            .disabled(editMode?.wrappedValue.isEditing ?? false)
                         }
                     }
                 }
@@ -65,22 +72,31 @@ struct AllMembersView: View {
                     let transition = AnyTransition.move(edge: .bottom)
                     EqualWidthVStackLayout(spacing: 10) {
                         Button {
-                            //
+                            Task {
+                                try await vm.shareCoffeecule()
+                                if let share = await vm.repository.rootShare {
+                                    self.share = share
+                                    self.container = Repository.container
+                                    isSharing = true
+                                }
+                            }
                         } label: {
                             Label("Add New Person", systemImage: "person.crop.circle.fill.badge.plus")
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
-                        Button {
-                            //
-                        } label: {
-                            Label("Delete Coffeecule", systemImage: "trash")
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                                .foregroundStyle(.red)
+                        if userIsOwner {
+                            Button {
+                                isDeletingCoffeecule = true
+                            } label: {
+                                Label("Delete Coffeecule", systemImage: "trash")
+                                    .font(.title2)
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundStyle(.red)
+                            }
+                            .buttonStyle(.bordered)
                         }
-                        .buttonStyle(.bordered)
                     }
                     .padding()
                     .padding(.bottom, 30)
@@ -115,10 +131,40 @@ struct AllMembersView: View {
             HistoryView(vm: vm)
         }
         .sheet(isPresented: $customizingCup) {
-            GeometryReader { geo in
-                CustomizeCupView(vm: vm)
+            CustomizeCupView(vm: vm)
+        }
+        .alert("Are you sure you want to delete your Coffeecule? This action is not reversable.", isPresented: $isDeletingCoffeecule) {
+            HStack {
+                Button("Yes", role: .destructive) {
+                    Task {
+                        do {
+                            try await vm.deleteCoffeecule()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+                Button("No", role: .cancel) {
+                    isDeletingCoffeecule = false
+                }
+                
             }
         }
+        .sheet(isPresented: $isSharing) {
+            if let share = share, let container = container {
+                CloudSharingView(share: share, container: container)
+            } else {
+                EmptyView()
+            }
+        }
+        .task {
+            userIsOwner = await vm.viewerIsOwner
+        }
+    }
+    init(vm: ViewModel, someoneElseBuying: Binding<Bool>, isBuying: Binding<Bool>) {
+        self.vm = vm
+        _someoneElseBuying = someoneElseBuying
+        _isBuying = isBuying
     }
 }
 
