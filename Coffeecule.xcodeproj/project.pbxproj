@@ -56,6 +56,7 @@
 		74D9F46B2AAB479900D651B8 /* MugIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9F46A2AAB479900D651B8 /* MugIcon.swift */; };
 		74D9F46D2AAB47CD00D651B8 /* UserColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9F46C2AAB47CD00D651B8 /* UserColor.swift */; };
 		74EE27632AAF423500A8D894 /* SomeoneElseBuying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */; };
+		74EE27682AAF438A00A8D894 /* AllMembersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE27672AAF438A00A8D894 /* AllMembersView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +114,7 @@
 		74D9F46A2AAB479900D651B8 /* MugIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MugIcon.swift; sourceTree = "<group>"; };
 		74D9F46C2AAB47CD00D651B8 /* UserColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserColor.swift; sourceTree = "<group>"; };
 		74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomeoneElseBuying.swift; sourceTree = "<group>"; };
+		74EE27672AAF438A00A8D894 /* AllMembersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMembersView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
 				5D45F6CB2AAA546900F55F32 /* MemberView.swift */,
 				748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */,
+				74EE27672AAF438A00A8D894 /* AllMembersView.swift */,
 				74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */,
 				74845B0C2AABA0D600E58E11 /* ColorPickerDetail.swift */,
 				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
@@ -383,6 +386,7 @@
 				74059E672A952BD70080D2B9 /* PersonError.swift in Sources */,
 				7413E4202A2A1CA900EFA01E /* ParticipantType.swift in Sources */,
 				74D0E6282A30B8B100338009 /* VmCloud.swift in Sources */,
+				74EE27682AAF438A00A8D894 /* AllMembersView.swift in Sources */,
 				7467995B29B0DC9100339D5C /* CloudDebug.swift in Sources */,
 				74BA5F5C29E5B98500C28F2F /* VMPeople.swift in Sources */,
 				74845B0B2AAB94EE00E58E11 /* CupPickerDetail.swift in Sources */,
