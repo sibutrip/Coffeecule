@@ -9,6 +9,7 @@ import SwiftUI
 import CloudKit
 
 struct MemberView: View {
+    let someoneElseBuying: Bool
     @ObservedObject var vm: ViewModel
     @Binding var relationship: Relationship
     var name: String {
@@ -43,6 +44,10 @@ struct MemberView: View {
                         Image(icon.isBuyingBadgeImage)
                             .resizable()
                             .scaledToFit()
+                    } else if someoneElseBuying {
+                        Image(icon.someoneElseBuyingBadgeImage)
+                            .resizable()
+                            .scaledToFit()
                     }
                 } else {
                     Image(icon.imageBackground)
@@ -67,9 +72,10 @@ struct MemberView: View {
             .animation(.default, value: vm.currentBuyer)
         }
     }
-    init(vm: ViewModel, relationship: Binding<Relationship>) {
+    init(vm: ViewModel, relationship: Binding<Relationship>, someoneElseBuying: Bool = false) {
         _relationship = relationship
         self.vm = vm
+        self.someoneElseBuying = someoneElseBuying
     }
 }
 

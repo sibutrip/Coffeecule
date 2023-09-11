@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct AllMembersView: View {
+    @Environment(\.editMode) var editMode
     @ObservedObject var vm: ViewModel
     @State private var viewingHistory = false
     @State private var customizingCup = false
     @Binding var someoneElseBuying: Bool
+    @Binding var isBuying: Bool
     private let columns = [
         GridItem(.flexible(minimum: 10, maximum: .infinity)),
         GridItem(.flexible(minimum: 10, maximum: .infinity))
@@ -33,10 +35,12 @@ struct AllMembersView: View {
                         }
                     }
                 }
-                if hasBuyer {
+                if hasBuyer && !(editMode?.wrappedValue.isEditing ?? true) {
                     let transition = AnyTransition.move(edge: .bottom)
                     EqualWidthVStackLayout(spacing: 10) {
-                        Button { } label: {
+                        Button {
+                            isBuying = true
+                        } label: {
                             Text("\(vm.currentBuyer.name) is buying")
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
@@ -48,6 +52,33 @@ struct AllMembersView: View {
                             Text("Someone else is buying")
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .padding()
+                    .padding(.bottom, 30)
+                    .frame(width: geo.size.width)
+                    .background(.regularMaterial)
+                    .transition(transition)
+                }
+                if editMode?.wrappedValue.isEditing ?? false {
+                    let transition = AnyTransition.move(edge: .bottom)
+                    EqualWidthVStackLayout(spacing: 10) {
+                        Button {
+                            //
+                        } label: {
+                            Label("Add New Person", systemImage: "person.crop.circle.fill.badge.plus")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button {
+                            //
+                        } label: {
+                            Label("Delete Coffeecule", systemImage: "trash")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.red)
                         }
                         .buttonStyle(.bordered)
                     }
@@ -69,13 +100,15 @@ struct AllMembersView: View {
                     Label("Customize Your Cup", systemImage: "cup.and.saucer")
                 }
             }
-            
             ToolbarItem {
                 Button {
                     viewingHistory = true
                 } label: {
                     Label("Transaction History", systemImage: "dollarsign.arrow.circlepath")
                 }
+            }
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
             }
         }
         .sheet(isPresented: $viewingHistory) {
@@ -85,9 +118,10 @@ struct AllMembersView: View {
             GeometryReader { geo in
                 CustomizeCupView(vm: vm)
             }
-        }    }
+        }
+    }
 }
 
 #Preview {
-    AllMembersView(vm: ViewModel(), someoneElseBuying: .constant(false))
+    AllMembersView(vm: ViewModel(), someoneElseBuying: .constant(false), isBuying: .constant(false))
 }

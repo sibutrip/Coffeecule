@@ -24,7 +24,11 @@ actor Repository: ObservableObject {
     
     
     // RECORDS
-    @Published public var transactions: [Transaction]?
+    @Published public var transactions: [Transaction]? {
+        didSet {
+            print(transactions?.count)
+        }
+    }
     public var rootRecord: CKRecord? = nil
     public var rootShare: CKShare? = nil
     public static var shareMetaData: CKShare.Metadata?
@@ -145,5 +149,9 @@ actor Repository: ObservableObject {
             self.transactions = transactions
         }
     }
-    
+    public func remove(transaction: Transaction) {
+        self.transactions = self.transactions?.filter {
+            $0.id != transaction.id
+        }
+    }
 }

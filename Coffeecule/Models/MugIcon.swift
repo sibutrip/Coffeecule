@@ -30,6 +30,10 @@ enum MugIcon: String, CaseIterable {
         self.rawValue + ".moneybadge"
     }
     
+    var someoneElseBuyingBadgeImage: String {
+        self.rawValue + ".emptybadge"
+    }
+    
     var emptyBadgeImage: String {
         self.rawValue + ".emptybadge"
     }

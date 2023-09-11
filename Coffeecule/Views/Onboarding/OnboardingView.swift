@@ -13,13 +13,17 @@ struct OnboardingView: View {
     @State private var couldNotJoinCule = false
     @State private var couldntCreateCule = false
     @State private var creating = false
+    @State private var joining = false
     
     var body: some View {
         VStack {
             Spacer()
-            Button("create") { creating = true }
+            Button("Create a new Coffecule") { creating = true }
+            Spacer()
+            Button("Join an existing Coffecule") { joining = true }
             Spacer()
         }
+        .padding()
         .sheet(isPresented: $creating) {
             CreateView(vm: vm, couldNotJoinCule: $couldNotJoinCule, couldntCreateCule: $couldntCreateCule)
         }
@@ -27,6 +31,9 @@ struct OnboardingView: View {
             Button("ok den", role: .cancel) {
                 couldNotJoinCule = false
             }
+        }
+        .sheet(isPresented: $joining) {
+            Text("Open a link from the owner of the Coffeecule to join")
         }
     }
 }

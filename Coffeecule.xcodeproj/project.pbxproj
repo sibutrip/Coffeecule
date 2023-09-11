@@ -174,12 +174,11 @@
 			children = (
 				7467994229B0DC9100339D5C /* ContentView.swift */,
 				7467993F29B0DC9100339D5C /* CoffeeculeView.swift */,
+				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				5D45F6CB2AAA546900F55F32 /* MemberView.swift */,
 				748BE4E72AAA0A4600FCA6AE /* RDCoffeeculeView.swift */,
 				74EE27672AAF438A00A8D894 /* AllMembersView.swift */,
 				74EE27622AAF423500A8D894 /* SomeoneElseBuying.swift */,
-				74845B0C2AABA0D600E58E11 /* ColorPickerDetail.swift */,
-				7467994029B0DC9100339D5C /* WhosGettingCoffee.swift */,
 				744356662A97E65D0027A58D /* HistoryView.swift */,
 				744356682A97EBA30027A58D /* AddTransactionView.swift */,
 				7478C72729E5FCC8006ED737 /* CloudSharingView.swift */,
@@ -294,9 +293,10 @@
 		74EE27662AAF434800A8D894 /* Cups */ = {
 			isa = PBXGroup;
 			children = (
+				74845B062AAB6B8200E58E11 /* CustomizeCupView.swift */,
 				74845B0A2AAB94EE00E58E11 /* CupPickerDetail.swift */,
 				74845B082AAB8C3B00E58E11 /* CupView.swift */,
-				74845B062AAB6B8200E58E11 /* CustomizeCupView.swift */,
+				74845B0C2AABA0D600E58E11 /* ColorPickerDetail.swift */,
 			);
 			path = Cups;
 			sourceTree = "<group>";

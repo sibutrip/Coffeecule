@@ -41,12 +41,28 @@ struct HistoryView: View {
                         List {
                             ForEach(datesAndTransactions.keys.sorted(by: { $0 > $1 }), id: \.self) { date in
                                 let transactions = datesAndTransactions[date] ?? []
-                                Section(date.formatted(date: .abbreviated, time: .omitted)) {
-                                    ForEach(transactions) { transaction in
-                                        HStack {
-                                            Text(transaction.receiverName)
-                                            Spacer()
-                                            Text(transaction.buyerName)
+                                if !transactions.isEmpty {
+                                    Section(date.formatted(date: .abbreviated, time: .omitted)) {
+                                        ForEach(transactions) { transaction in
+                                            HStack {
+                                                Text(transaction.receiverName)
+                                                Spacer()
+                                                Text(transaction.buyerName)
+                                            }
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                Button {
+                                                    withAnimation {
+                                                        datesAndTransactions[date] = datesAndTransactions[date]?
+                                                            .filter { $0.id != transaction.id }
+                                                    }
+                                                    Task {
+                                                        try await vm.remove(transaction: transaction)
+                                                    }
+                                                } label: {
+                                                    Label("Trash", systemImage: "trash")
+                                                }
+                                                .tint(.red)
+                                            }
                                         }
                                     }
                                 }

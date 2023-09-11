@@ -9,20 +9,38 @@ import Foundation
 import SwiftUI
 
 struct RDCoffeeculeView: View {
+    @Environment(\.editMode) var editMode
     @ObservedObject var vm: ViewModel
     let columns: [GridItem]
     @State var someoneElseBuying = false
+    @State var isBuying = false
     var hasBuyer: Bool {
         vm.currentBuyer != Person()
     }
     var body: some View {
         NavigationStack {
-            if !someoneElseBuying {
-                AllMembersView(vm: vm, someoneElseBuying: $someoneElseBuying)
-            } else {
-                SomeoneElseBuying(vm: vm)
+            Group {
+                if !someoneElseBuying {
+                    AllMembersView(vm: vm, someoneElseBuying: $someoneElseBuying, isBuying: $isBuying)
+                } else {
+                    SomeoneElseBuying(vm: vm, someoneElseBuying: $someoneElseBuying, isBuying: $isBuying)
+                }
             }
-        }.animation(.default, value: someoneElseBuying)
+        }
+        .alert("Is \(vm.currentBuyer.name) buying coffee?", isPresented: $isBuying) {
+            HStack {
+                Button("Yes") {
+                    Task(priority: .userInitiated) {
+                        await vm.buyCoffee(receivers:vm.presentPeople)
+                    }
+                    someoneElseBuying = false
+                }
+                Button("Cancel", role: .cancel) {
+                    isBuying = false
+                }
+            }
+        }
+        .animation(.default, value: someoneElseBuying)
     }
     init(vm: ViewModel, geo: GeometryProxy) {
         self.vm = vm

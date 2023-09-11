@@ -10,9 +10,11 @@ import CloudKit
 
 extension ViewModel {
     
-    public func buyCoffee(buyer: Person, receivers: [Person]) {
-        
+    public func remove(transaction: Transaction) async throws {
+        await repository.remove(transaction: transaction)
+        try await self.removeFromCloud(transaction: transaction)
     }
+    
     public func calculateBuyer() {
         let relationships = self.relationships
         let debts = self.displayedDebts
@@ -100,6 +102,33 @@ extension ViewModel {
             debts[relationship.person] = debt
         }
         self.displayedDebts = debts
+    }
+    func removeFromCloud(transaction: Transaction) async throws {
+        let rootRecordName = await repository.rootRecord?["userID"] as? String
+        let record = transaction.associatedRecord
+        if self.userID == rootRecordName {
+            let result = try await Repository.container.privateCloudDatabase.modifyRecords(saving: [], deleting: [record.recordID])
+            let results = result.saveResults.map { $0.value }
+            results.forEach { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            let result = try await Repository.container.sharedCloudDatabase.modifyRecords(saving: [], deleting: [record.recordID])
+            let results = result.saveResults.map { $0.value }
+            results.forEach { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 }
 

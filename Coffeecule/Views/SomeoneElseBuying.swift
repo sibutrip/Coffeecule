@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SomeoneElseBuying: View {
     @ObservedObject var vm: ViewModel
+    @Binding var someoneElseBuying: Bool
+    @Binding var isBuying: Bool
     private let columns = [
         GridItem(.flexible(minimum: 10, maximum: .infinity)),
         GridItem(.flexible(minimum: 10, maximum: .infinity))
@@ -24,41 +26,43 @@ struct SomeoneElseBuying: View {
                     LazyVGrid(columns: columns) {
                         ForEach($vm.relationships) { relationship in
                             if relationship.wrappedValue.isPresent {
-                                MemberView(vm: vm, relationship: relationship)
+                                Button {
+                                    vm.currentBuyer = relationship.wrappedValue.person
+                                } label: {
+                                    MemberView(vm: vm, relationship: relationship, someoneElseBuying: true)
+                                }
                             }
                         }
                     }
                 }
-//                if hasBuyer {
-//                    let transition = AnyTransition.move(edge: .bottom)
-//                    EqualWidthVStackLayout(spacing: 10) {
-//                        Button { } label: {
-//                            Text("\(vm.currentBuyer.name) is buying")
-//                                .font(.title2)
-//                                .frame(maxWidth: .infinity)
-//                        }
-//                        .buttonStyle(.borderedProminent)
-//                        Button {
-//                        } label: {
-//                            Text("Someone else is buying")
-//                                .font(.title2)
-//                                .frame(maxWidth: .infinity)
-//                        }
-//                        .buttonStyle(.bordered)
-//                    }
-//                    .padding()
-//                    .padding(.bottom, 30)
-//                    .frame(width: geo.size.width)
-//                    .background(.regularMaterial)
-//                    .transition(transition)
-//                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                            someoneElseBuying = false
+                        }
+                    }
+                }
+                if hasBuyer {
+                    let transition = AnyTransition.move(edge: .bottom)
+                    Button { 
+                        isBuying = true
+                    } label: {
+                        Text("\(vm.currentBuyer.name) is buying")
+                            .font(.title2)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding()
+                    .background(.regularMaterial)
+                    .transition(transition)
+                }
             }
             .animation(.default, value: hasBuyer)
-            .navigationTitle("Who's Here?")
+            .navigationTitle(someoneElseBuying ? "Who's Buying?" : "Who's Here?")
         }
     }
 }
 
 #Preview {
-    SomeoneElseBuying(vm: ViewModel())
+    SomeoneElseBuying(vm: ViewModel(), someoneElseBuying: .constant(true), isBuying: .constant(false))
 }

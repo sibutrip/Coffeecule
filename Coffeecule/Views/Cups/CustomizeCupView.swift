@@ -8,39 +8,56 @@
 import SwiftUI
 
 struct CustomizeCupView: View {
+    @Environment(\.dismiss) var dismiss
     @ObservedObject var vm: ViewModel
     let relationship: Relationship
     var person: Person { relationship.person }
+    let columns = [
+        GridItem(.flexible(minimum: 10, maximum: .infinity)),
+        GridItem(.flexible(minimum: 10, maximum: .infinity))
+    ]
     @State var userNotFound = false
     @Binding var selectedColor: UserColor
     @Binding var selectedMug: MugIcon
-
+    
     
     var body: some View {
-        VStack(alignment: .leading) {
-            CupSelectionView(person: person, icon: $selectedMug, color: $selectedColor)
-            Text("Cup style:")
-            HStack {
-                ForEach(MugIcon.allCases,id: \.rawValue) { mugIcon in
-                    Button {
-                        selectedMug = mugIcon
-                    } label: {
-                        CupPickerDetail(icon: mugIcon, selectedMugIcon: $selectedMug, color: $selectedColor)
+        NavigationStack {
+            VStack(alignment: .leading) {
+                Spacer()
+                LazyVGrid(columns: columns, spacing: 0) {
+                    ForEach(MugIcon.allCases,id: \.rawValue) { mugIcon in
+                        Button {
+                            selectedMug = mugIcon
+                        } label: {
+                            CupPickerDetail(person: person, icon: mugIcon, selectedMugIcon: $selectedMug, color: $selectedColor)
+                        }
                     }
                 }
+                Spacer()
+                HStack {
+                    ForEach(UserColor.allCases,id: \.rawValue) { color in
+                        Button {
+                            selectedColor = color
+                        } label: {
+                            ColorPickerDetail(color: color, selectedColor: $selectedColor)
+                        }
+                    }
+                }
+                Spacer()
+                Spacer()
             }
-            Text("Color:")
-            HStack {
-                ForEach(UserColor.allCases,id: \.rawValue) { color in
-                    Button {
-                        selectedColor = color
-                    } label: {
-                        ColorPickerDetail(color: color, selectedColor: $selectedColor)
+            .padding(.horizontal)
+            .navigationTitle("Customize Your Cup")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem {
+                    Button("Done") {
+                        dismiss()
                     }
                 }
             }
         }
-        .padding(.horizontal)
         .alert("Could not find your profile! Try restarting the app", isPresented: $userNotFound) {
             Button("Ok") { userNotFound = false }
         }
@@ -55,8 +72,8 @@ struct CustomizeCupView: View {
         }
     }
     init(vm: ViewModel) {
-
-
+        
+        
         self.vm = vm
         let relationships = vm.relationships
             .filter { relationship in
