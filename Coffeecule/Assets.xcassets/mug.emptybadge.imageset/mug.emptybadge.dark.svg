@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="540px" height="540px" viewBox="0 0 540 540" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>mug.emptybadge.dark</title>
+    <defs>
+        <path d="M64.5,130 C100.122366,130 129,100.898509 129,65 C129,29.1014913 100.122366,0 64.5,0 C28.8776336,0 0,29.1014913 0,65 C0,100.898509 28.8776336,130 64.5,130 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="129" height="130" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="mug.emptybadge.dark" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#000000" cx="441.301251" cy="136.308774" r="74"></circle>
+        <g id="Group-2" transform="translate(376.8013, 71.3088)" stroke="#59F56E" stroke-dasharray="20" stroke-width="16">
+            <use id="Oval" mask="url(#mask-2)" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>
