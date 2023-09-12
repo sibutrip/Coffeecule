@@ -58,7 +58,7 @@ struct HistoryView: View {
                                                     Spacer()
                                                     Text(transaction.buyerName)
                                                 }
-                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                                     Button {
                                                         withAnimation {
                                                             datesAndTransactions[date] = datesAndTransactions[date]?
