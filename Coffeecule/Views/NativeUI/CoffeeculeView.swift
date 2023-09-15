@@ -29,9 +29,9 @@ struct CoffeeculeView: View {
                 .animation(.default, value: vm.relationships)
             itsTimeForPersonToGetCoffee
             buyCoffeeButton
-//            if vm.presentPeopleCount > 1 {
-//                relationshipWebChart
-//            }
+            if vm.presentPeopleCount > 1 {
+                relationshipWebChart
+            }
             if self.editMode?.wrappedValue != .inactive {
                 Section {
                     Button("Delete Coffeecule") {
@@ -71,7 +71,7 @@ struct CoffeeculeView: View {
             }
         }
         .sheet(isPresented: $viewingHistory) {
-            HistoryView(vm: vm)
+            TransactionHistory(vm: vm)
         }
         .sheet(isPresented: $addingTransaction) {
             AddTransactionView(vm: vm, processingTransaction: $processingTransaction)

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct HistoryView: View {
+struct TransactionHistory: View {
     @State var isLoading = true
     @ObservedObject var vm: ViewModel
     @State var datesAndTransactions: [Date: [Transaction]] = [:]
@@ -18,26 +18,31 @@ struct HistoryView: View {
                 if isLoading {
                     ProgressView()
                 } else {
-                    VStack(spacing: 0) {
-                        VStack(spacing: 0) {
-                            Text("Transaction History")
-                                .font(.headline)
-                                .padding(.bottom)
-                            HStack {
-                                Text("Receiver")
-                                    .foregroundStyle(Color.blue)
-                                Spacer()
-                                Text("Buyer")
-                                    .foregroundStyle(Color.red)
-                            }
-                            .overlay { Image(systemName: "arrow.left") }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .padding(.horizontal, 50)
-                        .background {
-                            Color("ListBackground")
-                        }
+//                    VStack(spacing: 0) {
+//                        VStack(spacing: 0) {
+//                            Text("Transaction History")
+//                                .font(.headline)
+//                                .padding(.bottom)
+//                            HStack {
+//                                Text("Receiver")
+//                                    .foregroundStyle(Color.blue)
+//                                Spacer()
+//                                Text("Buyer")
+//                                    .foregroundStyle(Color.red)
+//                            }
+//                            .overlay { Image(systemName: "arrow.left") }
+//                        }
+//                        .frame(maxWidth: .infinity)
+//                        .padding()
+//                        .padding(.horizontal, 50)
+//                        .background {
+//                            Color("ListBackground")
+//                        }
+//                        .onTapGesture {
+//                            Task {
+//                                await datesAndTransactions[Date.now] = [Transaction(buyer: "Cory", receiver: "Tom", in: vm.repository)]
+//                            }
+//                        }
                         if datesAndTransactions.isEmpty {
                             Text("No previous transactions. Try to buy a coffee first!")
                                 .padding(.horizontal)
@@ -49,15 +54,15 @@ struct HistoryView: View {
                         } else {
                             List {
                                 ForEach(datesAndTransactions.keys.sorted(by: { $0 > $1 }), id: \.self) { date in
-                                    let transactions = datesAndTransactions[date] ?? []
+                                    let unsortedTransactions = datesAndTransactions[date] ?? []
+                                    let transactions = unsortedTransactions.sorted(by: { first, second in
+                                        first.receiverName < second.receiverName
+                                    })
                                     if !transactions.isEmpty {
                                         Section(date.formatted(date: .abbreviated, time: .omitted)) {
                                             ForEach(transactions) { transaction in
-                                                HStack {
-                                                    Text(transaction.receiverName)
-                                                    Spacer()
-                                                    Text(transaction.buyerName)
-                                                }
+                                                TransactionHistoryDetail(vm: vm, transaction: transaction)
+                                                    .listRowSpacing(0)
                                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                                     Button {
                                                         withAnimation {
@@ -77,9 +82,9 @@ struct HistoryView: View {
                                     }
                                 }
                             }
+                            .listStyle(.plain)
                             .refreshable {
                                 Task {
-                                    #warning("put need at least 2 fo buy")
                                     await vm.refreshData()
                                     let transactions = await vm.repository.transactions?.sorted { $0.creationDate! > $1.roundedDate! } ?? []
                                     let datesAndTransactions = Dictionary(grouping: transactions) { $0.roundedDate! }
@@ -88,17 +93,23 @@ struct HistoryView: View {
                                 }
                             }
                         }
-                    }
+//                    }
                 }
             }
+            .navigationTitle("Transaction History")
         }
         .task {
             isLoading = true
             let transactions = await vm.repository.transactions?.sorted { $0.creationDate! > $1.roundedDate! } ?? []
+            print(transactions)
             let datesAndTransactions = Dictionary(grouping: transactions) { $0.roundedDate! }
             self.datesAndTransactions = datesAndTransactions
             //            transactions.forEach { print($0.buyerName) }
             isLoading = false
         }
     }
+}
+
+#Preview {
+    TransactionHistory(vm: ViewModel())
 }

@@ -17,6 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let accessedFromShare = cloudShareMetadata != nil ? true : false
         Repository.shareMetaData = cloudShareMetadata
         let contentView = ContentView().environmentObject(AppAccess(accessedFromShare: accessedFromShare))
+//        let contentView = HistoryView(vm: ViewModel())
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)

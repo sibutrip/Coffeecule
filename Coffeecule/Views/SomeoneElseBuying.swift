@@ -35,24 +35,36 @@ struct SomeoneElseBuying: View {
                         }
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel") {
-                            someoneElseBuying = false
-                        }
-                    }
-                }
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button("Cancel") {
+//                            someoneElseBuying = false
+//                        }
+//                    }
+//                }
                 if hasBuyer {
                     let transition = AnyTransition.move(edge: .bottom)
-                    Button { 
-                        isBuying = true
-                    } label: {
-                        Text("\(vm.currentBuyer.name) is buying")
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
+                    EqualWidthVStackLayout(spacing: 10) {
+                        Button {
+                            isBuying = true
+                        } label: {
+                            Text("\(vm.currentBuyer.name) is buying")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button {
+                            someoneElseBuying = false
+                        } label: {
+                            Text("Cancel")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity)
                     .padding()
+                    .padding(.bottom, 30)
                     .background(.regularMaterial)
                     .transition(transition)
                 }
