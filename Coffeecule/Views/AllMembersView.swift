@@ -23,6 +23,7 @@ struct AllMembersView: View {
     @Binding var isBuying: Bool
     
     @State var dragDistance: CGFloat? = nil
+    @State private var buyButtonsSize: CGSize = .zero
     
     private let columns = [
         GridItem(.flexible(minimum: 10, maximum: .infinity),spacing: 0),
@@ -48,41 +49,47 @@ struct AllMembersView: View {
                 }
                 if hasBuyer && !(editMode?.wrappedValue.isEditing ?? true) {
                     let transition = AnyTransition.move(edge: .bottom)
-                    VStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: geo.size.width / 8, height: 8)
-                            .foregroundStyle(.gray)
-                            .padding(.top, 10)
-                            .padding(.bottom, 5)
-                        EqualWidthVStackLayout(spacing: 10) {
-                            Button {
-                                isBuying = true
-                            } label: {
-                                Text("\(vm.currentBuyer.name) is buying")
-                                    .font(.title2)
-                                    .frame(maxWidth: .infinity)
+                    ChildSizeReader(size: $buyButtonsSize) {
+                        VStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: geo.size.width / 8, height: 8)
+                                .foregroundStyle(.gray)
+                                .padding(.top, 10)
+                                .padding(.bottom, 5)
+                            EqualWidthVStackLayout(spacing: 10) {
+                                Button {
+                                    isBuying = true
+                                } label: {
+                                    Text("\(vm.currentBuyer.name) is buying")
+                                        .font(.title2)
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                
+                                Button {
+                                    someoneElseBuying = true
+                                } label: {
+                                    Text("Someone else is buying")
+                                        .font(.title2)
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
                             }
-                            .buttonStyle(.borderedProminent)
-                            
-                            Button {
-                                someoneElseBuying = true
-                            } label: {
-                                Text("Someone else is buying")
-                                    .font(.title2)
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.bordered)
                         }
-                    }
-                    .frame(width: geo.size.width)
-                    .overlay {
-                        relationshipWebChart
-                            .frame(height: geo.size.height / 3)
-                            .offset(y: geo.size.height / 3)
-//                            .frame(height: dragDistance ?? 0 )
-//                            .offset(y: dragDistance ?? 0)
+                        .frame(width: geo.size.width)
                     }
                     .padding(.bottom, 40 + (dragDistance ?? 0) )
+                    .overlay {
+                        VStack {
+                            Spacer()
+                            relationshipWebChart
+                                .frame(height: (dragDistance ?? 0))
+//                                .offset(y: 40)
+                            
+                            //                            .frame(height: dragDistance ?? 0 )
+                            //                            .offset(y: dragDistance ?? 0)
+                        }
+                    }
                     .background(.regularMaterial)
                     .transition(transition)
                     .highPriorityGesture(
